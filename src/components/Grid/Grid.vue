@@ -59,6 +59,7 @@ export default {
       transformAtLastRender: d3.zoomIdentity,
       lastMousePosition: null,
       handleMouseMove: null, // placeholder --> overwritten in mounted()
+      handleMouseMove2: null,
       ...drawMethods({
         xScale,
         yScale,
@@ -76,7 +77,6 @@ export default {
   mounted() {
     // throttle/debounce event handlers
     this.handleMouseMove = d3AwareThrottle(this.highlightSnapTarget, 100);
-
     // render grid first time (not debounced, as this seems to fix an issue
     // where the x bounds are set correctly, and then becomes incorrect when the
     // debounced renderGrid runs)

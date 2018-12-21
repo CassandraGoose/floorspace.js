@@ -8,7 +8,7 @@
 import * as d3 from 'd3';
 import polylabel from 'polylabel';
 import _ from 'lodash';
-import { snapTargets, snapWindowToEdge, snapToVertexWithinFace, findClosestEdge, findClosestWindow } from './snapping';
+import { snapTargets, snapWindowToEdge, snapToVertexWithinFace, findClosestEdge, findClosestWindow, gridSnapTargets, vertexSnapTargets } from './snapping';
 import geometryHelpers, { distanceBetweenPoints, fitToAspectRatio } from './../../store/modules/geometry/helpers';
 import modelHelpers from './../../store/modules/models/helpers';
 
@@ -40,7 +40,7 @@ export default {
   */
   gridClicked() {
     if (this.currentTool === 'Eraser' ||
-    ((this.currentTool === 'Rectangle' || this.currentTool === 'Polygon') && (this.currentSpace || this.currentShading))) {
+      ((this.currentTool === 'Rectangle' || this.currentTool === 'Polygon') && (this.currentSpace || this.currentShading))) {
       this.addPoint();
     }
     if (this.currentTool === 'Place Component') {
@@ -92,7 +92,7 @@ export default {
   },
   handleKeyDown(e) {
     if ((e.keyCode === 8 || e.keyCode === 46) &&
-        !_.includes(['input', 'textarea'], document.activeElement.tagName.toLowerCase())) {
+      !_.includes(['input', 'textarea'], document.activeElement.tagName.toLowerCase())) {
       this.deleteElement();
     }
   },
@@ -129,8 +129,8 @@ export default {
     if (this.currentComponentType === 'daylighting_control_definitions') {
       this.placeDaylightingControl();
     } else if (
-        this.currentComponentType === 'window_definitions' ||
-        this.currentComponentType === 'door_definitions'
+      this.currentComponentType === 'window_definitions' ||
+      this.currentComponentType === 'door_definitions'
     ) {
       this.placeWindowOrDoor();
     } else {
@@ -212,6 +212,7 @@ export default {
   */
   addPoint() {
     // location of the mouse in grid units
+
     const
       gridCoords = d3.mouse(this.$refs.grid),
       gridPoint = { x: gridCoords[0], y: gridCoords[1] },
@@ -242,8 +243,8 @@ export default {
   highlightSnapTarget(e) {
     // only highlight snap targets in drawing modes when a space or shading has been selected
     if (!(this.currentTool === 'Eraser' ||
-    (this.currentTool === 'Place Component' && this.currentComponentDefinition) ||
-    ((this.currentTool === 'Rectangle' || this.currentTool === 'Polygon') && (this.currentSpace || this.currentShading)))) { return; }
+      (this.currentTool === 'Place Component' && this.currentComponentDefinition) ||
+      ((this.currentTool === 'Rectangle' || this.currentTool === 'Polygon') && (this.currentSpace || this.currentShading)))) { return; }
 
     // unhighlight expired snap targets
     this.clearHighlights();
@@ -280,38 +281,38 @@ export default {
     // if snapping to an edisting edge or radius, draw a larger point, if snapping to the grid or just displaying the location of the pointer, create a small point
     if (snapTarget.type === 'edge' || snapTarget.type === 'vertex') {
       d3.select('#grid svg')
-      .append('ellipse')
-      .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
-      .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
-      .attr('rx', 5)
-      .attr('ry', 5)
-      .classed('highlight', true)
-      .attr('data-transform-plz', '')
-      .attr('vector-effect', 'non-scaling-stroke');
+        .append('ellipse')
+        .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
+        .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
+        .attr('rx', 5)
+        .attr('ry', 5)
+        .classed('highlight', true)
+        .attr('data-transform-plz', '')
+        .attr('vector-effect', 'non-scaling-stroke');
     } else {
       d3.select('#grid svg')
-      .append('ellipse')
-      .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
-      .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
-      .attr('rx', 2)
-      .attr('ry', 2)
-      .classed('gridpoint', true)
-      .attr('data-transform-plz', '')
-      .attr('vector-effect', 'non-scaling-stroke');
+        .append('ellipse')
+        .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
+        .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
+        .attr('rx', 2)
+        .attr('ry', 2)
+        .classed('gridpoint', true)
+        .attr('data-transform-plz', '')
+        .attr('vector-effect', 'non-scaling-stroke');
     }
 
     // in drawing modes, highlight edges that would be snapped to
     if (snapTarget.type === 'edge' && this.currentTool !== 'Eraser') {
       d3.select('#grid svg')
-      .append('line')
-      .attr('x1', this.rwuToGrid(snapTarget.v1GridCoords.x, 'x'))
-      .attr('y1', this.rwuToGrid(snapTarget.v1GridCoords.y, 'y'))
-      .attr('x2', this.rwuToGrid(snapTarget.v2GridCoords.x, 'x'))
-      .attr('y2', this.rwuToGrid(snapTarget.v2GridCoords.y, 'y'))
-      .attr('stroke-width', 1)
-      .classed('highlight', true)
-      .attr('data-transform-plz', '')
-      .attr('vector-effect', 'non-scaling-stroke');
+        .append('line')
+        .attr('x1', this.rwuToGrid(snapTarget.v1GridCoords.x, 'x'))
+        .attr('y1', this.rwuToGrid(snapTarget.v1GridCoords.y, 'y'))
+        .attr('x2', this.rwuToGrid(snapTarget.v2GridCoords.x, 'x'))
+        .attr('y2', this.rwuToGrid(snapTarget.v2GridCoords.y, 'y'))
+        .attr('stroke-width', 1)
+        .classed('highlight', true)
+        .attr('data-transform-plz', '')
+        .attr('vector-effect', 'non-scaling-stroke');
     }
     // save off mouse pos so that we can redo highlight if zoom occurs during
     // point drawing.
@@ -485,55 +486,55 @@ export default {
 
     // render a guideline or rectangle
     svg.selectAll('.guideline-line')
-    .append('path')
-    .datum(guidelinePoints)
-    .attr('fill', 'none')
-    .classed('guideline guideline-line', true)
-    .attr('vector-effect', 'non-scaling-stroke')
-    .attr('data-transform-plz', '')
-    .attr('d', d3.line().x(d => this.rwuToGrid(d.x, 'x'))
-                        .y(d => this.rwuToGrid(d.y, 'y')))
-    .lower();
+      .append('path')
+      .datum(guidelinePoints)
+      .attr('fill', 'none')
+      .classed('guideline guideline-line', true)
+      .attr('vector-effect', 'non-scaling-stroke')
+      .attr('data-transform-plz', '')
+      .attr('d', d3.line().x(d => this.rwuToGrid(d.x, 'x'))
+        .y(d => this.rwuToGrid(d.y, 'y')))
+      .lower();
 
     // render unfinished area polygon(s)
     svg.selectAll('.guideline-area')
-    .data(guidelinePolys)
-    .enter()
-    .append('polygon')
-    .attr('points', d => d.map(p =>
+      .data(guidelinePolys)
+      .enter()
+      .append('polygon')
+      .attr('points', d => d.map(p =>
         [this.rwuToGrid(p.x, 'x'), this.rwuToGrid(p.y, 'y')]
-        .join(','),
+          .join(','),
       ).join(' '))
-    .classed('guideline guideline-area guideLine', true)
-    .attr('vector-effect', 'non-scaling-stroke')
-    .attr('data-transform-plz', '')
-    .attr('fill', () => {
-      if (this.currentTool === 'Eraser') { return 'none'; }
-      if (this.currentSpace) { return this.currentSpace.color; }
-      if (this.currentShading) { return this.currentShading.color; }
-      return null;
-    });
+      .classed('guideline guideline-area guideLine', true)
+      .attr('vector-effect', 'non-scaling-stroke')
+      .attr('data-transform-plz', '')
+      .attr('fill', () => {
+        if (this.currentTool === 'Eraser') { return 'none'; }
+        if (this.currentSpace) { return this.currentSpace.color; }
+        if (this.currentShading) { return this.currentShading.color; }
+        return null;
+      });
 
     // don't render area/distance when erasing
     if (this.currentTool === 'Eraser') { return; }
 
     // render gridline distance(s)
     svg.selectAll('.guideline-text')
-    .data(guidelinePaths)
-    .enter()
-    .append('text')
-    .attr('x', d => this.rwuToGrid(d[0].x, 'x') + (this.rwuToGrid(d[1].x, 'x') - this.rwuToGrid(d[0].x, 'x')) / 2)
-    .attr('y', d => this.rwuToGrid(d[0].y, 'y') + (this.rwuToGrid(d[1].y, 'y') - this.rwuToGrid(d[0].y, 'y')) / 2)
-    .attr('dx', -1.25 * (this.transform.k > 1 ? 1 : this.transform.k) + 'em')
-    .attr('data-transform-plz', '')
-    .text((d) => {
-      const dist = this.distanceBetweenPoints(d[0], d[1]);
-      return dist ? dist.toFixed(2) : '';
-    })
-    .classed('guideline guideline-text guideline-dist', true)
-    .attr('font-family', 'sans-serif')
-    .attr('fill', 'red')
-    .style('font-size', '1em');
+      .data(guidelinePaths)
+      .enter()
+      .append('text')
+      .attr('x', d => this.rwuToGrid(d[0].x, 'x') + (this.rwuToGrid(d[1].x, 'x') - this.rwuToGrid(d[0].x, 'x')) / 2)
+      .attr('y', d => this.rwuToGrid(d[0].y, 'y') + (this.rwuToGrid(d[1].y, 'y') - this.rwuToGrid(d[0].y, 'y')) / 2)
+      .attr('dx', -1.25 * (this.transform.k > 1 ? 1 : this.transform.k) + 'em')
+      .attr('data-transform-plz', '')
+      .text((d) => {
+        const dist = this.distanceBetweenPoints(d[0], d[1]);
+        return dist ? dist.toFixed(2) : '';
+      })
+      .classed('guideline guideline-text guideline-dist', true)
+      .attr('font-family', 'sans-serif')
+      .attr('fill', 'red')
+      .style('font-size', '1em');
 
     if (guidelineArea.length > 3) {
       const
@@ -552,16 +553,16 @@ export default {
 
       // render unfinished area #
       svg.append('text')
-      .attr('x', this.rwuToGrid(x, 'x'))
-      .attr('y', this.rwuToGrid(y, 'y'))
-      .text(areaText)
-      .classed('guideline guideline-text guideline-area-text guideLine', true)
-      .attr('data-transform-plz', '')
-      .attr('text-anchor', 'middle')
-      .attr('font-family', 'sans-serif')
-      .attr('fill', 'red')
-      .style('font-size', '1em')
-      .raise();
+        .attr('x', this.rwuToGrid(x, 'x'))
+        .attr('y', this.rwuToGrid(y, 'y'))
+        .text(areaText)
+        .classed('guideline guideline-text guideline-area-text guideLine', true)
+        .attr('data-transform-plz', '')
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'sans-serif')
+        .attr('fill', 'red')
+        .style('font-size', '1em')
+        .raise();
     }
 
     d3.selectAll('.vertical, .horizontal').lower();
@@ -673,29 +674,29 @@ export default {
 
     // draw points
     const pointPath = d3.select('#grid svg')
-    .selectAll('ellipse.point-path').data(this.points);
+      .selectAll('ellipse.point-path').data(this.points);
 
     pointPath.merge(
       pointPath.enter().append('ellipse').attr('class', 'point-path'),
     )
-    .classed('origin', (d, ix) => ix === 0)
-    .attr('data-transform-plz', '')
-    .attr('cx', d => this.rwuToGrid(d.x, 'x'))
-    .attr('cy', d => this.rwuToGrid(d.y, 'y'))
-    .attr('rx', (d, ix) => (ix === 0 ? 7 : 2))
-    .attr('ry', (d, ix) => (ix === 0 ? 7 : 2))
-    .attr('vector-effect', 'non-scaling-stroke')
-    .attr('fill', (d, ix) => (ix === 0 ? 'none' : ''));
+      .classed('origin', (d, ix) => ix === 0)
+      .attr('data-transform-plz', '')
+      .attr('cx', d => this.rwuToGrid(d.x, 'x'))
+      .attr('cy', d => this.rwuToGrid(d.y, 'y'))
+      .attr('rx', (d, ix) => (ix === 0 ? 7 : 2))
+      .attr('ry', (d, ix) => (ix === 0 ? 7 : 2))
+      .attr('vector-effect', 'non-scaling-stroke')
+      .attr('fill', (d, ix) => (ix === 0 ? 'none' : ''));
 
     // connect the points for the face being drawn with a line
     d3.select('#grid svg').append('path').attr('class', 'point-path')
-    .datum(this.points)
-    .attr('fill', 'none')
-    .attr('vector-effect', 'non-scaling-stroke')
-    .attr('data-transform-plz', '')
-    .attr('d', d3.line().x(d => this.rwuToGrid(d.x, 'x')).y(d => this.rwuToGrid(d.y, 'y')))
-    // prevent edges from overlapping points - interferes with click events
-    .lower();
+      .datum(this.points)
+      .attr('fill', 'none')
+      .attr('vector-effect', 'non-scaling-stroke')
+      .attr('data-transform-plz', '')
+      .attr('d', d3.line().x(d => this.rwuToGrid(d.x, 'x')).y(d => this.rwuToGrid(d.y, 'y')))
+      // prevent edges from overlapping points - interferes with click events
+      .lower();
 
     // keep grid lines under polygon edges
     d3.selectAll('.vertical, .horizontal').lower();
@@ -869,14 +870,27 @@ export default {
       return this.strictSnapTargets(rwuPoint)[0];
     }
 
-    if (event.shiftKey) {
-      // disable snapping when shift is held down
-      return {
+    if (this.snapMode === 'grid-verts-edges') {
+      const realPoint = this.gridPointToRWU(gridPoint);
+      const gridSpacing = 0.5;
+      // need to a rewrite of snappingEdgeData because it's causing issues for me. 
+      const targets = [
+        ...vertexSnapTargets(this.currentStoryGeometry.vertices, gridSpacing, realPoint),
+        ...this.snappingEdgeData(realPoint),
+        ...gridSnapTargets(gridSpacing, realPoint),
+      ].map(
+        target => ({
+          ...target,
+          dist: distanceBetweenPoints(target, realPoint),
+          dx: realPoint.x - target.x,
+          dy: realPoint.y - target.y,
+        }));
+      const thing = _.orderBy(targets, ['dist', 'origin', 'type'], ['asc', 'asc', 'desc']);
+      return thing[0] || {
         type: 'gridpoint',
-        ...rwuPoint,
+        ...realPoint,
       };
     }
-
     // if snapping only to edges (placing edge components, return either the snapping edge or original point)
     if (snapOnlyToEdges) {
       const snappingEdge = this.snappingEdgeData(rwuPoint);
@@ -896,18 +910,17 @@ export default {
     if (this.gridVisible) {
       // offset of the first gridline on each axis
       const xOffset = +this.axis.x.select('.tick').attr('transform').replace('translate(', '').replace(')', '').split(',')[0],
-      yOffset = +this.axis.y.select('.tick').attr('transform').replace('translate(', '').replace(')', '').split(',')[1],
+        yOffset = +this.axis.y.select('.tick').attr('transform').replace('translate(', '').replace(')', '').split(',')[1],
+        // spacing between ticks in grid units
+        xTickSpacing = this.rwuToGrid(this.spacing + this.min_x, 'x'),
+        // yTickSpacing = this.rwuToGrid(this.spacing + this.min_y, 'y');
+        yTickSpacing = this.rwuToGrid(this.max_y - this.spacing, 'y'); // inverted y axis
 
-      // spacing between ticks in grid units
-      xTickSpacing = this.rwuToGrid(this.spacing + this.min_x, 'x'),
-      // yTickSpacing = this.rwuToGrid(this.spacing + this.min_y, 'y');
-      yTickSpacing = this.rwuToGrid(this.max_y - this.spacing, 'y'); // inverted y axis
-
-      // round point RWU coordinates to nearest gridline, adjust by grid offset, add 0.5 grid units to account for width of gridlines
+      // round point RWU coordinates to nearest gridline, adjust by grid offset, add 0.5 grid units to account for width of gridlines     
       const snapTarget = {
         type: 'gridpoint',
-        x: this.round(gridPoint.x, this.rwuToGrid(this.spacing + this.min_x, 'x')) + xOffset - 0.5,
-        y: this.round(gridPoint.y, this.rwuToGrid(this.max_y - this.spacing, 'y')) + yOffset - 0.5
+        x: this.round(gridPoint.x, xTickSpacing) + xOffset - 0.5,
+        y: this.round(gridPoint.y, yTickSpacing) + yOffset - 0.5,
       };
 
       // pick closest point
@@ -922,7 +935,7 @@ export default {
       const lastPoint = this.points[this.points.length - 1];
       // angle between last point drawn and mouse (degrees)
       const thetaDeg = Math.atan2(lastPoint.y - gridPoint.y, lastPoint.x - gridPoint.x)
-      * (180 / Math.PI);
+        * (180 / Math.PI);
 
       // snap to -180, -90, 0, 90, 180
       var snapCoords;
@@ -978,6 +991,7 @@ export default {
 
     return snapTargets(snappableVertices, this.spacing, location);
   },
+
   /*
   * given a point in RWU, look up the closest snappable vertex
   * if the vertex is within the snap tolerance of the point, return the coordinates of the vertex in grid units
@@ -1035,6 +1049,7 @@ export default {
   * and the distance from the projection to the point
   */
   snappingEdgeData(point) {
+    if (this.currentStoryGeometry.edges.length === 0) return [];
     // build a list of edges (in RWU) available for snapping
     // deep copy all vertices on the current story
     let snappableEdges = [...this.currentStoryGeometry.edges];
@@ -1052,21 +1067,21 @@ export default {
     // find the edge closest to the point being tested
     const nearestEdge = snappableEdges.reduce((a, b) => {
       const aStoryGeometry = a.previous_story ? this.previousStoryGeometry : this.currentStoryGeometry,
-      bStoryGeometry = b.previous_story ? this.previousStoryGeometry : this.currentStoryGeometry,
-      // look up vertices associated with edges
-      aV1 = geometryHelpers.vertexForId(a.v1, aStoryGeometry),
-      aV2 = geometryHelpers.vertexForId(a.v2, aStoryGeometry),
+        bStoryGeometry = b.previous_story ? this.previousStoryGeometry : this.currentStoryGeometry,
+        // look up vertices associated with edges
+        aV1 = geometryHelpers.vertexForId(a.v1, aStoryGeometry),
+        aV2 = geometryHelpers.vertexForId(a.v2, aStoryGeometry),
 
-      bV1 = geometryHelpers.vertexForId(b.v1, bStoryGeometry),
-      bV2 = geometryHelpers.vertexForId(b.v2, bStoryGeometry),
+        bV1 = geometryHelpers.vertexForId(b.v1, bStoryGeometry),
+        bV2 = geometryHelpers.vertexForId(b.v2, bStoryGeometry),
 
-      // project point being tested to each edge
-      aProjection = geometryHelpers.projectionOfPointToLine(point, { p1: aV1, p2: aV2 }),
-      bProjection = geometryHelpers.projectionOfPointToLine(point, { p1: bV1, p2: bV2 }),
+        // project point being tested to each edge
+        aProjection = geometryHelpers.projectionOfPointToLine(point, { p1: aV1, p2: aV2 }),
+        bProjection = geometryHelpers.projectionOfPointToLine(point, { p1: bV1, p2: bV2 }),
 
-      // look up distance between projection and point being tested
-      aDist = geometryHelpers.distanceBetweenPoints(aProjection, point),
-      bDist = geometryHelpers.distanceBetweenPoints(bProjection, point);
+        // look up distance between projection and point being tested
+        aDist = geometryHelpers.distanceBetweenPoints(aProjection, point),
+        bDist = geometryHelpers.distanceBetweenPoints(bProjection, point);
 
       // return data for the edge with the closest projection to the point being tested
       return aDist < bDist ? a : b;
@@ -1087,7 +1102,7 @@ export default {
     const snappableAngles = [-180, -90, 0, 90, 180];
     // angle between projection and mouse (degrees)
     const thetaDeg = Math.atan2(point.y - projection.y, point.x - projection.x)
-    * (180 / Math.PI);
+      * (180 / Math.PI);
 
     // if the original projection is within the snap tolerance of one of the snapping angles
     // adjust the projection so that it is exactly at the snap angle
@@ -1138,18 +1153,18 @@ export default {
   /*
   * returns the distance between two points
   */
-  distanceBetweenPoints (p1, p2) {
+  distanceBetweenPoints(p1, p2) {
     const dx = Math.abs(p1.x - p2.x),
-    dy = Math.abs(p1.y - p2.y);
+      dy = Math.abs(p1.y - p2.y);
     return Math.sqrt((dx * dx) + (dy * dy));
   },
 
   /*
   * round a number n to the nearest x
   */
-  round (n, x) {
+  round(n, x) {
     var result,
-    sign = n < 0 ? -1 : 1;
+      sign = n < 0 ? -1 : 1;
     n = Math.abs(n);
     if (n % x < x / 2) {
       result = n - (n % x);
@@ -1158,14 +1173,14 @@ export default {
     }
     // handle negatives
     result *= sign;
-    return result
+    return result;
   },
-  rotatePoint (center, point, angle) {
+  rotatePoint(center, point, angle) {
     const radians = angle * Math.PI / 180.0,
-    cos = Math.cos(radians),
-    sin = Math.sin(radians),
-    dX = point.x - center.x,
-    dY = point.y - center.y;
+      cos = Math.cos(radians),
+      sin = Math.sin(radians),
+      dX = point.x - center.x,
+      dY = point.y - center.y;
 
     return {
       x: cos * dX - sin * dY + center.x,
@@ -1287,9 +1302,9 @@ export default {
     this.axis.x = this.axis.x.merge(
       this.axis.x.enter().append('g').attr('class', 'axis axis--x'),
     )
-    .attr('stroke-width', strokeWidth)
-    .style('font-size', fontSize)
-    .style('display', this.gridVisible ? 'inline' : 'none');
+      .attr('stroke-width', strokeWidth)
+      .style('font-size', fontSize)
+      .style('display', this.gridVisible ? 'inline' : 'none');
 
     this.axis.y = svg.selectAll('g.axis--y')
       .data([undefined]);
@@ -1297,48 +1312,48 @@ export default {
     this.axis.y = this.axis.y.merge(
       this.axis.y.enter().append('g').attr('class', 'axis axis--y'),
     )
-    .attr('class', 'axis axis--y')
-    .attr('stroke-width', strokeWidth)
-    .style('font-size', fontSize)
-    .style('display', this.gridVisible ? 'inline' : 'none');
+      .attr('class', 'axis axis--y')
+      .attr('stroke-width', strokeWidth)
+      .style('font-size', fontSize)
+      .style('display', this.gridVisible ? 'inline' : 'none');
 
     // now that the axis g tags exist, call axis_generator on them.
     this.updateGrid();
 
     // configure zoom behavior in rwu
     this.zoomBehavior = d3.zoom()
-    .scaleExtent([0, Infinity])
-     .on('zoom', () => {
-       const transform = d3.event.transform;
-       // update stored transform for grid hiding, etc.
-       this.transform = { ...transform };
+      .scaleExtent([0, Infinity])
+      .on('zoom', () => {
+        const transform = d3.event.transform;
+        // update stored transform for grid hiding, etc.
+        this.transform = { ...transform };
 
-       // create updated copies of the scales based on the zoom transformation
-       // the transformed scales are only used to obtain the new rwu grid dimensions and redraw the axes
-       // NOTE: don't change the original scale or you'll get exponential growth
-       const
-         newScaleX = transform.rescaleX(this.zoomXScale),
-         newScaleY = transform.rescaleY(this.zoomYScale);
+        // create updated copies of the scales based on the zoom transformation
+        // the transformed scales are only used to obtain the new rwu grid dimensions and redraw the axes
+        // NOTE: don't change the original scale or you'll get exponential growth
+        const
+          newScaleX = transform.rescaleX(this.zoomXScale),
+          newScaleY = transform.rescaleY(this.zoomYScale);
 
-       [this.min_x, this.max_x] = newScaleX.domain();
-       [this.min_y, this.max_y] = newScaleY.domain(); // inverted y axis
+        [this.min_x, this.max_x] = newScaleX.domain();
+        [this.min_y, this.max_y] = newScaleY.domain(); // inverted y axis
 
-       this.axis_generator.x.scale(newScaleX);
-       this.axis_generator.y.scale(newScaleY);
-       this.updateGrid();
+        this.axis_generator.x.scale(newScaleX);
+        this.axis_generator.y.scale(newScaleY);
+        this.updateGrid();
 
-       // axis padding
-       this.padTickY(-12);
+        // axis padding
+        this.padTickY(-12);
 
-       // apply the zoom transform to image and polygon <g> tags.
-       // (more efficient than a full re-render)
-       this.translateEntities();
-       this.clearComponentHighlights();
-     })
-     .on('end', () => {
-       // redraw the saved geometry
-       this.draw({ zoomEnd: true });
-     });
+        // apply the zoom transform to image and polygon <g> tags.
+        // (more efficient than a full re-render)
+        this.translateEntities();
+        this.clearComponentHighlights();
+      })
+      .on('end', () => {
+        // redraw the saved geometry
+        this.draw({ zoomEnd: true });
+      });
 
     svg.call(this.zoomBehavior);
     svg
@@ -1388,8 +1403,8 @@ export default {
       translate = [width / 2 - scale * x, height / 2 - scale * y];
     d3.select(this.$refs.grid)
       .call(this.zoomBehavior.transform, d3.zoomIdentity
-          .translate(...translate)
-          .scale(scale));
+        .translate(...translate)
+        .scale(scale));
   },
   translateEntities() {
     // During a zoom, we don't do a full re-render because it would fire many
@@ -1462,7 +1477,7 @@ export default {
   /*
   * take a rwu value (from the datastore), find the corresponding coordinates in the svg grid
   */
-  rwuToGrid (rwu, axis) {
+  rwuToGrid(rwu, axis) {
     let scale;
     if (axis === 'x') {
       scale = this.xScale;
@@ -1484,7 +1499,7 @@ export default {
     }
     const result = scale.invert(gridValue);
     // prevent floating point inaccuracies in stored numbers
-    return (Math.round(result * 100000000000))/100000000000;
+    return (Math.round(result * 100000000000)) / 100000000000;
   },
 
   gridPointToRWU(pt) {
@@ -1516,28 +1531,28 @@ export default {
   /*
   * Format tick labels to maintain legibility
   */
-  formatTickX (maxTicks, val) {
+  formatTickX(maxTicks, val) {
     const rangeX = this.max_x - this.min_x,
-    spacing = this.spacing,
-    spacingScaled = Math.ceil((rangeX / maxTicks) / spacing) * spacing;
+      spacing = this.spacing,
+      spacingScaled = Math.ceil((rangeX / maxTicks) / spacing) * spacing;
 
     return (spacingScaled === 0 || val % spacingScaled === 0) ? val : '';
   },
-  formatTickY (maxTicks, val) {
+  formatTickY(maxTicks, val) {
     const rangeY = this.max_y - this.min_y,
-    spacing = this.spacing,
-    spacingScaled = Math.ceil((rangeY / maxTicks) / spacing) * spacing;
+      spacing = this.spacing,
+      spacingScaled = Math.ceil((rangeY / maxTicks) / spacing) * spacing;
 
     return (spacingScaled === 0 || val % spacingScaled === 0) ? val : '';
   },
   /*
   * Adjust padding to ensure full label is visible
   */
-  padTickY (paddingPerDigit) {
+  padTickY(paddingPerDigit) {
     let min = Math.abs(this.min_y),
-    max = Math.abs(this.max_y),
-    numDigits = (min < max ? max : min).toFixed(0).length,
-    yPadding = paddingPerDigit * numDigits;
+      max = Math.abs(this.max_y),
+      numDigits = (min < max ? max : min).toFixed(0).length,
+      yPadding = paddingPerDigit * numDigits;
 
     this.axis.y.call(this.axis_generator.y.tickPadding(yPadding));
   }
