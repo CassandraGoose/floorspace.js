@@ -86,7 +86,6 @@ https://github.com/d3/d3/blob/17fbf8d4b16ed19303d71dee4881d871bddbc037/test/d3-t
  * jQuery(window).on('popstate', debounced.cancel);
  */
 function d3Debounce(func, wait, options) {
-  console.log(' in debounce ')
   var lastArgs,
       lastThis,
       lastD3Event,

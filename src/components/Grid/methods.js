@@ -217,7 +217,6 @@ export default {
       gridCoords = d3.mouse(this.$refs.grid),
       gridPoint = { x: gridCoords[0], y: gridCoords[1] },
       snapTarget = this.findSnapTarget(gridPoint);
-    console.log('this two')
     // if the snapTarget is the origin of the face being drawn in Polygon mode, close the face and don't add a new point
     if (snapTarget.type === 'vertex' && snapTarget.origin && this.currentTool === 'Polygon') {
       this.savePolygonFace();
@@ -226,7 +225,6 @@ export default {
 
     // create the point
     const newPoint = snapTarget.type === 'edge' ? snapTarget.projection : snapTarget;
-    console.log('newpoint?', newPoint)
     this.points.push(newPoint);
     this.drawPoints();
     // if the Rectangle or Eraser tool is active and two points have been drawn (to define a rectangle)
@@ -270,7 +268,6 @@ export default {
     }
 
     const snapTarget = this.findSnapTarget(gridPoint);
-    console.log('this one')
     // render a line and point showing which geometry would be created with a click at this location
     const guidePoint = snapTarget.type === 'edge' ? snapTarget.projection :
       snapTarget;
@@ -872,7 +869,6 @@ export default {
     }
 
     if (this.snapMode === 'grid-verts-edges') {
-      console.log('in')
       const realPoint = this.gridPointToRWU(gridPoint);
       const gridSpacing = 0.5;
       const targets = [
