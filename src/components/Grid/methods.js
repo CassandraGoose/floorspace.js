@@ -875,10 +875,6 @@ export default {
       console.log('in')
       const realPoint = this.gridPointToRWU(gridPoint);
       const gridSpacing = 0.5;
-      // need to a rewrite of snappingEdgeData because it's causing issues for me. 
-      console.log('vertexSnapTargets', JSON.stringify(vertexSnapTargets(this.currentStoryGeometry.vertices, gridSpacing, realPoint)))
-      console.log('snappingEdgeData', JSON.stringify(this.snappingEdgeData(realPoint)));
-      console.log('gridSnapTargets', JSON.stringify(gridSnapTargets(gridSpacing, realPoint)))
       const targets = [
         ...vertexSnapTargets(this.currentStoryGeometry.vertices, gridSpacing, realPoint),
         ...this.snappingEdgeData(realPoint),
@@ -892,17 +888,15 @@ export default {
         }));
 //doesn't make it through targets on new polygon after one has been created
       const thing = _.orderBy(targets, ['dist', 'origin', 'type'], ['asc', 'asc', 'desc']);
-      console.log('thing', thing[0])
       return thing[0] || {
         type: 'gridpoint',
         ...realPoint,
       };
     }
-    console.log('out')
     // if snapping only to edges (placing edge components, return either the snapping edge or original point)
     if (snapOnlyToEdges) {
       const snappingEdge = this.snappingEdgeData(rwuPoint);
-      return snappingEdge || {
+      return snappingEdge[0] || {
         type: 'gridpoint',
         ...rwuPoint,
       };
@@ -912,7 +906,7 @@ export default {
     if (snappingVertex) { return snappingVertex; }
 
     const snappingEdge = this.snappingEdgeData(rwuPoint);
-    if (snappingEdge) { return snappingEdge; }
+    if (snappingEdge.length > 0) { return snappingEdge[0]; }
 
     // grid is active and no vertices or edges are within snapping range, calculate the closest grid point to snap to
     if (this.gridVisible) {
