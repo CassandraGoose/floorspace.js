@@ -217,7 +217,7 @@ export default {
       gridCoords = d3.mouse(this.$refs.grid),
       gridPoint = { x: gridCoords[0], y: gridCoords[1] },
       snapTarget = this.findSnapTarget(gridPoint);
-
+    console.log('this two')
     // if the snapTarget is the origin of the face being drawn in Polygon mode, close the face and don't add a new point
     if (snapTarget.type === 'vertex' && snapTarget.origin && this.currentTool === 'Polygon') {
       this.savePolygonFace();
@@ -226,6 +226,7 @@ export default {
 
     // create the point
     const newPoint = snapTarget.type === 'edge' ? snapTarget.projection : snapTarget;
+    console.log('newpoint?', newPoint)
     this.points.push(newPoint);
     this.drawPoints();
     // if the Rectangle or Eraser tool is active and two points have been drawn (to define a rectangle)
@@ -269,7 +270,7 @@ export default {
     }
 
     const snapTarget = this.findSnapTarget(gridPoint);
-
+    console.log('this one')
     // render a line and point showing which geometry would be created with a click at this location
     const guidePoint = snapTarget.type === 'edge' ? snapTarget.projection :
       snapTarget;
@@ -871,9 +872,13 @@ export default {
     }
 
     if (this.snapMode === 'grid-verts-edges') {
+      console.log('in')
       const realPoint = this.gridPointToRWU(gridPoint);
       const gridSpacing = 0.5;
       // need to a rewrite of snappingEdgeData because it's causing issues for me. 
+      console.log('vertexSnapTargets', JSON.stringify(vertexSnapTargets(this.currentStoryGeometry.vertices, gridSpacing, realPoint)))
+      console.log('snappingEdgeData', JSON.stringify(this.snappingEdgeData(realPoint)));
+      console.log('gridSnapTargets', JSON.stringify(gridSnapTargets(gridSpacing, realPoint)))
       const targets = [
         ...vertexSnapTargets(this.currentStoryGeometry.vertices, gridSpacing, realPoint),
         ...this.snappingEdgeData(realPoint),
@@ -885,12 +890,15 @@ export default {
           dx: realPoint.x - target.x,
           dy: realPoint.y - target.y,
         }));
+//doesn't make it through targets on new polygon after one has been created
       const thing = _.orderBy(targets, ['dist', 'origin', 'type'], ['asc', 'asc', 'desc']);
+      console.log('thing', thing[0])
       return thing[0] || {
         type: 'gridpoint',
         ...realPoint,
       };
     }
+    console.log('out')
     // if snapping only to edges (placing edge components, return either the snapping edge or original point)
     if (snapOnlyToEdges) {
       const snappingEdge = this.snappingEdgeData(rwuPoint);
@@ -1062,7 +1070,7 @@ export default {
       })))));
     }
 
-    if (!snappableEdges.length) { return null; }
+    if (!snappableEdges.length) { return []; }
 
     // find the edge closest to the point being tested
     const nearestEdge = snappableEdges.reduce((a, b) => {
@@ -1146,7 +1154,7 @@ export default {
         v2GridCoords: nearestEdgeV2,
       }
     }
-    return null;
+    return [];
   },
 
   // ****************** SNAPPING HELPERS ****************** //

@@ -177,7 +177,6 @@ export default {
     const
       story = _.find(rootState.models.stories, { geometry_id }),
       vertsReferencedByDCs = _.flatMap(story.spaces, s => _.map(s.daylighting_controls, 'vertex_id'));
-
     commit('trimGeometry', { geometry_id, vertsReferencedElsewhere: vertsReferencedByDCs });
   },
 };
