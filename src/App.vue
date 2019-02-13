@@ -140,4 +140,10 @@ export default {
     }
 }
 
+#app {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  margin: 10%;
+}
 </style>
