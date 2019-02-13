@@ -15,6 +15,7 @@ import timetravel from './store/timetravel';
 import App from './App.vue';
 import PrettySelect from './components/PrettySelect.vue';
 import GenericInput from './components/GenericInput.vue';
+import geometry from './store/modules/geometry';
 
 Vue.component('pretty-select', PrettySelect);
 Vue.component('generic-input', GenericInput);
@@ -25,7 +26,55 @@ window.eventBus = new Vue();
 window.application = new Vue({
   store,
   el: '#app',
-  template: '<App/>',
+  template: '<App :styles="styles"/>',
+  // REMOVE
+  data() {
+    return {
+      styles: {
+        layout: {
+          display: 'flex',
+          justifyContent: 'flex-end',
+        },
+        toolbar: {
+          display: 'flex',
+          flexDirection: 'column',
+          left: 'auto',
+          right: 'auto',
+          top: 'auto',
+          width: '75%',
+          topToolbar: {
+            tabs: {
+              display: 'none',
+            },
+            importButtons: {
+              display: 'none',
+            },
+            undoRedo: {
+              backgroundColor: '#24292c',
+            },
+          },
+          bottomToolbar: {
+            backgroundColor: 'black',
+            instructions: {
+              display: 'none',
+            },
+            image: {
+              display: 'none',
+            },
+            gridTools: {
+              display: 'none',
+            },
+            drawingTools: {
+              flexDirection: 'column',
+              buttons: {
+                backgroundColor: '#24292c',
+              },
+            },
+          },
+        },
+      },
+    };
+  },
   components: { App },
 });
 

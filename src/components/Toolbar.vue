@@ -6,11 +6,11 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
-  <nav id="toolbar">
+  <nav id="toolbar" :style="styles.toolbar">
 
     <section id="top">
       <div id="navigation-head">
-        <div v-if="showImportExport" class="import-export-buttons">
+        <div v-if="showImportExport" class="import-export-buttons" :style="styles.toolbar.topToolbar.importButtons">
           <input ref="importLibrary" @change="importDataAsFile($event, 'library')" type="file" />
           <input ref="importInput" @change="importDataAsFile($event, 'floorplan')" type="file" />
 
@@ -25,7 +25,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           </div>
         </div>
 
-        <div id="undo-redo">
+        <div id="undo-redo" :style="styles.toolbar.topToolbar.undoRedo">
           <div title="undo">
             <undo-svg @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }"></undo-svg>
           </div>
@@ -34,7 +34,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           </div>
         </div>
       </div>
-      <ul id="mode-tabs">
+      <ul id="mode-tabs" :style="styles.toolbar.topToolbar.tabs">
         <li @click="modeTab='floorplan'" class="tab" data-modetab="floorplan" :class="{ active: modeTab === 'floorplan' }">
           <span>
             Floorplan
@@ -96,28 +96,28 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </div>
     </section>
 
-    <section id="bottom" :class="modeTab">
+    <section id="bottom" :class="modeTab" :style="styles.toolbar.bottomToolbar">
       <template  v-if="modeTab ==='floorplan'">
-        <div id="instructions">Draw a floorplan and import images</div>
+        <div id="instructions" :style="styles.toolbar.bottomToolbar.instructions">Draw a floorplan and import images</div>
 
-        <div id="drawing-tools" class="tools-list tools">
-          <div @click="tool = 'Rectangle'" data-tool="Rectangle" title="Rectangle" :class="{ active: tool === 'Rectangle' }">
+        <div id="drawing-tools" :style="styles.toolbar.bottomToolbar.drawingTools" class="tools-list tools">
+          <div @click="tool = 'Rectangle'" data-tool="Rectangle" title="Rectangle" :style="styles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Rectangle' }">
             <tool-draw-rectangle-svg class="button"></tool-draw-rectangle-svg>
           </div>
-          <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :class="{ active: tool === 'Polygon' }">
+          <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="styles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
             <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
           </div>
-          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :class="{ active: tool === 'Fill' }">
+          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="styles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Fill' }">
             <tool-fill-svg class="button"></tool-fill-svg>
           </div>
-          <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :class="{ active: tool === 'Eraser' }">
+          <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :style="styles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Eraser' }">
             <tool-erase-svg class="button"></tool-erase-svg>
           </div>
           <!-- remove Select/Move tool -->
           <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
             <tool-move-size-svg class="button"></tool-move-size-svg>
           </div> -->
-          <div @click="setImageTool" data-tool="Image" title="Image" :class="{ active: tool === 'Image' }">
+          <div @click="setImageTool" data-tool="Image" title="Image" :style="styles.toolbar.bottomToolbar.image" :class="{ active: tool === 'Image' }">
             <tool-image-svg class="button"></tool-image-svg>
           </div>
         </div>
@@ -148,7 +148,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </div> -->
       </template>
 
-      <div id="grid-tools">
+      <div id="grid-tools" :style="styles.toolbar.bottomToolbar.gridTools">
         <RenderByDropdown />
         <div title="zoom to fit">
           <ZoomToFitSvg class="button" @click.native="zoomToFit"></ZoomToFitSvg>
@@ -195,6 +195,7 @@ import appconfig, { componentTypes } from '../store/modules/application/appconfi
 
 export default {
   name: 'toolbar',
+  props: ['styles'],
   data() {
     return {
       componentTypes: {
