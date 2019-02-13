@@ -31,43 +31,54 @@ window.application = new Vue({
   data() {
     return {
       styles: {
-        layout: {
-          display: 'flex',
-          justifyContent: 'flex-end',
-        },
-        toolbar: {
-          display: 'flex',
-          flexDirection: 'column',
-          left: 'auto',
-          right: 'auto',
-          top: 'auto',
-          width: '75%',
-          topToolbar: {
-            tabs: {
-              display: 'none',
-            },
-            importButtons: {
-              display: 'none',
-            },
-            undoRedo: {
-              backgroundColor: '#24292c',
-            },
+        navigationStyles: {
+          width: '20%',
+          nav: {
+            backgroundColor: '#4EACEA',
           },
-          bottomToolbar: {
-            backgroundColor: 'black',
-            instructions: {
-              display: 'none',
-            },
-            image: {
-              display: 'none',
-            },
-            gridTools: {
-              display: 'none',
-            },
-            drawingTools: {
-              flexDirection: 'column',
-              buttons: {
+          list: {
+            display: 'none',
+          },
+        },
+        toolbarStyles: {
+          layout: {
+            display: 'flex',
+            justifyContent: 'flex-end',
+          },
+          toolbar: {
+            display: 'flex',
+            flexDirection: 'column',
+            left: 'auto',
+            right: 'auto',
+            top: 'auto',
+            width: '75%',
+            topToolbar: {
+              tabs: {
+                display: 'none',
+              },
+              importButtons: {
+                display: 'none',
+              },
+              undoRedo: {
                 backgroundColor: '#24292c',
+              },
+            },
+            bottomToolbar: {
+              backgroundColor: 'black',
+              instructions: {
+                display: 'none',
+              },
+              image: {
+                display: 'none',
+              },
+              gridTools: {
+                display: 'none',
+              },
+              drawingTools: {
+                flexDirection: 'column',
+                buttons: {
+                  backgroundColor: '#24292c',
+                },
               },
             },
           },

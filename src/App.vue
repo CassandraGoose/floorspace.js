@@ -8,10 +8,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     <div id="app"
       :class="`tool_${tool.toLowerCase()}`"
       :style="styles.layout">
-        <toolbar :class="{ 'disabled-component': tool === 'Map' }" :styles="styles"></toolbar>
+        <toolbar :class="{ 'disabled-component': tool === 'Map' }" :toolbarStyles="styles.toolbarStyles"></toolbar>
 
         <div id="layout-main" :class="{ 'nav-on-top': navigationExpanded }">
             <navigation
+              :navigationStyles="styles.navigationStyles"
               :class="{ 'disabled-component': tool === 'Map' }"
               @expanded="(val) => { navigationExpanded = val; }"
             ></navigation>
@@ -142,7 +143,7 @@ export default {
 
 #app {
   position: absolute;
-  width: 50%;
+  width: 85%;
   height: 100%;
   margin: 10%;
 }
