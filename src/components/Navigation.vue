@@ -11,14 +11,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         <section id="selections">
         </section>
 
-        <div id="list" :style="navigationStyles.list">
+        <div id="list" >
           <Library
+            :style="navigationStyles.list"
             :objectTypes="['stories']"
             :mode="'stories'"
             :compact="libraryExpanded !== 'stories'"
             @toggleCompact="libraryExpanded = (libraryExpanded === 'stories' ? false : 'stories')"
           />
           <Library
+            :style="navigationStyles.list"
             addNewOnHotkey="true"
             :objectTypes="objectTypesForTab"
             :mode="subselectionType"

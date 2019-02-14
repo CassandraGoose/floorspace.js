@@ -141,12 +141,4 @@ export default {
     }
 }
 
-#app {
-  display: flex;
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  margin: 10%;
-  background-color: pink;
-}
 </style>

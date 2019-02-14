@@ -15,7 +15,8 @@ export default {
       backgroundColor: '#4EACEA',
     },
     list: {
-      display: 'none',
+      backgroundColor: '#4EACEA',
+      height: '100vh',
     },
   },
   toolbarStyles: {
