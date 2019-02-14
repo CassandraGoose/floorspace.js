@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <button @click="finishSetup">Done</button>
         </div>
 
-        <map-modal v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal>
+        <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal>
         <svg id="reticle"></svg>
     </div>
 </template>
@@ -36,6 +36,7 @@ const d3 = require('d3');
 
 export default {
   name: 'map-view',
+  props: ['modal'],
   data() {
     return {
       view: null,

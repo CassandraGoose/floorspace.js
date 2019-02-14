@@ -31,8 +31,18 @@ window.application = new Vue({
   data() {
     return {
       styles: {
+        modal: {
+          position: 'absolute',
+          width: '90%',
+          overlay: {
+            position: 'absolute',
+          },
+        },
+        gridStyles: {
+          left: '30%',
+        },
         navigationStyles: {
-          width: '20%',
+          width: '30%',
           nav: {
             backgroundColor: '#4EACEA',
           },
@@ -41,15 +51,11 @@ window.application = new Vue({
           },
         },
         toolbarStyles: {
-          layout: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-          },
           toolbar: {
             display: 'flex',
             flexDirection: 'column',
             left: 'auto',
-            right: 'auto',
+            // right: 'auto',
             top: 'auto',
             width: '75%',
             topToolbar: {
