@@ -6,22 +6,22 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 <template>
     <div id="app"
-      :class="`tool_${tool.toLowerCase()}`"
-      :style="styles.layout">
+      :class="`tool_${tool.toLowerCase()}`">
         <toolbar :class="{ 'disabled-component': tool === 'Map' }" :toolbarStyles="styles.toolbarStyles"></toolbar>
-
+        
+        <navigation
+            :navigationStyles="styles.navigationStyles"
+            :class="{ 'disabled-component': tool === 'Map' }"
+            @expanded="(val) => { navigationExpanded = val; }"
+          ></navigation>
         <div id="layout-main" :class="{ 'nav-on-top': navigationExpanded }">
-            <navigation
-              :navigationStyles="styles.navigationStyles"
-              :class="{ 'disabled-component': tool === 'Map' }"
-              @expanded="(val) => { navigationExpanded = val; }"
-            ></navigation>
+            
 
-            <main>
+            <main :style="styles.gridStyles">
               <div id="alert-text" v-show="error || success" :class="{ error, success }">
                   <p>{{ error || success }}</p>
               </div>
-                <canvas-view></canvas-view>
+                <canvas-view :modal="styles.modal"></canvas-view>
                 <grid-view></grid-view>
             </main>
             <!-- <inspector-view></inspector-view> -->
@@ -142,9 +142,11 @@ export default {
 }
 
 #app {
+  display: flex;
   position: absolute;
-  width: 85%;
+  width: 50%;
   height: 100%;
   margin: 10%;
+  background-color: pink;
 }
 </style>

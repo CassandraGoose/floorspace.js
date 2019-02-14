@@ -15,7 +15,7 @@ import timetravel from './store/timetravel';
 import App from './App.vue';
 import PrettySelect from './components/PrettySelect.vue';
 import GenericInput from './components/GenericInput.vue';
-import geometry from './store/modules/geometry';
+import speedStyles from './speedStyles';
 
 Vue.component('pretty-select', PrettySelect);
 Vue.component('generic-input', GenericInput);
@@ -30,66 +30,7 @@ window.application = new Vue({
   // REMOVE
   data() {
     return {
-      styles: {
-        modal: {
-          position: 'absolute',
-          width: '90%',
-          overlay: {
-            position: 'absolute',
-          },
-        },
-        gridStyles: {
-          left: '30%',
-        },
-        navigationStyles: {
-          width: '30%',
-          nav: {
-            backgroundColor: '#4EACEA',
-          },
-          list: {
-            display: 'none',
-          },
-        },
-        toolbarStyles: {
-          toolbar: {
-            display: 'flex',
-            flexDirection: 'column',
-            left: 'auto',
-            // right: 'auto',
-            top: 'auto',
-            width: '75%',
-            topToolbar: {
-              tabs: {
-                display: 'none',
-              },
-              importButtons: {
-                display: 'none',
-              },
-              undoRedo: {
-                backgroundColor: '#24292c',
-              },
-            },
-            bottomToolbar: {
-              backgroundColor: 'black',
-              instructions: {
-                display: 'none',
-              },
-              image: {
-                display: 'none',
-              },
-              gridTools: {
-                display: 'none',
-              },
-              drawingTools: {
-                flexDirection: 'column',
-                buttons: {
-                  backgroundColor: '#24292c',
-                },
-              },
-            },
-          },
-        },
-      },
+      styles: speedStyles,
     };
   },
   components: { App },
