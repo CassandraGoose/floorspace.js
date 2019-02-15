@@ -2,8 +2,7 @@
   <div
     class="editable-select-list"
     :class="{ 'expanded': !compact }"
-    :data-object-type="selectedObjectType"
-  >
+    :data-object-type="selectedObjectType">
     <div class="controls">
       <div class="control-group">
         <PrettySelect v-if="objectTypes.length > 1"
@@ -16,7 +15,7 @@
           <AddNew class="button"/>
         </a>
       </div>
-      <div class="control-group">
+      <div class="control-group" :style="styles.editableSelectList.doubleArrows">
         <a @click="toggleCompact" :title="compact ? 'expand' : 'contract'">
           <DoubleArrows
             class="button"
@@ -41,6 +40,7 @@
       :duplicateRow="duplicateRow"
     />
     <EditableTable
+      :style="styles.editableSelectList.editableTable"
       v-else
       :selectRow="selectRow"
       :selectedItemId="selectedRowId"
@@ -53,6 +53,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash';
 import EditableTable from './EditableTable.vue';
 import LibrarySelect from './LibrarySelect.vue';
 import PrettySelect from './PrettySelect.vue';
@@ -63,7 +64,7 @@ export default {
   name: 'EditableSelectList',
   props: [
     'columns', 'rows', 'addRow', 'editRow', 'destroyRow', 'selectRow', 'selectedRowId',
-    'objectTypes', 'selectedObjectType', 'searchAvailable', 'compact', 'duplicateRow',
+    'objectTypes', 'selectedObjectType', 'searchAvailable', 'compact', 'duplicateRow', 'styles',
   ],
   data() {
     return {

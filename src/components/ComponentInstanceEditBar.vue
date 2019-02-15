@@ -8,8 +8,8 @@
   />
 </template>
 <script>
-import libconfig from '../store/modules/models/libconfig';
 import { mapGetters } from 'vuex';
+import libconfig from '../store/modules/models/libconfig';
 import EditBar from './EditBar.vue';
 
 export default {

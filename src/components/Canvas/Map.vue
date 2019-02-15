@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <button @click="finishSetup">Done</button>
         </div>
 
-        <map-modal v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal>
+        <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal>
         <svg id="reticle"></svg>
     </div>
 </template>
@@ -27,8 +27,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 <script>
 
 import { mapState } from 'vuex';
-import { ResizeEvents } from 'src/components/Resize'
-import MapModal from 'src/components/Modals/MapModal'
+import { ResizeEvents } from '../Resize';
+import MapModal from '../Modals/MapModal.vue';
 
 const googleMaps = require('google-maps-api')('AIzaSyDIja3lnhq63SxukBm9_mA-jn5R0Bj9RN8', ['places']);
 const ol = require('openlayers');
@@ -36,6 +36,7 @@ const d3 = require('d3');
 
 export default {
   name: 'map-view',
+  props: ['modal'],
   data() {
     return {
       view: null,

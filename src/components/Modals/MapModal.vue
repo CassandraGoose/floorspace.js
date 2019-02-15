@@ -7,8 +7,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <template>
 <aside>
-    <div class="overlay"></div>
-    <div class="modal">
+    <div class="overlay" :style="modal.overlay"></div>
+    <div class="modal" :style="modal">
         <header>
             <h2>Quickstart</h2>
         </header>
@@ -47,6 +47,7 @@ import NonChromeWarning from '../NonChromeWarning.vue';
 
 export default {
   name: 'MapModal',
+  props: ['modal'],
   data() {
     return {
       address: '',

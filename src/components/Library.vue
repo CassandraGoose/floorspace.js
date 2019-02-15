@@ -6,6 +6,7 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
+<div>
   <EditableSelectList
     :selectedObjectType="mode"
     :objectTypes="objectTypesDisplay"
@@ -21,10 +22,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND 
     :compact="compact"
     @toggleCompact="c => $emit('toggleCompact', c)"
     @selectObjectType="changeMode"
+    :styles="styles"
   />
+  </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import { mapState } from 'vuex';
 import libconfig from '../store/modules/models/libconfig';
 import EditableSelectList from './EditableSelectList.vue';
@@ -44,7 +48,7 @@ function keyForMode(mode) {
 
 export default {
   name: 'Library',
-  props: ['objectTypes', 'mode', 'searchAvailable', 'compact', 'addNewOnHotkey'],
+  props: ['objectTypes', 'mode', 'searchAvailable', 'compact', 'addNewOnHotkey', 'styles'],
   mounted() {
     document.body.addEventListener('keyup', this.hotkeyAddNew);
   },
@@ -100,7 +104,7 @@ export default {
     },
     ...mapState({
       stories: state => state.models.stories,
-       modeTab: state => state.application.currentSelections.modeTab,
+      modeTab: state => state.application.currentSelections.modeTab,
     }),
     spaces() { return this.currentStory.spaces; },
     shading() { return this.currentStory.shading; },

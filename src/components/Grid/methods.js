@@ -1531,7 +1531,7 @@ export default {
   /*
   * Format tick labels to maintain legibility
   */
-  formatTickX (maxTicks, val) {
+  formatTickX(maxTicks, val) {
     const rangeX = this.max_x - this.min_x,
     spacing = this.spacing,
     spacingScaled = Math.ceil((rangeX / maxTicks) / spacing) * spacing;

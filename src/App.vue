@@ -5,29 +5,31 @@ Redistribution and use in source and binary forms, with or without modification,
 (3) Neither the name of the copyright holder nor the names of any contributors may be used to endorse or promote products derived from this software without specific prior written permission from the respective party.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 <template>
-    <div id="app"
-      :class="`tool_${tool.toLowerCase()}`">
-        <toolbar :class="{ 'disabled-component': tool === 'Map' }"></toolbar>
+  <div id="app"
+    :class="`tool_${tool.toLowerCase()}`">
+      <toolbar :class="{ 'disabled-component': tool === 'Map' }" :toolbarStyles="styles.toolbarStyles"></toolbar>
+      
+      <navigation
+          :navigationStyles="styles.navigationStyles"
+          :class="{ 'disabled-component': tool === 'Map' }"
+          @expanded="(val) => { navigationExpanded = val; }"
+        ></navigation>
+      <div id="layout-main" :style="styles.layout" :class="{ 'nav-on-top': navigationExpanded }">
+          
 
-        <div id="layout-main" :class="{ 'nav-on-top': navigationExpanded }">
-            <navigation
-              :class="{ 'disabled-component': tool === 'Map' }"
-              @expanded="(val) => { navigationExpanded = val; }"
-            ></navigation>
-
-            <main>
-              <div id="alert-text" v-show="error || success" :class="{ error, success }">
-                  <p>{{ error || success }}</p>
-              </div>
-                <canvas-view></canvas-view>
-                <grid-view></grid-view>
-            </main>
-            <!-- <inspector-view></inspector-view> -->
-        </div>
-        <ImageUpload />
-        <Textures />
-        <PortalTarget name="texture-options" />
-    </div>
+          <main :style="styles.main">
+            <div id="alert-text" v-show="error || success" :class="{ error, success }">
+                <p>{{ error || success }}</p>
+            </div>
+              <canvas-view :modal="styles.modal"></canvas-view>
+              <grid-view></grid-view>
+          </main>
+          <!-- <inspector-view></inspector-view> -->
+      </div>
+      <ImageUpload />
+      <Textures />
+      <PortalTarget name="texture-options" />
+  </div>
 </template>
 
 <script>
@@ -48,6 +50,7 @@ import { Resize } from './components/Resize';
 
 export default {
   name: 'app',
+  props: ['styles'],
   data() {
     return {
       error: null,

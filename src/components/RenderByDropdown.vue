@@ -11,7 +11,7 @@
 
 <script>
 import { displayNameForMode } from './../store/modules/application/helpers';
-import PrettySelect from './PrettySelect';
+import PrettySelect from './PrettySelect.vue';
 
 export default {
   computed: {
