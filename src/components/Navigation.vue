@@ -7,7 +7,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <template>
   <div id="layout-navigation" :style="navigationStyles">
-    <speed-tree :styles="navigationStyles" :objectTypes="['Story', 'Space', 'Shading', 'Space Type']"/>
+    <speed-tree :styles="navigationStyles" :selectItem="row => { selectedObject = row; }"
+ :objectTypes="['Story', 'Space', 'Shading', 'Space Type']"/>
     <nav id="navigation">
         <section id="selections">
         </section>

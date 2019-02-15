@@ -1,14 +1,13 @@
 <template>
   <div id="speedNavigation">
-    <div class="tree">
-      <span><img src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
-      <div v-for="(story, i) in this.stories" :key="i">
-        <a>{{story.name}}</a>
-        <div v-for="(space, i) in story.spaces" :key="i">
-          <a>{{space.name}}</a>
-          <!-- <p>{{space.type}}</p> -->
-        </div>
-      </div>
+    <div class="tree-container">
+    <span><img src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
+    <ol class="tree" v-for="(story, i) in this.stories" :key="i">
+      <li><a @click="selectStory(story)">{{story.name}}</a></li>
+      <ol v-for="(space, i) in story.spaces" :key="i">
+        <li>{{space.name}}</li>
+      </ol>
+    </ol>
     </div>
   <div class="controls">
     <div v-for="(object, i) in objectTypes" :key="i">
@@ -56,6 +55,14 @@ export default {
     shading() { return this.currentStory.shading; },
   },
   methods: {
+    selectStory(story) {
+      console.log(story);
+      // this.$store.dispatch('models/selectStory', story);
+      this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
+    },
+    selectSubItem(item) {
+      this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
+    },
     // REPEATED
     subselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
@@ -157,7 +164,7 @@ export default {
   color: black;
 }
 
-.tree {
+.tree-container {
   display: flex;
   flex-direction: column;
   align-self: flex-start;
@@ -166,6 +173,38 @@ export default {
   height: 50%;
   width: 100%;
   overflow: scroll;
+}
+
+ol.tree, ol.tree ol{
+  list-style: none;
+  margin-left: 3%;
+}
+
+ol.tree ol {
+  margin-left: 3%;
+}
+
+ol.tree li {
+  padding: 3%;
+  color: black;
+  font-weight: bold;
+  border-left: 1px dotted black;
+}
+
+ol.tree li:list-child {
+  border-left: none;
+}
+
+ol.tree li:before {
+  position: relative;
+  top: -.3em;
+  height: 1em;
+  width: 10%;
+  color: white;
+  border-bottom: 1px dotted black;
+  content: "";
+  display: inline-block;
+  left: -7px;
 }
 
 .controls {
