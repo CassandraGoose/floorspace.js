@@ -169,7 +169,7 @@ export default {
   flex-direction: column;
   align-self: flex-start;
   background-color: white;
-  padding: 5%;
+  padding: 10%;
   height: 50%;
   width: 100%;
   overflow: scroll;
@@ -177,35 +177,46 @@ export default {
 
 ol.tree, ol.tree ol{
   list-style: none;
-  margin-left: 3%;
+  margin: 1%;
+  padding: 3%;
 }
 
 ol.tree ol {
-  margin-left: 3%;
+  margin-left: 1%;
 }
 
+ol > ol > li {
+  margin-left: 5%;
+}
+
+
 ol.tree li {
-  padding: 3%;
+  line-height: 1em;
   color: black;
   font-weight: bold;
   border-left: 1px dotted black;
 }
 
-ol.tree li:list-child {
+ol.tree li:last-child, ol.tree li:first-child {
   border-left: none;
 }
 
 ol.tree li:before {
   position: relative;
   top: -.3em;
-  height: 1em;
+  height: 1.5em;
   width: 10%;
   color: white;
   border-bottom: 1px dotted black;
   content: "";
   display: inline-block;
-  left: -7px;
+  left: -3%;
 }
+
+ol.tree li:last-child:before {
+  border-left: 1px dotted black;
+}
+
 
 .controls {
   margin-left: 20%;
