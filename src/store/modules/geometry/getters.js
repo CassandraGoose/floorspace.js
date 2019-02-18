@@ -37,5 +37,5 @@ export default {
                 edge_order: face.edgeRefs.map(eR => eR.reverse ? 0 : 1)
             }))
         }));
-    }
+    },
 }

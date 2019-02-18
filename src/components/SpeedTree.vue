@@ -9,38 +9,48 @@
       </ol>
     </ol>
     </div>
-  <div class="controls">
-    <div v-for="(object, i) in objectTypes" :key="i">
-      <a @click="createObject(object)">
-        <div class="control-buttons"><AddNew class="button"/>{{object}}</div>
-      </a>
+    <div class="controls">
+      <div v-for="(object, i) in objectTypes" :key="i">
+        <a @click="createObject(object)">
+          <div class="control-buttons"><AddNew class="button"/>{{object}}</div>
+        </a>
+      </div>
     </div>
-  </div>
-  <div class="area-info">
-    <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
-    <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
-  </div>
+    <div class="area-info">
+      <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
+      <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import _ from 'lodash';
 import Library from './Library.vue';
 import AddNew from './../assets/svg-icons/add_new.svg';
+import geometryHelpers from './../store/modules/geometry/helpers';
 
 export default {
   name: 'SpeedTree',
   props: ['styles', 'objectTypes'],
   computed: {
-    ...mapState('models', ['stories']),
+    ...mapState({
+      stories: state => state.models.stories,
+      geometry: state => state.geometry,
+    }),
+    ...mapGetters({
+      currentStoryGeom: 'application/currentStoryDenormalizedGeom',
+    }),
     storyArea() {
-      // calculate from state
-      return 0;
+      return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
     },
     buildingArea() {
       // calculate from state
-      return 0;
+      let totalArea = 0;
+      this.geometry.forEach((geom) => {
+        totalArea += Math.abs(geometryHelpers.areaOfSelection(geom.vertices));
+      });
+      return totalArea;
     },
     currentStory: {
       get() { return this.$store.getters['application/currentStory']; },
@@ -56,8 +66,6 @@ export default {
   },
   methods: {
     selectStory(story) {
-      console.log(story);
-      // this.$store.dispatch('models/selectStory', story);
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
     selectSubItem(item) {
@@ -70,7 +78,6 @@ export default {
     },
     // REPEATED
     createObject(object) {
-      console.log('clicked');
       switch (object) {
         case 'Story':
           this.$store.dispatch('models/initStory');
