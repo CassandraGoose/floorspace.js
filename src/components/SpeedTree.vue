@@ -10,10 +10,16 @@
           {{story.name}}
           {{this.expanded}}
         </a>
+        <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
         </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
-          <li>{{space.name}}</li>
+          <li>{{space.name}} <a @click="destroyObject('spaces', space)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a></li>
+        </ol>
+      </div>
+      <div v-if="expanded.includes(i)">
+        <ol v-for="(shading, k) in story.shading" :key="k">
+          <li>{{shading.name}} <a @click="destroyObject('shading', shading)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a></li>
         </ol>
       </div>
     </ol>
@@ -59,7 +65,6 @@ export default {
       return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
     },
     buildingArea() {
-      // calculate from state
       let totalArea = 0;
       this.geometry.forEach((geom) => {
         totalArea += Math.abs(geometryHelpers.areaOfSelection(geom.vertices));
@@ -70,7 +75,6 @@ export default {
       get() { return this.$store.getters['application/currentStory']; },
       set(story) { this.$store.dispatch('application/setCurrentStoryId', { id: story.id }); },
     },
-    // current selection getters and setters - these dispatch actions to update the data store when a new item is selected
     currentSubSelection: {
       get() { return this.$store.getters['application/currentSubSelection']; },
       set(item) { this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id }); },
@@ -119,28 +123,29 @@ export default {
       if (!newestRow) { return; }
       this.selectedObject = newestRow;
     },
-    // REPEATED
-    destroyObject(object) {
-      switch (this.mode) {
+    // REPEATED W/O type param... so need to refactor 
+    destroyObject(type, object) {
+      debugger;
+      switch (type) {
         case 'stories':
           this.$store.dispatch('models/destroyStory', { story: object });
           return;
         case 'spaces':
           this.$store.dispatch('models/destroySpace', {
             space: object,
-            story: this.$store.state.models.stories.find(story => story[this.mode].find(o => o.id === object.id)),
+            story: this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)),
           });
           break;
         case 'shading':
           this.$store.dispatch('models/destroyShading', {
             shading: object,
-            story: this.$store.state.models.stories.find(story => story[this.mode].find(o => o.id === object.id)),
+            story: this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)),
           });
           break;
         case 'images':
           this.$store.dispatch('models/destroyImage', {
             image: object,
-            story: this.$store.state.models.stories.find(story => story[this.mode].find(o => o.id === object.id)),
+            story: this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)),
           });
           break;
         case 'window_definitions':
@@ -171,9 +176,6 @@ export default {
         this.selectedObject = this.rows[0];
       }
     },
-  },
-  mounted() {
-    console.log('HYE', this.stories);
   },
   components: {
     Library,
