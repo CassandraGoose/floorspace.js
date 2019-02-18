@@ -1,7 +1,7 @@
 export default {
   modal: {
     position: 'absolute',
-    width: '90%',
+    width: '70%',
     overlay: {
       position: 'absolute',
     },

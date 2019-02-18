@@ -1,12 +1,21 @@
 <template>
   <div id="speedNavigation">
     <div class="tree-container">
-    <span><img src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
+    <span><img class="building" src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
-      <li><a @click="selectStory(story)">{{story.name}}</a></li>
-      <ol v-for="(space, i) in story.spaces" :key="i">
-        <li>{{space.name}}</li>
-      </ol>
+      <li>
+        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
+        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
+        <a @click="selectStory(story)">
+          {{story.name}}
+          {{this.expanded}}
+        </a>
+        </li>
+      <div v-if="expanded.includes(i)">
+        <ol v-for="(space, j) in story.spaces" :key="j">
+          <li>{{space.name}}</li>
+        </ol>
+      </div>
     </ol>
     </div>
     <div class="controls">
@@ -33,6 +42,11 @@ import geometryHelpers from './../store/modules/geometry/helpers';
 export default {
   name: 'SpeedTree',
   props: ['styles', 'objectTypes'],
+  data() {
+    return {
+      expanded: [0],
+    };
+  },
   computed: {
     ...mapState({
       stories: state => state.models.stories,
@@ -70,6 +84,12 @@ export default {
     },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
+    },
+    storyExpanded(index) {
+      this.expanded.push(index);
+    },
+    storyCollapsed(index) {
+      this.expanded = this.expanded.filter(item => item !== index);
     },
     // REPEATED
     subselectionType: {
@@ -245,8 +265,13 @@ ol.tree li:last-child:before {
   padding-right: 5%;
 }
 
-img {
+.building {
   max-height: 20px;
   max-width: 20px;
+}
+
+img {
+  max-height: 10px;
+  max-width: 10px;
 }
 </style>
