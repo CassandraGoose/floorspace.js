@@ -20,7 +20,7 @@ import speedStyles from './speedStyles';
 Vue.component('pretty-select', PrettySelect);
 Vue.component('generic-input', GenericInput);
 
-window.eventBus = new Vue();
+// window.eventBus = new Vue();
 
 // mount the root vue instance
 window.application = new Vue({

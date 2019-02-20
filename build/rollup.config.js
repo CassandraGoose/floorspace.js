@@ -26,13 +26,13 @@ export default {
         isProduction: true
       }
     }),
+    resolve({
+      jsnext: true,
+    }),
     svg(),
     sass(),
     alias({
-      vue: path.resolve(__dirname, '../node_modules/vue/dist/vue.js')
-    }),
-    resolve({
-      module: true,
+      vue: path.resolve(__dirname, '../node_modules/vue/dist/vue.js'),
     }),
     url(),
     json(),

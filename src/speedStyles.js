@@ -1,19 +1,20 @@
 export default {
   modal: {
-    position: 'absolute',
-    width: '70%',
+    position: 'fixed',
+    width: '50%',
+    top: '25%',
     overlay: {
       position: 'absolute',
     },
   },
   layout: {
-    left: '30%',
+    left: '25%',
   },
   main: {
     position: 'static',
   },
   navigationStyles: {
-    width: '30%',
+    width: '25%',
     nav: {
       display: 'none',
     },
@@ -36,7 +37,7 @@ export default {
       left: 'auto',
       // right: 'auto',
       top: 'auto',
-      width: '75%',
+      width: '78%',
       topToolbar: {
         tabs: {
           display: 'none',

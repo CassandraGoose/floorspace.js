@@ -8,7 +8,6 @@
         <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
         <a @click="selectStory(story)">
           {{story.name}}
-          {{this.expanded}}
         </a>
         <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
         </li>
@@ -24,16 +23,18 @@
       </div>
     </ol>
     </div>
-    <div class="controls">
-      <div v-for="(object, i) in objectTypes" :key="i">
-        <a @click="createObject(object)">
-          <div class="control-buttons"><AddNew class="button"/>{{object}}</div>
-        </a>
+    <div class="controls-container">
+     <div class="controls">
+        <div v-for="(object, i) in objectTypes" :key="i">
+          <a @click="createObject(object)">
+            <div class="control-buttons"><AddNew class="button"/>{{object}}</div>
+          </a>
+        </div>
       </div>
-    </div>
-    <div class="area-info">
-      <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
-      <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+      <div class="area-info">
+        <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
+        <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +53,9 @@ export default {
     return {
       expanded: [0],
     };
+  },
+  created() {
+    console.log('this', this);
   },
   computed: {
     ...mapState({
@@ -125,7 +129,6 @@ export default {
     },
     // REPEATED W/O type param... so need to refactor 
     destroyObject(type, object) {
-      debugger;
       switch (type) {
         case 'stories':
           this.$store.dispatch('models/destroyStory', { story: object });
@@ -199,7 +202,7 @@ export default {
   align-self: flex-start;
   background-color: white;
   padding: 10%;
-  height: 50%;
+  height: 55%;
   width: 100%;
   overflow: scroll;
 }
@@ -217,7 +220,6 @@ ol.tree ol {
 ol > ol > li {
   margin-left: 5%;
 }
-
 
 ol.tree li {
   line-height: 1em;
@@ -246,19 +248,16 @@ ol.tree li:last-child:before {
   border-left: 1px dotted black;
 }
 
-
-.controls {
-  margin-left: 20%;
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  height: 40%;
+  justify-content: space-around;
+  overflow: scroll;
 }
 
-.control-buttons {
-  min-width: 30%;
-  justify-content: flex-start;
-}
-
-.area-info {
-  margin-left: 20%;
-  padding-bottom: 5%;
+.controls, .area-info {
+  margin-left: 25%;
 }
 
 .area {
@@ -277,3 +276,6 @@ img {
   max-width: 10px;
 }
 </style>
+
+
+#speedNavigation > div.controls-container > div.controls > div:nth-child(1) > a > div

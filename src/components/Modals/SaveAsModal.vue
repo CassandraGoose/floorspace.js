@@ -9,6 +9,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   <ModalBase
     :title="`Save ${saveWhat} as`"
     @close="$emit('close')"
+    :styles="styles"
   >
     <span class="input-text">
       <input ref="downloadName" type="text"
@@ -28,7 +29,7 @@ import ModalBase from './ModalBase.vue';
 
 export default {
   name: 'SaveAsModal',
-  props: ['saveWhat', 'dataToDownload'],
+  props: ['saveWhat', 'dataToDownload', 'styles'],
   mounted() {
     this.$refs.downloadName.focus();
   },

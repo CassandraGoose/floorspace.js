@@ -7,8 +7,8 @@
 
 import _ from 'lodash';
 
-const d3 = require('d3');
-const d3Selection = require('d3-selection');
+const d3 = require('../d3');
+const d3Selection = require('../d3-selection');
 
 /*
 You might ask: Why do we need a copy-pasta version of lodash.throttle?
@@ -114,6 +114,7 @@ function d3Debounce(func, wait, options) {
         thisArg = lastThis,
         saveD3Event = d3.event;
 
+    debugger;
     d3Selection.event = lastD3Event;
     lastD3Event = lastArgs = lastThis = undefined;
     lastInvokeTime = time;

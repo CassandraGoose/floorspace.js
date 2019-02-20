@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import eventBus from '../eventBus';
 
 const serializeState = (state) => {
   const clone = JSON.parse(JSON.stringify(state));
@@ -147,7 +148,7 @@ export default {
     this.triggeringAction = triggeringAction;
     this.store.replaceState(replacementState);
     console.log('undo', replacementState);
-    window.eventBus.$emit('success', `undo ${oldAction}`);
+    eventBus.$emit('success', `undo ${oldAction}`);
   },
 
   redo() {
@@ -159,7 +160,7 @@ export default {
     });
     this.triggeringAction = triggeringAction;
     this.store.replaceState(replacementState);
-    window.eventBus.$emit('success', `redo ${triggeringAction}`);
+    eventBus.$emit('success', `redo ${triggeringAction}`);
     console.log('redo', replacementState);
   },
   logTimetravel() {

@@ -2,7 +2,7 @@ import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
 
-const d3 = require('d3');
+const d3 = require('../../../d3');
 
 export default {
   namespaced: true,

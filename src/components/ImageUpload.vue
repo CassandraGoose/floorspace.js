@@ -11,11 +11,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import modelHelpers from './../store/modules/models/helpers';
+import eventBus from '../eventBus';
 
 export default {
   name: 'ImageUpload',
   mounted() {
-    window.eventBus.$on('uploadImage', this.promptUpload.bind(this));
+    eventBus.$on('uploadImage', this.promptUpload.bind(this));
   },
   computed: {
     ...mapState({

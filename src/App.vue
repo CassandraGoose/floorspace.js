@@ -7,7 +7,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 <template>
   <div id="app"
     :class="`tool_${tool.toLowerCase()}`">
-      <toolbar :class="{ 'disabled-component': tool === 'Map' }" :toolbarStyles="styles.toolbarStyles"></toolbar>
+      <toolbar :class="{ 'disabled-component': tool === 'Map' }" :styles="styles"></toolbar>
       
       <navigation
           :navigationStyles="styles.navigationStyles"
@@ -46,7 +46,7 @@ import ImageUpload from './components/ImageUpload.vue';
 import Inspector from './components/Inspector.vue';
 import Textures from './components/Textures.vue';
 import { Resize } from './components/Resize';
-
+import eventBus from './eventBus';
 
 export default {
   name: 'app',
@@ -63,15 +63,15 @@ export default {
   },
   mounted() {
 
-    window.eventBus.$on('error', (err) => {
+    eventBus.$on('error', (err) => {
       this.error = err;
       setTimeout(() => { this.error = null; }, 5000);
     });
-    window.eventBus.$on('success', (msg) => {
+    eventBus.$on('success', (msg) => {
       this.success = msg;
       setTimeout(() => { this.success = null; }, 5000);
     });
-    window.eventBus.$on('reload-grid', () => {
+    eventBus.$on('reload-grid', () => {
       // This is unfortunate. oh well.
       document.getElementById('svg-grid')
         .dispatchEvent(new Event('reloadGrid'));

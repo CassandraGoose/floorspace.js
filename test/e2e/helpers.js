@@ -1,4 +1,4 @@
-const d3 = require('d3');
+const d3 = require('../../src/d3');
 const _ = require('lodash');
 
 function errorMessages(logs) {

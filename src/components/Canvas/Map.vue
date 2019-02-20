@@ -27,12 +27,15 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 <script>
 
 import { mapState } from 'vuex';
+import _ from 'lodash';
 import { ResizeEvents } from '../Resize';
 import MapModal from '../Modals/MapModal.vue';
+import eventBus from '../../eventBus';
 
 const googleMaps = require('google-maps-api')('AIzaSyDIja3lnhq63SxukBm9_mA-jn5R0Bj9RN8', ['places']);
 const ol = require('openlayers');
-const d3 = require('d3');
+const d3 = require('../../d3');
+
 
 export default {
   name: 'map-view',
@@ -57,7 +60,7 @@ export default {
     this.initAutoComplete();
     this.loadMap();
     ResizeEvents.$on('resize', this.updateMapView);
-    window.eventBus.$on('boundsResolved', this.clearStartResolution);
+    eventBus.$on('boundsResolved', this.clearStartResolution);
   },
 
   /*
@@ -65,7 +68,7 @@ export default {
   */
   beforeDestroy() {
     ResizeEvents.$off('resize', this.updateMapView);
-    window.eventBus.$off('boundsResolved', this.clearStartResolution);
+    eventBus.$off('boundsResolved', this.clearStartResolution);
   },
 
   methods: {
@@ -162,7 +165,7 @@ export default {
       const resolution = ol.proj.getPointResolution(this.view.getProjection(), this.view.getResolution(), this.view.getCenter());
       const scale = this.startResolution / resolution;
       console.log(`scaling to ${this.startResolution} / ${resolution} == ${scale}`);
-      window.eventBus.$emit('scaleTo', scale);
+      eventBus.$emit('scaleTo', scale);
 
       this.rotation = this.view.getRotation();
 

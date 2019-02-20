@@ -3,6 +3,7 @@ import factory from './../factory';
 import geometryHelpers, { distanceBetweenPoints } from './../helpers';
 import createFaceFromPoints, { eraseSelection, newGeometriesOfOverlappedFaces, validateFaceGeometry } from './createFaceFromPoints';
 import { withPreservedComponents } from './componentPreservationSociety';
+import eventBus from '../../../../eventBus';
 
 export function getOrCreateVertex(geometry, coords) {
   return geometryHelpers.vertexForCoordinates(coords, geometry) || factory.Vertex(coords.x, coords.y);
@@ -40,7 +41,7 @@ export default {
       const eraseResult = eraseSelection(points, context);
 
       if (!eraseResult) {
-        window.eventBus.$emit('error', 'Operation cancelled - no split faces');
+        eventBus.$emit('error', 'Operation cancelled - no split faces');
       }
     });
 
@@ -68,16 +69,16 @@ export default {
       );
 
     if (newGeoms.error) {
-      window.eventBus.$emit('error', `Operation cancelled - ${newGeoms.error}`);
+      eventBus.$emit('error', `Operation cancelled - ${newGeoms.error}`);
 
-      window.eventBus.$emit('reload-grid');
+      eventBus.$emit('reload-grid');
       return;
     }
 
     const movedGeom = validateFaceGeometry(movedPoints, currentStoryGeometry);
     if (!movedGeom.success) {
-      window.eventBus.$emit('error', movedGeom.error);
-      window.eventBus.$emit('reload-grid');
+      eventBus.$emit('error', movedGeom.error);
+      eventBus.$emit('reload-grid');
       return;
     }
 

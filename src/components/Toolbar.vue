@@ -6,11 +6,11 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
-  <nav id="toolbar" :style="toolbarStyles.toolbar">
+  <nav id="toolbar" :style="styles.toolbarStyles.toolbar">
 
     <section id="top">
       <div id="navigation-head">
-        <div v-if="showImportExport" class="import-export-buttons" :style="toolbarStyles.toolbar.topToolbar.importButtons">
+        <div v-if="showImportExport" class="import-export-buttons" :style="styles.toolbarStyles.toolbar.topToolbar.importButtons">
           <input ref="importLibrary" @change="importDataAsFile($event, 'library')" type="file" />
           <input ref="importInput" @change="importDataAsFile($event, 'floorplan')" type="file" />
 
@@ -25,7 +25,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           </div>
         </div>
 
-        <div id="undo-redo" :style="toolbarStyles.toolbar.topToolbar.undoRedo">
+        <div id="undo-redo" :style="styles.toolbarStyles.toolbar.topToolbar.undoRedo">
           <div title="undo">
             <undo-svg @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }"></undo-svg>
           </div>
@@ -34,7 +34,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           </div>
         </div>
       </div>
-      <ul id="mode-tabs" :style="toolbarStyles.toolbar.topToolbar.tabs">
+      <ul id="mode-tabs" :style="styles.toolbarStyles.toolbar.topToolbar.tabs">
         <li @click="modeTab='floorplan'" class="tab" data-modetab="floorplan" :class="{ active: modeTab === 'floorplan' }">
           <span>
             Floorplan
@@ -96,28 +96,28 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </div>
     </section>
 
-    <section id="bottom" :class="modeTab" :style="toolbarStyles.toolbar.bottomToolbar">
+    <section id="bottom" :class="modeTab" :style="styles.toolbarStyles.toolbar.bottomToolbar">
       <template  v-if="modeTab ==='floorplan'">
-        <div id="instructions" :style="toolbarStyles.toolbar.bottomToolbar.instructions">Draw a floorplan and import images</div>
+        <div id="instructions" :style="styles.toolbarStyles.toolbar.bottomToolbar.instructions">Draw a floorplan and import images</div>
 
-        <div id="drawing-tools" :style="toolbarStyles.toolbar.bottomToolbar.drawingTools" class="tools-list tools">
-          <div @click="tool = 'Rectangle'" data-tool="Rectangle" title="Rectangle" :style="toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Rectangle' }">
+        <div id="drawing-tools" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools" class="tools-list tools">
+          <div @click="tool = 'Rectangle'" data-tool="Rectangle" title="Rectangle" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Rectangle' }">
             <tool-draw-rectangle-svg class="button"></tool-draw-rectangle-svg>
           </div>
-          <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
+          <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
             <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
           </div>
-          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Fill' }">
+          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Fill' }">
             <tool-fill-svg class="button"></tool-fill-svg>
           </div>
-          <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :style="toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Eraser' }">
+          <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Eraser' }">
             <tool-erase-svg class="button"></tool-erase-svg>
           </div>
           <!-- remove Select/Move tool -->
           <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
             <tool-move-size-svg class="button"></tool-move-size-svg>
           </div> -->
-          <div @click="setImageTool" data-tool="Image" title="Image" :style="toolbarStyles.toolbar.bottomToolbar.image" :class="{ active: tool === 'Image' }">
+          <div @click="setImageTool" data-tool="Image" title="Image" :style="styles.toolbarStyles.toolbar.bottomToolbar.image" :class="{ active: tool === 'Image' }">
             <tool-image-svg class="button"></tool-image-svg>
           </div>
         </div>
@@ -148,7 +148,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </div> -->
       </template>
 
-      <div id="grid-tools" :style="toolbarStyles.toolbar.bottomToolbar.gridTools">
+      <div id="grid-tools" :style="styles.toolbarStyles.toolbar.bottomToolbar.gridTools">
         <RenderByDropdown />
         <div title="zoom to fit">
           <ZoomToFitSvg class="button" @click.native="zoomToFit"></ZoomToFitSvg>
@@ -166,12 +166,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
     <section class="modals">
       <SaveAsModal
+        :styles='styles'
         v-if="showSaveModal"
         :saveWhat="thingWereSaving"
         :dataToDownload="dataToDownload"
         @close="() => {showSaveModal = false; thingWereSaving = '';}"
       />
       <Settings
+        :styles="styles"
         v-else-if="showGroundPropsModal"
         @close="showGroundPropsModal = false"
       />
@@ -181,6 +183,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import _ from 'lodash';
 import SaveAsModal from './Modals/SaveAsModal.vue';
 import Settings from './Modals/Settings.vue';
 import PrettySelect from './PrettySelect.vue';
@@ -189,13 +192,13 @@ import svgs from './svgs';
 import RenderByDropdown from './RenderByDropdown.vue';
 import ComponentInstanceEditBar from './ComponentInstanceEditBar.vue';
 import appconfig, { componentTypes } from '../store/modules/application/appconfig';
-
+import eventBus from '../eventBus';
 
 // svgs
 
 export default {
   name: 'toolbar',
-  props: ['toolbarStyles'],
+  props: ['styles'],
   data() {
     return {
       componentTypes: {
@@ -212,11 +215,11 @@ export default {
     setImageTool() {
       this.tool = 'Image';
       if (this.currentStory.images.length === 0) {
-        window.eventBus.$emit('uploadImage');
+        eventBus.$emit('uploadImage');
       }
     },
     zoomToFit() {
-      window.eventBus.$emit('zoomToFit');
+      eventBus.$emit('zoomToFit');
     },
     exportData() {
       this.thingWereSaving = 'Floorplan';
@@ -232,7 +235,7 @@ export default {
         try {
           data = JSON.parse(reader.result);
         } catch (e) {
-          window.eventBus.$emit('error', 'Invalid JSON');
+          eventBus.$emit('error', 'Invalid JSON');
           return;
         }
         if (type === 'library') {
@@ -254,7 +257,7 @@ export default {
       if (this.allowSettingUnits) {
         this.rwUnits = val;
       } else {
-        window.eventBus.$emit('error', 'Units must be set before any geometry is drawn.');
+        eventBus.$emit('error', 'Units must be set before any geometry is drawn.');
       }
       // not today, friend...
       // this.$store.dispatch('changeUnits', { newUnits: val });

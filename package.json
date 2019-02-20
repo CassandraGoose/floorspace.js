@@ -16,9 +16,10 @@
     "deploy": "./node_modules/.bin/gh-pages -d dist/ -b gh-pages -r git@github.com:${TRAVIS_REPO_SLUG}.git"
   },
   "dependencies": {
+    "@babel/core": "^7.2.2",
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015-rollup": "^3.0.0",
-    "d3": "^4.4.0",
+    "d3": "^5.9.1",
     "d3-selection": "^1.1.0",
     "d3-selection-multi": "^1.0.1",
     "element-ui": "^2.3.4",

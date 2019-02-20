@@ -4,6 +4,8 @@ import geometryHelpers, { distanceBetweenPoints } from './../helpers';
 import modelHelpers from './../../models/helpers';
 import { uniq, dropConsecutiveDups, allPairs } from './../../../../utilities';
 import { withPreservedComponents } from './componentPreservationSociety';
+import eventBus from '../../../../eventBus';
+
 /*
  * create a face and associated edges and vertices from an array of points
  * associate the face with the space or shading included in the payload
@@ -27,7 +29,7 @@ export default function createFaceFromPoints(context, payload) {
     const existingFaceVertices = geometryHelpers.verticesForFaceId(existingFace.id, currentStoryGeometry);
     facePoints = geometryHelpers.setOperation('union', existingFaceVertices, points);
     if (facePoints.error) {
-      window.eventBus.$emit('error', `Operation cancelled - ${facePoints.error}`);
+      eventBus.$emit('error', `Operation cancelled - ${facePoints.error}`);
       return;
     }
   } else {
@@ -37,7 +39,7 @@ export default function createFaceFromPoints(context, payload) {
 
   const faceGeometry = validateFaceGeometry(facePoints, context.rootGetters['application/currentStoryGeometry'], context.rootGetters['project/snapTolerance']);
   if (!faceGeometry.success) {
-    window.eventBus.$emit('error', faceGeometry.error);
+    eventBus.$emit('error', faceGeometry.error);
     console.error(faceGeometry.error);
     return;
   }
@@ -50,7 +52,7 @@ export default function createFaceFromPoints(context, payload) {
 
   // prevent overlapping faces by erasing existing geometry covered by the points defining the new face
   if (newGeoms.error) {
-    window.eventBus.$emit('error', `Operation cancelled - ${newGeoms.error}`);
+    eventBus.$emit('error', `Operation cancelled - ${newGeoms.error}`);
     return;
   }
 
@@ -133,7 +135,7 @@ export function eraseSelection(points, context) {
   const newGeoms = newGeometriesOfOverlappedFaces(points, currentStoryGeometry);
   // prevent overlapping faces by erasing existing geometry covered by the points defining the new face
   if (newGeoms.error) {
-    window.eventBus.$emit('error', `Operation cancelled - ${newGeoms.error}`);
+    eventBus.$emit('error', `Operation cancelled - ${newGeoms.error}`);
     return false;
   }
 

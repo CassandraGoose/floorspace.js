@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Validator from './../../utilities/validator';
+import eventBus from '../../../eventBus';
 
 export default {
     // CONFIG
@@ -132,7 +133,7 @@ export default {
       return;
     }
     if (key === 'tilt_angle' && (value < 0 || value >= 90)) {
-      window.eventBus.$emit('error', 'Tilt Angle must be in [0, 90)');
+      eventBus.$emit('error', 'Tilt Angle must be in [0, 90)');
       return;
     }
     commit('modifyGround', { key, value });
