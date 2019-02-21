@@ -27,7 +27,7 @@ export default {
       }
     }),
     resolve({
-      jsnext: true,
+      modules: true,
     }),
     svg(),
     sass(),
@@ -54,7 +54,7 @@ export default {
       exclude: 'node_moduels/**',
       babelrc: false,
       presets: ["es2015-rollup", "stage-3"],
-      comments: false,
+      comments: false, 
     }),
   ]
 };
