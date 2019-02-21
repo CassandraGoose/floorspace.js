@@ -188,10 +188,11 @@ export default {
 </script>
 <style lang="css" scoped>
 #speedNavigation {
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: 100%;
   background-color: #4EACEA;
   color: black;
 }
@@ -201,7 +202,7 @@ export default {
   flex-direction: column;
   align-self: flex-start;
   background-color: white;
-  padding: 10%;
+  /* padding: 10%; */
   height: 55%;
   width: 100%;
   overflow: scroll;

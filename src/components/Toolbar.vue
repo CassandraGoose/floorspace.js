@@ -192,7 +192,6 @@ import svgs from './svgs';
 import RenderByDropdown from './RenderByDropdown.vue';
 import ComponentInstanceEditBar from './ComponentInstanceEditBar.vue';
 import appconfig, { componentTypes } from '../store/modules/application/appconfig';
-import eventBus from '../eventBus';
 
 // svgs
 
@@ -215,11 +214,11 @@ export default {
     setImageTool() {
       this.tool = 'Image';
       if (this.currentStory.images.length === 0) {
-        eventBus.$emit('uploadImage');
+        this.$root.$options.eventBus.$emit('uploadImage');
       }
     },
     zoomToFit() {
-      eventBus.$emit('zoomToFit');
+      this.$root.$options.eventBus.$emit('zoomToFit');
     },
     exportData() {
       this.thingWereSaving = 'Floorplan';
@@ -235,7 +234,7 @@ export default {
         try {
           data = JSON.parse(reader.result);
         } catch (e) {
-          eventBus.$emit('error', 'Invalid JSON');
+          this.$root.$options.eventBus.$emit('error', 'Invalid JSON');
           return;
         }
         if (type === 'library') {
@@ -257,7 +256,7 @@ export default {
       if (this.allowSettingUnits) {
         this.rwUnits = val;
       } else {
-        eventBus.$emit('error', 'Units must be set before any geometry is drawn.');
+        this.$root.$options.eventBus.$emit('error', 'Units must be set before any geometry is drawn.');
       }
       // not today, friend...
       // this.$store.dispatch('changeUnits', { newUnits: val });

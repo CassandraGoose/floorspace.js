@@ -9,34 +9,41 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill';
 import Vue from 'vue';
-import store from './store/index';
 
 import timetravel from './store/timetravel';
 import App from './App.vue';
 import PrettySelect from './components/PrettySelect.vue';
 import GenericInput from './components/GenericInput.vue';
 import speedStyles from './speedStyles';
+import createStore from './store';
 
 Vue.component('pretty-select', PrettySelect);
 Vue.component('generic-input', GenericInput);
 
+const eventBus = new Vue();
+
 // window.eventBus = new Vue();
+createStore(eventBus).then((store) => {
+  window.application = new Vue({
+    // beforeCreate() {
+    //   this.$store = store;
+    // },
+    store,
+    el: '#app',
+    template: '<App :styles="styles" style="overlfow:scroll;"/>',
+    eventBus,
+    // REMOVE
+    data() {
+      return {
+        styles: speedStyles,
+      };
+    },
+    components: { App },
+  });
 
-// mount the root vue instance
-window.application = new Vue({
-  store,
-  el: '#app',
-  template: '<App :styles="styles" style="overlfow:scroll;"/>',
-  // REMOVE
-  data() {
-    return {
-      styles: speedStyles,
-    };
-  },
-  components: { App },
+  timetravel.init(store);
 });
-
-timetravel.init(store);
+// mount the root vue instance
 
 // <div style="margin: 100px"><div style="position:relative; overflow: hidden; height: 600px; width: 600px;">
 // </div></div>

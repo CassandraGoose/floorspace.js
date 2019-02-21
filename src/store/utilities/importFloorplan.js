@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import idFactory from './generateId';
 import { getDefaults } from '../modules/models/factory';
-import eventBus from '../../eventBus';
 
 function maybeUpdateProject(project) {
   // backwards compatibility changes:
@@ -151,7 +150,7 @@ export default function importFloorplan(context, payload) {
 
     stories.forEach(story => context.dispatch('geometry/trimGeometry', { geometry_id: story.geometry_id }));
     if (!options.noReloadGrid) {
-      _.defer(() => eventBus.$emit('zoomToFit'));
+      _.defer(() => context.rootGetters.eventBus.$emit('zoomToFit'));
     }
   });
 

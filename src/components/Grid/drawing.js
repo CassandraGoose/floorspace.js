@@ -1,4 +1,5 @@
-import * as d3 from '../../d3';
+// import * as d3 from '../../d3';
+// const d3 = window.d3;
 
 import 'd3-selection-multi';
 import _ from 'lodash';
@@ -521,7 +522,6 @@ export function drawImage() {
           y: d.y - (currY - startY) / pxPerRWU,
         });
       });
-
     const
       scaleTransform = (d) => {
         const
@@ -579,7 +579,6 @@ export function drawImage() {
             y: d.y - trans.y / pxPerRWU,
           });
         });
-
     const
       rotationAngle = (d) => {
         const

@@ -14,7 +14,7 @@ exports.assertion = function () {
   this.command = function (cb) {
     const self = this;
     return this.api.execute(
-      () => window.application.$store.getters['geometry/errors'],
+      () => this.$store.getters['geometry/errors'],
       [],
       (res) => {
         cb.call(self, res);

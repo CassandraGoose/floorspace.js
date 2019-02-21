@@ -2,7 +2,6 @@ import _ from 'lodash';
 import idFactory from './generateId';
 import { libraryTypes } from '../modules/application/appconfig';
 import { convertLibrary } from './unitConversion';
-import eventBus from '../../eventBus';
 
 export default function importLibrary(context, payload) {
   let count = 0;
@@ -45,7 +44,7 @@ export default function importLibrary(context, payload) {
   }
   const localUnitsPayload = convertLibrary(payload.data, librarySystem, projectSystem);
 
-  eventBus.$emit('success', `Imported ${count} object${count !== 1 ? 's' : ''}`);
+  context.rootGetters.eventBus.$emit('success', `Imported ${count} object${count !== 1 ? 's' : ''}`);
   // merge the import data with the existing library objects
   context.commit(
     'importLibrary',

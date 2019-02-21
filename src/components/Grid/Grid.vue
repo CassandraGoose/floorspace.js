@@ -34,9 +34,9 @@ import applicationHelpers from './../../store/modules/application/helpers';
 import { ResizeEvents } from '../../components/Resize';
 import drawMethods from './drawing';
 import { expandWindowAlongEdge, windowLocation } from './snapping';
-import eventBus from '../../eventBus';
 
-const d3 = require('../../d3');
+// const d3 = require('../../d3');
+// const d3 = window.d3;
 
 export default {
   name: 'grid',
@@ -65,7 +65,7 @@ export default {
         xScale,
         yScale,
         selectImage: (img) => { this.currentImage = img; },
-        updateImage: (data) => window.application.$store.dispatch('models/updateImageWithData', data),
+        updateImage: (data) => this.$store.dispatch('models/updateImageWithData', data),
       }),
       crosshatchModifiers: {
         '-highlight': 'green',
@@ -78,7 +78,7 @@ export default {
   mounted() {
     // throttle/debounce event handlers
     this.handleMouseMove = d3AwareThrottle(this.highlightSnapTarget, 100);
-
+    // the above debugger is for figuring out why the crosshair isn't where my mouse is
     // render grid first time (not debounced, as this seems to fix an issue
     // where the x bounds are set correctly, and then becomes incorrect when the
     // debounced renderGrid runs)
@@ -95,8 +95,8 @@ export default {
 
     ResizeEvents.$on('resize', this.reloadGridAndScales);
 
-    eventBus.$on('zoomToFit', this.zoomToFit);
-    eventBus.$on('scaleTo', this.scaleTo);
+    this.$root.$options.eventBus.$on('zoomToFit', this.zoomToFit);
+    this.$root.$options.eventBus.$on('scaleTo', this.scaleTo);
   },
   beforeDestroy() {
     this.$refs.grid.removeEventListener('reloadGrid', this.reloadGridAndScales);
@@ -107,8 +107,8 @@ export default {
 
     ResizeEvents.$off('resize', this.reloadGridAndScales);
 
-    eventBus.$off('zoomToFit', this.zoomToFit);
-    eventBus.$off('scaleTo', this.scaleTo);
+    this.$root.$options.eventBus.$off('zoomToFit', this.zoomToFit);
+    this.$root.$options.eventBus.$off('scaleTo', this.scaleTo);
   },
   computed: {
     ...mapState({

@@ -5,13 +5,13 @@
 // (3) Neither the name of the copyright holder nor the names of any contributors may be used to endorse or promote products derived from this software without specific prior written permission from the respective party.
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import * as d3 from '../../d3';
+// import * as d3 from '../../d3';
+// const d3 = window.d3;
 import polylabel from 'polylabel';
 import _ from 'lodash';
 import { snapTargets, snapWindowToEdge, snapToVertexWithinFace, findClosestEdge, findClosestWindow, gridSnapTargets, vertexSnapTargets } from './snapping';
 import geometryHelpers, { distanceBetweenPoints, fitToAspectRatio, projectionOfPointToLine } from './../../store/modules/geometry/helpers';
 import modelHelpers from './../../store/modules/models/helpers';
-import eventBus from '../../eventBus';
 
 function ticksInRange(start, stop, spacing) {
   return _.range(
@@ -217,6 +217,9 @@ export default {
       gridCoords = d3.mouse(this.$refs.grid),
       gridPoint = { x: gridCoords[0], y: gridCoords[1] },
       snapTarget = this.findSnapTarget(gridPoint);
+    console.log('gridcoords', gridCoords);
+    console.log('gridpoint', gridPoint);
+    console.log('snapTarget', snapTarget)
 
     // if the snapTarget is the origin of the face being drawn in Polygon mode, close the face and don't add a new point
     if (snapTarget.type === 'vertex' && snapTarget.origin && this.currentTool === 'Polygon') {
@@ -1220,7 +1223,7 @@ export default {
     [this.min_x, this.max_x] = xExtent;
     [this.min_y, this.max_y] = yExtent;
     _.defer(() => {
-      eventBus.$emit('boundsResolved');
+      this.$root.$options.eventBus.$emit('boundsResolved');
     });
   },
   nullTransform() {
@@ -1231,7 +1234,6 @@ export default {
     const
       w = this.$refs.gridParent.clientWidth,
       h = this.$refs.gridParent.clientHeight;
-
     this.resolveBounds();
     // scaleX amd scaleY are used during drawing to translate from px to RWU given the current grid dimensions in rwu
     this.$store.dispatch('application/setScaleX', {
@@ -1240,7 +1242,6 @@ export default {
         rwuRange: [this.min_x, this.max_x],
       },
     });
-
     this.$store.dispatch('application/setScaleY', {
       scaleY: {
         pixels: h,
@@ -1272,7 +1273,6 @@ export default {
     const
       width = this.$refs.gridParent.clientWidth,
       height = this.$refs.gridParent.clientHeight;
-
     this.xScale = d3.scaleLinear()
       .domain([this.min_x, this.max_x])
       .range([0, width]);
@@ -1294,7 +1294,6 @@ export default {
       // keep font size and stroke width visually consistent
       strokeWidth = 1,
       fontSize = '14px';
-
     svg.attr('height', height)
       .attr('width', width);
     this.axis.x = svg.selectAll('g.axis--x')

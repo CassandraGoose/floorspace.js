@@ -9,7 +9,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   <div id="layout-navigation" :style="navigationStyles">
     <speed-tree :styles="navigationStyles" :selectItem="row => { selectedObject = row; }"
  :objectTypes="['Story', 'Space', 'Shading', 'Space Type']"/>
-    <nav id="navigation">
+    <nav id="navigation" :style="navigationStyles.nav">
         <section id="selections">
         </section>
         <div id="list" >
@@ -137,6 +137,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../scss/config";
+#layout-navigation {
+  height: 100%;
+}
 #navigation {
   background-color: $gray-medium-dark;
   border-right: 1px solid $gray-darkest;

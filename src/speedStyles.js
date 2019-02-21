@@ -8,13 +8,13 @@ export default {
     },
   },
   layout: {
-    left: '25%',
+    left: '30%',
   },
   main: {
     position: 'static',
   },
   navigationStyles: {
-    width: '25%',
+    width: '30%',
     nav: {
       display: 'none',
     },
@@ -37,7 +37,7 @@ export default {
       left: 'auto',
       // right: 'auto',
       top: 'auto',
-      width: '78%',
+      width: '75%',
       topToolbar: {
         tabs: {
           display: 'none',

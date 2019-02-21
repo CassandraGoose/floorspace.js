@@ -27,8 +27,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <!-- <inspector-view></inspector-view> -->
       </div>
       <ImageUpload />
-      <Textures />
-      <PortalTarget name="texture-options" />
+      <Textures :style="styles.navigationStyles.nav"/>
+      <PortalTarget :style="styles.navigationStyles.nav" name="texture-options" />
   </div>
 </template>
 
@@ -46,13 +46,14 @@ import ImageUpload from './components/ImageUpload.vue';
 import Inspector from './components/Inspector.vue';
 import Textures from './components/Textures.vue';
 import { Resize } from './components/Resize';
-import eventBus from './eventBus';
+import styles from './speedStyles';
 
 export default {
   name: 'app',
-  props: ['styles'],
+  // props: ['styles'],
   data() {
     return {
+      styles,
       error: null,
       success: null,
       navigationExpanded: false,
@@ -63,15 +64,15 @@ export default {
   },
   mounted() {
 
-    eventBus.$on('error', (err) => {
+    this.$root.$options.eventBus.$on('error', (err) => {
       this.error = err;
       setTimeout(() => { this.error = null; }, 5000);
     });
-    eventBus.$on('success', (msg) => {
+    this.$root.$options.eventBus.$on('success', (msg) => {
       this.success = msg;
       setTimeout(() => { this.success = null; }, 5000);
     });
-    eventBus.$on('reload-grid', () => {
+    this.$root.$options.eventBus.$on('reload-grid', () => {
       // This is unfortunate. oh well.
       document.getElementById('svg-grid')
         .dispatchEvent(new Event('reloadGrid'));
@@ -110,7 +111,11 @@ export default {
 <style src="./scss/main.scss" lang="scss"></style>
 <style lang="scss" scoped>
 @import "./scss/config";
+body {
+  height: 100%;
+}
 .tool_rectangle, .tool_polygon, .tool_eraser {
+  height: 100%;
   #grid {
     cursor: crosshair;
   }

@@ -1,10 +1,10 @@
 import actions from './actions';
 import mutations from './mutations';
 import getters from './getters';
+import d3P from '../../../d3';
+// const d3 = require('../../../d3');
 
-const d3 = require('../../../d3');
-
-export default {
+export default d3P.then(d3 => ({
   namespaced: true,
   state: {
     currentSelections: {
@@ -37,4 +37,4 @@ export default {
   actions,
   mutations,
   getters,
-};
+}));

@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Validator from './../../utilities/validator';
-import eventBus from '../../../eventBus';
 
 export default {
     // CONFIG
@@ -123,7 +122,7 @@ export default {
     context.commit('setView', { xExtent, yExtent });
   },
 
-  modifyGround({ state, commit }, { key, val }) {
+  modifyGround({ state, commit, context }, { key, val }) {
     let value = +val;
     if (isNaN(value)) {
       value = 0;
@@ -133,9 +132,9 @@ export default {
       return;
     }
     if (key === 'tilt_angle' && (value < 0 || value >= 90)) {
-      eventBus.$emit('error', 'Tilt Angle must be in [0, 90)');
+      context.rootGetters.eventBus.$emit('error', 'Tilt Angle must be in [0, 90)');
       return;
     }
     commit('modifyGround', { key, value });
   },
-}
+};

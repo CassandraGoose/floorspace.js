@@ -34,7 +34,6 @@ import libconfig from '../store/modules/models/libconfig';
 import EditableSelectList from './EditableSelectList.vue';
 import helpers from '../store/modules/models/helpers';
 import { assignableProperties, componentTypes } from '../store/modules/application/appconfig';
-import eventBus from '../eventBus';
 
 function keyForMode(mode) {
   return (
@@ -163,7 +162,7 @@ export default {
       const row = _.find(this.rows, { id: rowId });
       const result = helpers.setValueForKey(row, this.$store, this.mode, colName, value);
       if (!result.success) {
-        eventBus.$emit('error', result.error);
+        this.$root.$options.eventBus.$emit('error', result.error);
       }
     },
     modifyComponentInstance(id, key, value) {
@@ -191,11 +190,11 @@ export default {
           this.$store.dispatch('models/initShading', { story: this.currentStory });
           break;
         case 'images':
-          eventBus.$emit('uploadImage');
+          this.$root.$options.eventBus.$emit('uploadImage');
           break;
         case 'windows':
         case 'daylighting_controls':
-          eventBus.$emit('error', 'Create components by clicking where you would like it to be');
+          this.$root.$options.eventBus.$emit('error', 'Create components by clicking where you would like it to be');
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });

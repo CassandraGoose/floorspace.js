@@ -30,12 +30,11 @@ import { mapState } from 'vuex';
 import _ from 'lodash';
 import { ResizeEvents } from '../Resize';
 import MapModal from '../Modals/MapModal.vue';
-import eventBus from '../../eventBus';
 
 const googleMaps = require('google-maps-api')('AIzaSyDIja3lnhq63SxukBm9_mA-jn5R0Bj9RN8', ['places']);
 const ol = require('openlayers');
-const d3 = require('../../d3');
-
+// const d3 = require('../../d3');
+// const d3 = window.d3;
 
 export default {
   name: 'map-view',
@@ -60,7 +59,7 @@ export default {
     this.initAutoComplete();
     this.loadMap();
     ResizeEvents.$on('resize', this.updateMapView);
-    eventBus.$on('boundsResolved', this.clearStartResolution);
+    this.$root.$options.eventBus.$on('boundsResolved', this.clearStartResolution);
   },
 
   /*
@@ -68,7 +67,7 @@ export default {
   */
   beforeDestroy() {
     ResizeEvents.$off('resize', this.updateMapView);
-    eventBus.$off('boundsResolved', this.clearStartResolution);
+    this.$root.$options.eventBus.$off('boundsResolved', this.clearStartResolution);
   },
 
   methods: {
