@@ -30,4 +30,5 @@ export default {
   // d3 scaling functions
   setScaleX(state, payload) { state.scale.x = payload.scaleX; },
   setScaleY(state, payload) { state.scale.y = payload.scaleY; },
+  setGridId(state, payload) { state.currentGridId = payload.currentGridId; },
 };

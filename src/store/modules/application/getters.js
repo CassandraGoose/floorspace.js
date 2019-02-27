@@ -15,7 +15,10 @@ export default {
       currentStory.shading.find(i => i.id === subSelectionId) ||
       currentStory.images.find(i => i.id === subSelectionId);
   },
-
+  getCurrentGridId(state) {
+    // this is dumb but i don't have any other ideas rn.
+    return state.currentGridId;
+  },
   currentSubSelectionType(state, getters) {
     const currentStory = getters['currentStory'];
     if (!currentStory) { return null; }

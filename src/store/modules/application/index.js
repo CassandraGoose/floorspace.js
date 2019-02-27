@@ -18,7 +18,7 @@ export default d3P.then(d3 => ({
       component_instance_id: null,
 
       space_property_id: null,
-
+      currentGridId: null,
       // current application mode and tool
       tool: 'Rectangle',
       mode: 'spaces',

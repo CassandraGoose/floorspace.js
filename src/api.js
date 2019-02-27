@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 window.api = {
   config: null,
   initAlreadyRun: false,
@@ -7,8 +6,8 @@ window.api = {
     var options = _options || { noReloadGrid: false };
     try {
       window.application.$store.dispatch('importFloorplan', {
-        clientWidth: document.getElementById('svg-grid').clientWidth,
-        clientHeight: document.getElementById('svg-grid').clientHeight,
+        clientWidth: document.getElementById(window.application.$store.getters['application/getCurrentGridId']).clientWidth,
+        clientHeight: document.getElementById(window.application.$store.getters['application/getCurrentGridId']).clientHeight,
         data: JSON.parse(data),
         options: options
       });

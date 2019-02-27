@@ -1,4 +1,9 @@
 export default {
+  map: {
+    mapContainer: {
+
+    },
+  },
   modal: {
     position: 'fixed',
     width: '50%',
@@ -35,10 +40,12 @@ export default {
       display: 'flex',
       flexDirection: 'column',
       left: 'auto',
-      // right: 'auto',
       top: 'auto',
-      width: '75%',
+      width: '70%',
+      color: 'white',
       topToolbar: {
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
         tabs: {
           display: 'none',
         },
@@ -46,11 +53,18 @@ export default {
           display: 'none',
         },
         undoRedo: {
+          display: 'flex',
+          flexDirection: 'column',
           backgroundColor: '#24292c',
+          height: '100%',
+          textAlign: 'center',
+          width: '40px',
         },
       },
       bottomToolbar: {
         backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'flex-start',
         instructions: {
           display: 'none',
         },
@@ -62,11 +76,19 @@ export default {
         },
         drawingTools: {
           flexDirection: 'column',
+          alignSelf: 'flex-start',
           buttons: {
             backgroundColor: '#24292c',
+            width: '20px',
+            textAlign: 'center',
+          },
+          svg: {
+            textAlign: 'center',
           },
         },
       },
     },
   },
 };
+
+// document.querySelector('.overlaycontainer-stopevent').style.display = 'none';

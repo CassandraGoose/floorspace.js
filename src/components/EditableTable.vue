@@ -125,8 +125,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "./../scss/config";
+@import "./../scss/main.scss";
 
   .editable-table {
     .el-table::before, .el-table__fixed-right::before, .el-table__fixed::before {

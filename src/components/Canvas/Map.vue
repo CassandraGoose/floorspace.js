@@ -6,7 +6,7 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
-    <div id="map-container">
+    <div id="map-container" :styles="styles.mapContainer">
         <div id="map" ref="map" :style="{ 'pointer-events': tool === 'Map' ? 'all': 'none' }"></div>
 
         <div v-show="tool === 'Map'" id="autocomplete">
@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <button @click="finishSetup">Done</button>
         </div>
 
-        <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal>
+        <!-- <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal> -->
         <svg id="reticle"></svg>
     </div>
 </template>
@@ -33,12 +33,10 @@ import MapModal from '../Modals/MapModal.vue';
 
 const googleMaps = require('google-maps-api')('AIzaSyDIja3lnhq63SxukBm9_mA-jn5R0Bj9RN8', ['places']);
 const ol = require('openlayers');
-// const d3 = require('../../d3');
-// const d3 = window.d3;
 
 export default {
   name: 'map-view',
-  props: ['modal'],
+  props: ['modal', 'styles'],
   data() {
     return {
       view: null,
@@ -277,12 +275,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "./../../scss/config";
+@import "./../../scss/main.scss";
 
 #map-container {
-    position: relative;
+    // position: relative;
     height: 100%;
     width: 100%;
-
     #map {
         height: 100%;
         min-width: 100%;

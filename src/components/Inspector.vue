@@ -82,6 +82,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../scss/config";
+@import "./../scss/main.scss";
+
 #inspector {
   // background-color: $gray-medium-dark;
   background-color: $gray-medium;

@@ -1,6 +1,3 @@
-// import * as d3 from '../../d3';
-// const d3 = window.d3;
-
 import 'd3-selection-multi';
 import _ from 'lodash';
 import {

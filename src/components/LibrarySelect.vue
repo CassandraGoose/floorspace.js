@@ -45,6 +45,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../scss/config";
+@import "./../scss/main.scss";
 
 .library-select {
   padding: 0 0 !important;

@@ -102,7 +102,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
         <div id="drawing-tools" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools" class="tools-list tools">
           <div @click="tool = 'Rectangle'" data-tool="Rectangle" title="Rectangle" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Rectangle' }">
-            <tool-draw-rectangle-svg class="button"></tool-draw-rectangle-svg>
+            <tool-draw-rectangle-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-rectangle-svg>
           </div>
           <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
             <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
@@ -241,8 +241,8 @@ export default {
           this.$store.dispatch('importLibrary', { data });
         } else if (type === 'floorplan') {
           this.$store.dispatch('importFloorplan', {
-            clientWidth: document.getElementById('svg-grid').clientWidth,
-            clientHeight: document.getElementById('svg-grid').clientHeight,
+            clientWidth: document.getElementById(this.gridId).clientWidth,
+            clientHeight: document.getElementById(this.gridId).clientHeight,
             data,
           });
         }
@@ -291,6 +291,7 @@ export default {
       currentStory: 'application/currentStory',
     }),
     ...mapState({
+      gridId: state => state.application.currentGridId,
       mapEnabled: state => state.project.map.enabled,
       timetravelInitialized: state => state.timetravelInitialized,
       showImportExport: state => state.project.show_import_export,
@@ -417,6 +418,7 @@ export default {
 
 <style lang="scss" scoped>
 // @import "./../scss/config";
+@import "./../scss/main.scss";
 
 $gray-dark: #333333;
 $black: #000000;
@@ -425,8 +427,8 @@ $gray-medium-light: #5b5b5b;
 svg.icon, svg.button {
   margin-top: .5rem;
   vertical-align: middle;
-  height: 2rem;
-  width: 2rem;
+  height: 20px;
+  width: 20px;
 }
 
 #toolbar {
@@ -446,6 +448,9 @@ svg.icon, svg.button {
       #undo-redo {
         > div {
           display: inline-block;
+          svg {
+            height: 5%;
+          }
         }
         float: right;
       }
@@ -453,6 +458,10 @@ svg.icon, svg.button {
         display: none;
       }
     }
+
+  #grid-settings > div > label {
+    font-size: 15%;
+  }
 
     #grid-settings {
       display: flex;
@@ -462,6 +471,7 @@ svg.icon, svg.button {
       }
     }
   }
+
   #bottom {
     user-select: none;
     .render-by {
@@ -480,6 +490,7 @@ svg.icon, svg.button {
       display: flex;
       margin-right: 3rem;
       margin-left: 0;
+
       .active {
         background-color: $gray-dark;
       }
@@ -506,7 +517,10 @@ svg.icon, svg.button {
     }
   }
 }
-
+// REMOVE
+.input-number {
+  display: none;
+}
 
 #mode-tabs {
   list-style: none;

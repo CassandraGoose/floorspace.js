@@ -30,6 +30,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "./../scss/config";
+@import "./../scss/main.scss";
+
 .edit-bar {
   display: flex;
   flex-direction: row;

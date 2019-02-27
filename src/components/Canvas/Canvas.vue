@@ -5,11 +5,11 @@ Redistribution and use in source and binary forms, with or without modification,
 (3) Neither the name of the copyright holder nor the names of any contributors may be used to endorse or promote products derived from this software without specific prior written permission from the respective party.
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 <template>
-    <div id="canvasfloor" ref="canvas">
+    <div id="canvasfloor" ref="canvas1">
         <svg id="north_axis" height="1792" viewBox="0 0 1792 1792" width="1792" xmlns="http://www.w3.org/2000/svg" :transform="`rotate(${northAxis})`">
           <path d="M1277 493q-9 19-29 19h-224v1248q0 14-9 23t-23 9H800q-14 0-23-9t-9-23V512H544q-21 0-29-19t5-35L870 74q10-10 23-10 14 0 24 10l355 384q13 16 5 35z"/>
         </svg>
-        <map-view :modal="modal" v-if="mapEnabled" v-show="mapVisible"></map-view>
+        <map-view :styles="styles.map" :modal="modal" v-if="mapEnabled" v-show="mapVisible"></map-view>
     </div>
 </template>
 
@@ -21,24 +21,26 @@ import { mapState } from 'vuex';
 import MapView from './Map.vue';
 
 export default {
-    name: 'app',
-    props: ['modal'],
-    data () { return {}; },
-    computed: {
-        ...mapState({
-            mapEnabled: state => state.project.map.enabled,
-            mapVisible: state => state.project.map.visible,
-            northAxis: state => state.project.north_axis,
-        })
-    },
-    components: {
-        'map-view': MapView,
-    }
-}
+  name: 'app',
+  props: ['modal', 'styles'],
+  data() { return {}; },
+  computed: {
+    ...mapState({
+      mapEnabled: state => state.project.map.enabled,
+      mapVisible: state => state.project.map.visible,
+      northAxis: state => state.project.north_axis,
+    }),
+  },
+  components: {
+    'map-view': MapView,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "./../../scss/config";
+@import "./../../scss/main.scss";
+
 svg#north_axis {
   height: 2.25rem;
   position: absolute;

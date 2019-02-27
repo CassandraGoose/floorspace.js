@@ -26,10 +26,10 @@ export default {
         isProduction: true
       }
     }),
-    resolve({
-      modules: true,
-    }),
     svg(),
+    resolve({
+      module: true,
+    }),
     sass(),
     alias({
       vue: path.resolve(__dirname, '../node_modules/vue/dist/vue.js'),
@@ -51,7 +51,6 @@ export default {
       ]
     }),
     babel({
-      exclude: 'node_moduels/**',
       babelrc: false,
       presets: ["es2015-rollup", "stage-3"],
       comments: false, 

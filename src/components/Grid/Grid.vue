@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     ref="gridParent"
     :class="{ 'reduce-ticks': reduceTicks }"
   >
-    <svg ref="grid" id="svg-grid">
+    <svg ref="grid" :id="gridId">
       <g class="axis axis--x"></g>
       <g class="axis axis--y"></g>
       <g class="images" data-transform-plz></g>
@@ -34,9 +34,6 @@ import applicationHelpers from './../../store/modules/application/helpers';
 import { ResizeEvents } from '../../components/Resize';
 import drawMethods from './drawing';
 import { expandWindowAlongEdge, windowLocation } from './snapping';
-
-// const d3 = require('../../d3');
-// const d3 = window.d3;
 
 export default {
   name: 'grid',
@@ -127,6 +124,7 @@ export default {
       doorDefs: state => state.models.library.door_definitions,
       windowWidths: state => _.sumBy(state.models.library.window_definitions, 'width'),
       allVertices: state => _.flatMap(state.geometry, 'vertices'),
+      gridId: state => state.application.currentGridId,
     }),
     ...mapGetters({
       currentStory: 'application/currentStory',
@@ -324,9 +322,9 @@ export default {
     transform(newTransform, lastTransform) {
       // hide polygon names if zoomed out enough
       if (newTransform.k < 0.5) {
-        d3.select('#svg-grid').selectAll('.polygon-text').style('display', 'none');
+        d3.select(this.gridId).selectAll('.polygon-text').style('display', 'none');
       } else {
-        d3.select('#svg-grid').selectAll('.polygon-text').style('display', 'initial');
+        d3.select(this.gridId).selectAll('.polygon-text').style('display', 'initial');
       }
     },
   },
@@ -475,6 +473,8 @@ export default {
 
 </script>
 <style lang="scss" scoped>@import "./../../scss/config";
+@import "./../../scss/main.scss";
+
 // styles for dynamically created d3 elements go into src/scss/partials/d3.scss
 #grid {
   user-select: none;

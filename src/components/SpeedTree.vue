@@ -24,10 +24,10 @@
     </ol>
     </div>
     <div class="controls-container">
-     <div class="controls">
+    <div class="controls">
         <div v-for="(object, i) in objectTypes" :key="i">
           <a @click="createObject(object)">
-            <div class="control-buttons"><AddNew class="button"/>{{object}}</div>
+            <div><AddNew class="button"/>{{object}}</div>
           </a>
         </div>
       </div>
@@ -36,7 +36,7 @@
         <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
       </div>
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -172,6 +172,10 @@ export default {
       }
     },
   },
+  mounted() {
+    this.$store.dispatch('project/setMapEnabled', { enabled: true });
+    this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
+  },
   watch: {
     // REPEATED
     rows() {
@@ -186,44 +190,39 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
+@import "./../scss/main.scss";
+
 #speedNavigation {
+  font-size: 75%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
   background-color: #4EACEA;
   color: black;
 }
 
 .tree-container {
+  padding-right: 5%;
   display: flex;
   flex-direction: column;
   align-self: flex-start;
   background-color: white;
-  /* padding: 10%; */
+  align-content: center;
   height: 55%;
   width: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 ol.tree, ol.tree ol{
   list-style: none;
   margin: 1%;
-  padding: 3%;
-}
-
-ol.tree ol {
-  margin-left: 1%;
-}
-
-ol > ol > li {
-  margin-left: 5%;
+  padding-left: 10%;
 }
 
 ol.tree li {
-  line-height: 1em;
+  padding-top: 3%;
   color: black;
   font-weight: bold;
   border-left: 1px dotted black;

@@ -34,7 +34,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
   .non-chrome-warning {
     background: tomato;
     padding: 20px;

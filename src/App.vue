@@ -21,7 +21,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <div id="alert-text" v-show="error || success" :class="{ error, success }">
                 <p>{{ error || success }}</p>
             </div>
-              <canvas-view :modal="styles.modal"></canvas-view>
+              <canvas-view :styles="styles" :modal="styles.modal"></canvas-view>
               <grid-view></grid-view>
           </main>
           <!-- <inspector-view></inspector-view> -->
@@ -36,7 +36,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import { mapState } from 'vuex';
 import { PortalTarget } from 'portal-vue';
-
 // this import order is important, if the grid is loaded before the other elements or after the toolbar, it ends up warped
 import Navigation from './components/Navigation.vue';
 import Grid from './components/Grid/Grid.vue';
@@ -46,14 +45,12 @@ import ImageUpload from './components/ImageUpload.vue';
 import Inspector from './components/Inspector.vue';
 import Textures from './components/Textures.vue';
 import { Resize } from './components/Resize';
-import styles from './speedStyles';
 
 export default {
   name: 'app',
-  // props: ['styles'],
+  props: ['styles'],
   data() {
     return {
-      styles,
       error: null,
       success: null,
       navigationExpanded: false,
@@ -63,7 +60,7 @@ export default {
     this.$store.dispatch('models/initStory');
   },
   mounted() {
-
+    console.log(window.application)
     this.$root.$options.eventBus.$on('error', (err) => {
       this.error = err;
       setTimeout(() => { this.error = null; }, 5000);
@@ -74,7 +71,7 @@ export default {
     });
     this.$root.$options.eventBus.$on('reload-grid', () => {
       // This is unfortunate. oh well.
-      document.getElementById('svg-grid')
+      document.getElementById(this.gridId)
         .dispatchEvent(new Event('reloadGrid'));
     });
 
@@ -85,15 +82,25 @@ export default {
       if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
         e.shiftKey ? this.$store.timetravel.redo() : this.$store.timetravel.undo();
         e.preventDefault();
-      } else if (e.keyCode == 89 && (e.ctrlKey || e.metaKey)){
+      } else if (e.keyCode == 89 && (e.ctrlKey || e.metaKey)) {
         this.$store.timetravel.redo();
         e.preventDefault();
       }
     });
+
+    this.$store.commit('application/setGridId', { currentGridId: `svg-grid${this.svgGridId}` });
   },
 
   computed: {
-    ...mapState({ tool: state => state.application.currentSelections.tool }),
+    ...mapState({
+      tool: state => state.application.currentSelections.tool,
+      gridId: state => state.application.currentGridId }),
+    svgGridId() {
+      return 'yxxx'.replace(/[xy]/g, (c) => {
+        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return `${v.toString(4)}`;
+      });
+    },
   },
   components: {
     'grid-view': Grid,
@@ -108,14 +115,15 @@ export default {
 };
 </script>
 
-<style src="./scss/main.scss" lang="scss"></style>
+<!--<style src="./scss/main.scss" lang="scss"></style>-->
 <style lang="scss" scoped>
 @import "./scss/config";
+@import "./scss/main.scss";
 body {
   height: 100%;
 }
 .tool_rectangle, .tool_polygon, .tool_eraser {
-  height: 100%;
+  height: 100vh;
   #grid {
     cursor: crosshair;
   }

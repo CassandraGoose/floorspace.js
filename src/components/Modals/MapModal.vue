@@ -42,6 +42,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import svgs from '../svgs';
 import NonChromeWarning from '../NonChromeWarning.vue';
 
@@ -54,6 +55,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      gridId: state => state.application.currentGridId,
+    }),
     online () { return window.api && window.api.config ? window.api.config.online : true; },
     mapEnabled: {
       get() { return this.$store.state.project.map.enabled; },
@@ -78,8 +82,8 @@ export default {
     },
     importFloorplan(data) {
       this.$store.dispatch('importFloorplan', {
-        clientWidth: document.getElementById('svg-grid').clientWidth,
-        clientHeight: document.getElementById('svg-grid').clientHeight,
+        clientWidth: document.getElementById(this.gridId).clientWidth,
+        clientHeight: document.getElementById(this.gridId).clientHeight,
         data: JSON.parse(data),
       });
       this.$emit('close');
@@ -94,6 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../../scss/config";
+@import "./../../scss/main.scss";
 
 .modal {
     width: 35rem;

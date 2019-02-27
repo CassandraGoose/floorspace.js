@@ -75,6 +75,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "./../scss/config";
+@import "./../scss/main.scss";
+
 svg path {
   fill: $gray-medium;
   stroke: $gray-medium;

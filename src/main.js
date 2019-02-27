@@ -14,23 +14,19 @@ import timetravel from './store/timetravel';
 import App from './App.vue';
 import PrettySelect from './components/PrettySelect.vue';
 import GenericInput from './components/GenericInput.vue';
-import speedStyles from './speedStyles';
 import createStore from './store';
+import speedStyles from './speedStyles';
 
 Vue.component('pretty-select', PrettySelect);
 Vue.component('generic-input', GenericInput);
 
 const eventBus = new Vue();
 
-// window.eventBus = new Vue();
 createStore(eventBus).then((store) => {
   window.application = new Vue({
-    // beforeCreate() {
-    //   this.$store = store;
-    // },
     store,
     el: '#app',
-    template: '<App :styles="styles" style="overlfow:scroll;"/>',
+    template: '<App :styles="styles"/>',
     eventBus,
     // REMOVE
     data() {
@@ -43,7 +39,6 @@ createStore(eventBus).then((store) => {
 
   timetravel.init(store);
 });
-// mount the root vue instance
 
 // <div style="margin: 100px"><div style="position:relative; overflow: hidden; height: 600px; width: 600px;">
 // </div></div>
