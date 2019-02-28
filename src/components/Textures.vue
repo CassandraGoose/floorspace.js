@@ -106,6 +106,7 @@
 
 <script>
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
 import { textures } from '../store/modules/application/appconfig';
 
 export default {
@@ -153,6 +154,9 @@ export default {
   },
   computed: {
     modSuffixes() { return _.filter(Object.keys(this.modifiers), _.identity) },
+    ...mapGetters({
+      gridId: state => state.application.currentGridId,
+    }),
     patterns() {
       return _.reject(
         Array.from(this.$el.querySelectorAll('pattern')),
@@ -179,16 +183,16 @@ export default {
     windowStyles() {
       return _.map(this.patterns, p => p.getAttribute('id'))
         .map((id) => `
-            #grid svg .polygons .window .hatch[data-texture="${id}"] {
+            ${this.gridId} svg .polygons .window .hatch[data-texture="${id}"] {
               fill: url(#${id});
             }
-            #grid svg .polygons .window .facing-selection .hatch[data-texture="${id}"] {
+            ${this.gridId} svg .polygons .window .facing-selection .hatch[data-texture="${id}"] {
               fill: url(#${id}-facing-selection);
             }
-            #grid svg .polygons .window .selected .hatch[data-texture="${id}"] {
+            ${this.gridId} svg .polygons .window .selected .hatch[data-texture="${id}"] {
               fill: url(#${id}-selected);
             }
-            #grid svg .highlight .window .hatch[data-texture="${id}"] {
+            ${this.gridId} svg .highlight .window .hatch[data-texture="${id}"] {
               fill: url(#${id}-highlight);
             }
           `);

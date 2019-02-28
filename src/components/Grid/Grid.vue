@@ -7,10 +7,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <template>
   <div
-    id="grid"
+    :id="gridId"
     :style="{ 'pointer-events': (currentTool === 'Drag' || currentTool === 'Map') ? 'none': 'auto' }"
     ref="gridParent"
     :class="{ 'reduce-ticks': reduceTicks }"
+    class="grid"
   >
     <svg ref="grid" :id="svgGridId">
       <g class="axis axis--x"></g>
@@ -32,7 +33,7 @@ import geometryHelpers, { pointDistanceToSegment } from './../../store/modules/g
 import modelHelpers from './../../store/modules/models/helpers';
 import applicationHelpers from './../../store/modules/application/helpers';
 import { ResizeEvents } from '../../components/Resize';
-import drawMethods from './drawing';
+import drawMethods, { getGridIds } from './drawing';
 import { expandWindowAlongEdge, windowLocation } from './snapping';
 
 export default {
@@ -73,6 +74,8 @@ export default {
     };
   },
   mounted() {
+    methods.setGridIdWithSvg(this.gridId, this.svgGridId);
+    getGridIds(this.gridId);
     // throttle/debounce event handlers
     this.handleMouseMove = d3AwareThrottle(this.highlightSnapTarget, 100);
     // the above debugger is for figuring out why the crosshair isn't where my mouse is
@@ -477,7 +480,7 @@ export default {
 @import "./../../scss/main.scss";
 
 // styles for dynamically created d3 elements go into src/scss/partials/d3.scss
-#grid {
+.grid {
   user-select: none;
 
   button {

@@ -5,6 +5,8 @@ import {
   edgeDirection, repeatingWindowCenters,
 } from './../../store/modules/geometry/helpers';
 
+let gridId;
+
 function boxAroundWindow({ xScale, yScale, edge, offset }) {
   const
     { dx, dy } = unitPerpVector(edge.start, edge.end);
@@ -498,11 +500,11 @@ export function drawImage() {
       moveable = d3.drag()
       .on('start', function() {
         d3.event.sourceEvent.stopPropagation(); // don't zoom when I'm draggin' an image!
-        [startX, startY] = d3.mouse(document.querySelector('#grid svg'));
+        [startX, startY] = d3.mouse(document.querySelector(`${gridId}`));
         currX = currY = undefined;
       })
       .on('drag', function(d) {
-        [currX, currY] = d3.mouse(document.querySelector('#grid svg'));
+        [currX, currY] = d3.mouse(document.querySelector(`${gridId}`));
         const { dx, dy } = offset(d);
         d3.select(this)
           .attr('transform', `translate(${dx}, ${dy})`);
@@ -554,11 +556,11 @@ export function drawImage() {
       resizeable = d3.drag()
         .on('start', function() {
           d3.event.sourceEvent.stopPropagation();
-          [startX, startY] = d3.mouse(document.querySelector('#grid svg'));
+          [startX, startY] = d3.mouse(document.querySelector(`${gridId}`));
           currX = currY = undefined;
         })
         .on('drag', function(d) {
-          [currX, currY] = d3.mouse(document.querySelector('#grid svg'));
+          [currX, currY] = d3.mouse(document.querySelector(`${gridId}`));
           d3.select(this.parentNode.parentNode)
             .attr('transform', scaleTransform(d));
         })
@@ -589,11 +591,11 @@ export function drawImage() {
       rotateable = d3.drag()
         .on('start', function() {
           d3.event.sourceEvent.stopPropagation();
-          [startX, startY] = d3.mouse(document.querySelector('#grid svg'));
+          [startX, startY] = d3.mouse(document.querySelector(`${gridId}`));
           currX = currY = undefined;
         })
         .on('drag', function(d) {
-          [currX, currY] = d3.mouse(document.querySelector('#grid svg'));
+          [currX, currY] = d3.mouse(document.querySelector(`${gridId}`));
           d3.select(this.parentNode.parentNode)
             .attr('transform', `rotate(${rotationAngle(d)})`);
         })
@@ -744,6 +746,9 @@ export function drawWall() {
   return chart;
 }
 
+export function getGridIds(currentGridId) {
+  gridId = `${currentGridId} svg`;
+}
 
 export default function drawMethods({ xScale, yScale, updateImage, selectImage }) {
 

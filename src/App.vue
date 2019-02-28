@@ -128,7 +128,7 @@ body {
 }
 .tool_rectangle, .tool_polygon, .tool_eraser {
   height: 100vh;
-  #grid {
+  .grid {
     cursor: crosshair;
   }
 }

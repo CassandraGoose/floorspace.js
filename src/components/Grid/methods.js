@@ -33,8 +33,13 @@ function transformDiff(t1, t2) {
   );
 }
 
-
+let gridIdsvg;
+let gridId;
 export default {
+  setGridIdWithSvg(currentGridId, svgGridId) {
+    gridIdsvg = `#${svgGridId} svg`;
+    gridId = `#${currentGridId}`;
+  },
   // ****************** USER INTERACTION EVENTS ****************** //
   /*
   * handle a click on the svg grid
@@ -179,9 +184,9 @@ export default {
   },
   raiseOrLowerImages() {
     if (this.currentTool === 'Image') {
-      d3.select('#grid svg .images').raise();
+      d3.select(`${gridIdsvg} .images`).raise();
     } else {
-      d3.select('#grid svg .images').lower();
+      d3.select(`${gridIdsvg} .images`).lower();
     }
   },
   placeDaylightingControl() {
@@ -283,7 +288,7 @@ export default {
 
     // if snapping to an edisting edge or radius, draw a larger point, if snapping to the grid or just displaying the location of the pointer, create a small point
     if (snapTarget.type === 'vertex') {
-      d3.select('#grid svg')
+      d3.select(`${gridIdsvg}`)
       .append('ellipse')
       .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
       .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
@@ -293,7 +298,7 @@ export default {
       .attr('data-transform-plz', '')
       .attr('vector-effect', 'non-scaling-stroke');
     } else {
-      d3.select('#grid svg')
+      d3.select(`${gridIdsvg}`)
       .append('ellipse')
       .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
       .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
@@ -306,7 +311,7 @@ export default {
 
     // in drawing modes, highlight edges that would be snapped to
     if (snapTarget.type === 'edge' && this.currentTool !== 'Eraser') {
-      d3.select('#grid svg')
+      d3.select(`${gridIdsvg}`)
       .append('line')
       .attr('x1', this.rwuToGrid(snapTarget.v1GridCoords.x, 'x'))
       .attr('y1', this.rwuToGrid(snapTarget.v1GridCoords.y, 'y'))
@@ -323,11 +328,11 @@ export default {
   },
 
   clearHighlights() {
-    d3.selectAll('#grid .highlight, #grid .gridpoint, #grid .guideline').remove();
+    d3.selectAll(`${gridId} .highlight, ${gridId} .gridpoint, ${gridId} .guideline`).remove();
     this.componentFacingSelection = null;
   },
   clearComponentHighlights() {
-    d3.selectAll('#grid .highlight, #grid .component-guideline').remove();
+    d3.selectAll(`${gridId} .highlight, ${gridId} .component-guideline`).remove();
     this.componentFacingSelection = null;
   },
   highlightComponentToPlaceOrSelect(gridPoint) {
@@ -372,7 +377,7 @@ export default {
       // "Am I selecting or replacing that one?"
       return;
     }
-    d3.select('#grid svg')
+    d3.select(`${gridIdsvg}`)
       .append('g')
       .classed('highlight', true)
       .selectAll('.window')
@@ -397,7 +402,7 @@ export default {
 
     if (!loc) { return; }
 
-    d3.select('#grid svg')
+    d3.select(`${gridIdsvg}`)
       .append('g')
       .classed('highlight', true)
       .selectAll('.window')
@@ -412,7 +417,7 @@ export default {
     this.highlightWindowGuideline(loc);
   },
   highlightWindowGuideline(loc) {
-    d3.select('#grid svg')
+    d3.select(`${gridIdsvg}`)
       .append('g')
       .classed('guideline', true)
       .selectAll('.window-guideline')
@@ -428,7 +433,7 @@ export default {
         this.spacing,
       );
     if (!loc) { return; }
-    d3.select('#grid svg')
+    d3.select(`${gridIdsvg}`)
       .append('g')
       .classed('highlight', true)
       .selectAll('.daylighting-control')
@@ -442,7 +447,7 @@ export default {
       face = _.find(this.denormalizedGeometry.faces, { id: loc.face_id }),
       windows = this.windowsOnFace(face),
       nearestEdge = findClosestWindow(windows, loc) || findClosestEdge(face.edges, loc);
-    d3.select('#grid svg')
+    d3.select(`${gridIdsvg}`)
       .append('g')
       .classed('guideline', true)
       .selectAll('.daylighting-control-guideline')
@@ -485,7 +490,7 @@ export default {
     const
       guidelineArea = this.currentTool === 'Polygon' ? [...this.points, guidePoint, this.points[0]] : guidelinePoints,
       guidelinePolys = [guidelineArea, this.points],
-      svg = d3.select('#grid svg');
+      svg = d3.select(`${gridIdsvg}`);
 
     // render a guideline or rectangle
     svg.selectAll('.guideline-line')
@@ -574,7 +579,7 @@ export default {
   * Erase any drawn guidelines
   */
   eraseGuidelines() {
-    d3.selectAll('#grid .guideline').remove();
+    d3.selectAll(`${gridId} .guideline`).remove();
   },
   /*
   * Handle escape key presses to cancel current drawing operation
@@ -583,7 +588,7 @@ export default {
     if (e.code === 'Escape' || e.which === 27) {
       this.points = [];
       this.clearHighlights();
-      d3.selectAll('#grid .point-path').remove();
+      d3.selectAll(`${gridId} .point-path`).remove();
     }
   },
   // ****************** SAVING FACES ****************** //
@@ -593,7 +598,7 @@ export default {
   */
   savePolygonFace() {
     this.clearHighlights();
-    d3.selectAll('#grid .point-path').remove();
+    d3.selectAll(`${gridId} .point-path`).remove();
 
     const payload = {
       points: [...this.points],
@@ -617,7 +622,7 @@ export default {
   */
   saveRectangularFace() {
     this.clearHighlights();
-    d3.selectAll('#grid .point-path').remove();
+    d3.selectAll(`${gridId} .point-path`).remove();
 
     // infer 4 corners of the rectangle based on the two points that have been drawn
     const payload = {};
@@ -649,7 +654,7 @@ export default {
   eraseRectangularSelection() {
     // infer 4 corners of the rectangle based on the two points that have been drawn
     this.clearHighlights();
-    d3.selectAll('#grid .point-path').remove();
+    d3.selectAll(`${gridId} .point-path`).remove();
 
     const payload = {
       points: [
@@ -673,10 +678,10 @@ export default {
   */
   drawPoints() {
     // remove expired points and guidelines
-    d3.selectAll('#grid .point-path').remove();
+    d3.selectAll(`${gridId} .point-path`).remove();
 
     // draw points
-    const pointPath = d3.select('#grid svg')
+    const pointPath = d3.select(`${gridIdsvg}`)
     .selectAll('ellipse.point-path').data(this.points);
 
     pointPath.merge(
@@ -692,7 +697,7 @@ export default {
     .attr('fill', (d, ix) => (ix === 0 ? 'none' : ''));
 
     // connect the points for the face being drawn with a line
-    d3.select('#grid svg').append('path').attr('class', 'point-path')
+    d3.select(`${gridIdsvg}`).append('path').attr('class', 'point-path')
     .datum(this.points)
     .attr('fill', 'none')
     .attr('vector-effect', 'non-scaling-stroke')
@@ -705,7 +710,7 @@ export default {
     d3.selectAll('.vertical, .horizontal').lower();
   },
   registerDrag() {
-    const polygons = d3.select('#grid svg').selectAll('polygon');
+    const polygons = d3.select(`${gridIdsvg}`).selectAll('polygon');
 
     this.deregisterD3Events(polygons);
     if (this.currentTool === 'Select') {
@@ -769,7 +774,7 @@ export default {
   drawPolygons() {
     this.recalcScales();
     // remove expired polygons
-    let poly = d3.select('#grid svg .polygons').selectAll('g.poly')
+    let poly = d3.select(`${ gridIdsvg } .polygons`).selectAll('g.poly')
       .data(this.polygons, d => d.face_id);
 
     poly.exit().remove();
@@ -830,12 +835,12 @@ export default {
     poly.order();
   },
   drawWalls() {
-    d3.select('#grid svg .walls').selectAll('.wall')
+    d3.select(`${gridIdsvg} .walls`).selectAll('.wall')
       .data(this.walls, d => d.id)
       .call(this.drawWall);
   },
   drawImages() {
-    d3.select('#grid svg .images').selectAll('.image-group')
+    d3.select(`${gridIdsvg} .images`).selectAll('.image-group')
       .data(this.images, d => d.id)
       .call(this.drawImage);
   },
@@ -1290,7 +1295,7 @@ export default {
       width = this.$refs.gridParent.clientWidth,
       height = this.$refs.gridParent.clientHeight;
     const
-      svg = d3.select('#grid svg'),
+      svg = d3.select(`${gridIdsvg}`),
       // keep font size and stroke width visually consistent
       strokeWidth = 1,
       fontSize = '14px';
@@ -1389,7 +1394,7 @@ export default {
       y = (yExtent[0] + yExtent[1]) / 2,
       scale = 0.9 / Math.max(dx / width, dy / height),
       translate = [width / 2 - scale * x, height / 2 - scale * y],
-      svg = d3.select('#grid svg'),
+      svg = d3.select(`${gridIdsvg}`),
       transform = d3.zoomIdentity.translate(...translate).scale(scale);
 
     svg.call(this.zoomBehavior.transform, transform);
