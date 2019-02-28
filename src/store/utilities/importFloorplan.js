@@ -155,6 +155,6 @@ export default function importFloorplan(context, payload) {
   });
 
   if (!options.noReloadGrid) {
-    document.getElementById(context.state.application.currentGridId).dispatchEvent(new Event('reloadGrid'));
+    document.getElementById(context.state.application.currentSvgGridId).dispatchEvent(new Event('reloadGrid'));
   }
 }

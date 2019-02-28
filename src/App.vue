@@ -73,7 +73,7 @@ export default {
     });
     this.$root.$options.eventBus.$on('reload-grid', () => {
       // This is unfortunate. oh well.
-      document.getElementById(this.gridId)
+      document.getElementById(this.svgGridId)
         .dispatchEvent(new Event('reloadGrid'));
     });
 
@@ -89,15 +89,17 @@ export default {
         e.preventDefault();
       }
     });
-
-    this.$store.commit('application/setGridId', { currentGridId: `svg-grid${this.svgGridId}` });
+    this.$store.commit('application/setGridId', { currentSVGGridId: `svg-grid${this.gridId}` });
+    this.$store.commit('application/setGridId', { currentGridId: `grid${this.gridId}` });
   },
 
   computed: {
     ...mapState({
       tool: state => state.application.currentSelections.tool,
-      gridId: state => state.application.currentGridId }),
-    svgGridId() {
+      svgGridId: state => state.application.currentSvgGridId,
+      gridId: state => state.application.currentGridId,
+    }),
+    gridId() {
       return 'yxxx'.replace(/[xy]/g, (c) => {
         const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return `${v.toString(4)}`;

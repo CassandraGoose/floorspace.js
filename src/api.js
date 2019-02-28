@@ -6,8 +6,8 @@ window.api = {
     var options = _options || { noReloadGrid: false };
     try {
       window.application.$store.dispatch('importFloorplan', {
-        clientWidth: document.getElementById(window.application.$store.getters['application/getCurrentGridId']).clientWidth,
-        clientHeight: document.getElementById(window.application.$store.getters['application/getCurrentGridId']).clientHeight,
+        clientWidth: document.getElementById(window.application.$store.getters['application/getCurrentSvgGridId']).clientWidth,
+        clientHeight: document.getElementById(window.application.$store.getters['application/getCurrentSvgGridId']).clientHeight,
         data: JSON.parse(data),
         options: options
       });

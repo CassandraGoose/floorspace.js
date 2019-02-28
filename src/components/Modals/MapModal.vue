@@ -82,8 +82,8 @@ export default {
     },
     importFloorplan(data) {
       this.$store.dispatch('importFloorplan', {
-        clientWidth: document.getElementById(this.gridId).clientWidth,
-        clientHeight: document.getElementById(this.gridId).clientHeight,
+        clientWidth: document.getElementById(this.svgGridId).clientWidth,
+        clientHeight: document.getElementById(this.svgGridId).clientHeight,
         data: JSON.parse(data),
       });
       this.$emit('close');

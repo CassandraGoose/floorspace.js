@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     ref="gridParent"
     :class="{ 'reduce-ticks': reduceTicks }"
   >
-    <svg ref="grid" :id="gridId">
+    <svg ref="grid" :id="svgGridId">
       <g class="axis axis--x"></g>
       <g class="axis axis--y"></g>
       <g class="images" data-transform-plz></g>
@@ -125,6 +125,7 @@ export default {
       windowWidths: state => _.sumBy(state.models.library.window_definitions, 'width'),
       allVertices: state => _.flatMap(state.geometry, 'vertices'),
       gridId: state => state.application.currentGridId,
+      svgGridId: state => state.application.currentSvgGridId,
     }),
     ...mapGetters({
       currentStory: 'application/currentStory',
@@ -322,9 +323,9 @@ export default {
     transform(newTransform, lastTransform) {
       // hide polygon names if zoomed out enough
       if (newTransform.k < 0.5) {
-        d3.select(this.gridId).selectAll('.polygon-text').style('display', 'none');
+        d3.select(this.svgGridId).selectAll('.polygon-text').style('display', 'none');
       } else {
-        d3.select(this.gridId).selectAll('.polygon-text').style('display', 'initial');
+        d3.select(this.svgGridId).selectAll('.polygon-text').style('display', 'initial');
       }
     },
   },

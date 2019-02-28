@@ -239,8 +239,8 @@ export default {
           this.$store.dispatch('importLibrary', { data });
         } else if (type === 'floorplan') {
           this.$store.dispatch('importFloorplan', {
-            clientWidth: document.getElementById(this.gridId).clientWidth,
-            clientHeight: document.getElementById(this.gridId).clientHeight,
+            clientWidth: document.getElementById(this.svgGridId).clientWidth,
+            clientHeight: document.getElementById(this.svgGridId).clientHeight,
             data,
           });
         }
@@ -290,6 +290,7 @@ export default {
     }),
     ...mapState({
       gridId: state => state.application.currentGridId,
+      svgGridId: state => state.application.currentSvgGridId,
       mapEnabled: state => state.project.map.enabled,
       timetravelInitialized: state => state.timetravelInitialized,
       showImportExport: state => state.project.show_import_export,

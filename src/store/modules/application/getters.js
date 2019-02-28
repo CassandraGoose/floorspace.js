@@ -19,6 +19,9 @@ export default {
     // this is dumb but i don't have any other ideas rn.
     return state.currentGridId;
   },
+  getCurrentSvgGridId(state) {
+    return state.currentSvgGridId;
+  },
   currentSubSelectionType(state, getters) {
     const currentStory = getters['currentStory'];
     if (!currentStory) { return null; }
