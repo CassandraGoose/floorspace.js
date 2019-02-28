@@ -53,7 +53,6 @@ export default {
   * load the openlayers map, google maps autocomplete, and register a listener for view resizing
   */
   mounted() {
-    this.mapID = `map${this.randomMapId}`;
     this.showGrid = this.gridVisible;
 
     this.initAutoComplete();
@@ -69,7 +68,9 @@ export default {
     ResizeEvents.$off('resize', this.updateMapView);
     this.$root.$options.eventBus.$off('boundsResolved', this.clearStartResolution);
   },
-
+  created() {
+    this.mapID = `map${this.randomMapId}`;
+  },
   methods: {
     clearStartResolution() {
       this.startResolution = null;
