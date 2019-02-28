@@ -60,7 +60,9 @@ export default {
     this.$store.dispatch('models/initStory');
   },
   mounted() {
-    console.log(window.application)
+    this.$root.$options.eventBus.$on('requestFloorspaceJSON', () => {
+      this.$root.$options.eventBus.$emit('sendFloorspaceJSON', this.$store.getters['exportData']);
+    });
     this.$root.$options.eventBus.$on('error', (err) => {
       this.error = err;
       setTimeout(() => { this.error = null; }, 5000);

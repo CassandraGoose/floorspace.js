@@ -23,19 +23,22 @@
       </div>
     </ol>
     </div>
-    <div class="controls-container">
     <div class="controls">
-        <div v-for="(object, i) in objectTypes" :key="i">
+      <!-- when all objectTypes are ready, use the v-for below -->
+        <!-- <div v-for="(object, i) in objectTypes" :key="i">
           <a @click="createObject(object)">
             <div><AddNew class="button"/>{{object}}</div>
           </a>
-        </div>
+        </div> -->
+        <a @click="createObject('Story')">
+          <div><AddNew class="button"/>Story</div>
+        </a>
+        <a @click="createObject('Space')"><div><AddNew class="button"/>Space</div></a>
       </div>
       <div class="area-info">
         <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
         <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
       </div>
-    </div>
     </div>
 </template>
 
@@ -198,19 +201,19 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100%;
   background-color: #4EACEA;
   color: black;
 }
 
 .tree-container {
+  padding-top: 5%;
   padding-right: 5%;
   display: flex;
   flex-direction: column;
   align-self: flex-start;
   background-color: white;
   align-content: center;
-  height: 55%;
+  height: 50%;
   width: 100%;
   overflow-y: scroll;
 }
@@ -248,16 +251,20 @@ ol.tree li:last-child:before {
   border-left: 1px dotted black;
 }
 
-.controls-container {
+.controls {
   display: flex;
   flex-direction: column;
   height: 40%;
-  justify-content: space-around;
-  overflow: scroll;
+  justify-content: center;
+  margin-left: 25%;
 }
 
-.controls, .area-info {
+.area-info {
+  display: flex;
+  height: 10%;
+  flex-direction: column;
   margin-left: 25%;
+  margin-bottom: 10%;
 }
 
 .area {

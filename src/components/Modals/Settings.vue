@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     @close="$emit('close')"
     :styles="styles"
   >
-    <div class="settings">
+    <div class="settings" :style="styles.toolbarStyles.toolbar.topToolbar.settings">
       <p>
         <label class="input-text">
           North Axis

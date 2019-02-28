@@ -7,7 +7,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <template>
     <div id="map-container" :styles="styles.mapContainer">
-        <div id="map" ref="map" :style="{ 'pointer-events': tool === 'Map' ? 'all': 'none' }"></div>
+        <div :id="mapID" ref="map" :style="{ 'pointer-events': tool === 'Map' ? 'all': 'none', 'height': '100%', 'min-width': '100%' }"></div>
 
         <div v-show="tool === 'Map'" id="autocomplete">
             <span class="input-text">
@@ -41,6 +41,7 @@ export default {
     return {
       view: null,
       map: null,
+      mapID: null,
       startResolution: null,
       autocomplete: null,
       mapModalVisible: window.api ? window.api.config.showMapDialogOnStart : true,
@@ -52,6 +53,7 @@ export default {
   * load the openlayers map, google maps autocomplete, and register a listener for view resizing
   */
   mounted() {
+    this.mapID = `map${this.randomMapId}`;
     this.showGrid = this.gridVisible;
 
     this.initAutoComplete();
@@ -103,7 +105,7 @@ export default {
       this.view = new ol.View();
       this.map = new ol.Map({
         layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
-        target: 'map',
+        target: this.mapID,
         view: this.view,
       });
       this.view.on('propertychange', (e) => {
@@ -162,7 +164,7 @@ export default {
       const resolution = ol.proj.getPointResolution(this.view.getProjection(), this.view.getResolution(), this.view.getCenter());
       const scale = this.startResolution / resolution;
       console.log(`scaling to ${this.startResolution} / ${resolution} == ${scale}`);
-      eventBus.$emit('scaleTo', scale);
+      this.$root.$options.eventBus.eventBus.$emit('scaleTo', scale);
 
       this.rotation = this.view.getRotation();
 
@@ -212,6 +214,12 @@ export default {
       units: state => state.project.config.units,
       mapInitialized: state => state.project.map.initialized,
     }),
+    randomMapId() {
+      return 'yxxx'.replace(/[xy]/g, (c) => {
+        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return `${v.toString(4)}`;
+      });
+    },
     mPerFt() { return ol.proj.METERS_PER_UNIT['us-ft']; },
     unAdjustedResolutionMeters() {
       // default map resolution RWU/px
@@ -281,10 +289,10 @@ export default {
     // position: relative;
     height: 100%;
     width: 100%;
-    #map {
-        height: 100%;
-        min-width: 100%;
-    }
+    // #map {
+    //     height: 100%;
+    //     min-width: 100%;
+    // }
 }
 
 #autocomplete {

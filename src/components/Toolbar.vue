@@ -61,24 +61,24 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </li>
       </ul>
 
-      <div id="grid-settings">
-        <div class="input-checkbox">
-          <label>Story Below</label>
+      <div id="floorspace-grid-settings">
+        <div class="floorspace-input-checkbox">
+          <label class="floorspace-label">Story Below</label>
           <input type="checkbox" v-model="previousStoryVisible">
         </div>
 
-        <div v-if="mapEnabled" class="input-checkbox">
-          <label>map</label>
+        <div v-if="mapEnabled" class="floorspace-input-checkbox">
+          <label class="floorspace-label">map</label>
           <input type="checkbox" v-model="mapVisible">
         </div>
 
-        <div class="input-checkbox">
-          <label>grid</label>
+        <div class="floorspace-input-checkbox">
+          <label class="floorspace-label">grid</label>
           <input type="checkbox" v-model="gridVisible">
         </div>
 
-        <div class="input-number">
-          <label>spacing</label>
+        <div class="floorspace-input-number">
+          <label class="floorspace-label">spacing</label>
           <input v-model.number.lazy="spacing">
           <label v-if="!allowSettingUnits">{{ rwUnits}}</label>
         </div>
@@ -90,7 +90,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           @change="updateUnits"
         />
 
-        <div @click="showGroundPropsModal = true" title="settings">
+        <div :style="styles.toolbarStyles.toolbar.topToolbar.gear" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
       </div>
@@ -105,13 +105,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <tool-draw-rectangle-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-rectangle-svg>
           </div>
           <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
-            <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
+            <tool-draw-polygon-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-polygon-svg>
           </div>
           <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Fill' }">
-            <tool-fill-svg class="button"></tool-fill-svg>
+            <tool-fill-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-fill-svg>
           </div>
           <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Eraser' }">
-            <tool-erase-svg class="button"></tool-erase-svg>
+            <tool-erase-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-erase-svg>
           </div>
           <!-- remove Select/Move tool -->
           <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
@@ -192,8 +192,6 @@ import svgs from './svgs';
 import RenderByDropdown from './RenderByDropdown.vue';
 import ComponentInstanceEditBar from './ComponentInstanceEditBar.vue';
 import appconfig, { componentTypes } from '../store/modules/application/appconfig';
-
-// svgs
 
 export default {
   name: 'toolbar',
@@ -427,8 +425,8 @@ $gray-medium-light: #5b5b5b;
 svg.icon, svg.button {
   margin-top: .5rem;
   vertical-align: middle;
-  height: 20px;
-  width: 20px;
+  height: 2rem;
+  width: 2rem;
 }
 
 #toolbar {
@@ -448,9 +446,6 @@ svg.icon, svg.button {
       #undo-redo {
         > div {
           display: inline-block;
-          svg {
-            height: 5%;
-          }
         }
         float: right;
       }
@@ -459,11 +454,28 @@ svg.icon, svg.button {
       }
     }
 
-  #grid-settings > div > label {
-    font-size: 15%;
+  div.floorspace-input-number > input {
+    width: 10px;
   }
 
-    #grid-settings {
+  #floorspace-grid-settings > div > .floorspace-label {
+    font-size: 10px !important;
+    color: white !important;
+  }
+
+  #floorspace-grid-settings > div > input[type="checkbox"] {
+    min-height: 5px;
+    min-width: 5px;
+  }
+
+  #floorspace-grid-settings > div > input[type="checkbox"]:checked {
+    background-color: blue;
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+    #floorspace-grid-settings {
       display: flex;
       margin-left: auto;
       >div {
@@ -516,10 +528,6 @@ svg.icon, svg.button {
       }
     }
   }
-}
-// REMOVE
-.input-number {
-  display: none;
 }
 
 #mode-tabs {

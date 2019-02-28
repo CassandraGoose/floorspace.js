@@ -23,6 +23,9 @@ Vue.component('generic-input', GenericInput);
 const eventBus = new Vue();
 
 createStore(eventBus).then((store) => {
+  store.subscribeAction((action, state) => {
+    eventBus.$emit('newState', state);
+  });
   window.application = new Vue({
     store,
     el: '#app',

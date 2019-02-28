@@ -8,12 +8,19 @@ import createStore from './store/index';
 
 Vue.component('pretty-select', PrettySelect);
 
+
+
 export default function renderTo(el, customStyles) {
   const eventBus = new Vue();
   // const shadow = document.querySelector(el).attachShadow({ mode: 'open' });
   // const element = document.createElement('div');
   // shadow.appendChild(element);
   createStore(eventBus).then((store) => {
+    store.subscribeAction(() => {
+      const data = store.getters['exportData'];
+      eventBus.$emit('sendFloorspaceJSON', data);
+    });
+
     window.application = new Vue({
       store,
       // el: element,
@@ -29,4 +36,5 @@ export default function renderTo(el, customStyles) {
 
     timetravel.init(store);
   });
+  return eventBus;
 }

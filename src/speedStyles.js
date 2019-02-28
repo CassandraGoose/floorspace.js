@@ -20,6 +20,7 @@ export default {
   },
   navigationStyles: {
     width: '30%',
+    height: '75%',
     nav: {
       display: 'none',
     },
@@ -37,15 +38,22 @@ export default {
   },
   toolbarStyles: {
     toolbar: {
-      display: 'flex',
-      flexDirection: 'column',
-      left: 'auto',
-      top: 'auto',
-      width: '70%',
+      // display: 'flex',
+      // flexDirection: 'column',
+      // left: 'auto',
+      // top: 'auto',
+      marginLeft: '25%',
+      width: '75%',
       color: 'white',
       topToolbar: {
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
+        // flexDirection: 'row',
+        settings: {
+          // maxHeight: '300px',
+          // maxWidth: '400px',
+        },
+        gear: {
+          // paddingRight: '20px',
+        },
         tabs: {
           display: 'none',
         },
@@ -53,12 +61,11 @@ export default {
           display: 'none',
         },
         undoRedo: {
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: '#24292c',
-          height: '100%',
-          textAlign: 'center',
-          width: '40px',
+          // display: 'flex',
+          // flexDirection: 'column',
+          // backgroundColor: '#24292c',
+          // width: '30px',
+          // height: '30px',
         },
       },
       bottomToolbar: {
@@ -79,10 +86,12 @@ export default {
           alignSelf: 'flex-start',
           buttons: {
             backgroundColor: '#24292c',
-            width: '20px',
+            width: '40px',
             textAlign: 'center',
           },
           svg: {
+            height: '25px',
+            width: '25px',
             textAlign: 'center',
           },
         },
