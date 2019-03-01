@@ -36,9 +36,10 @@ function transformDiff(t1, t2) {
 let gridIdsvg;
 let gridId;
 export default {
-  setGridIdWithSvg(currentGridId, svgGridId) {
-    gridIdsvg = `#${svgGridId} svg`;
+  setGridIdWithSvg(currentGridId) {
+    gridIdsvg = `#${currentGridId} svg`;
     gridId = `#${currentGridId}`;
+    console.log(gridIdsvg, gridId)
   },
   // ****************** USER INTERACTION EVENTS ****************** //
   /*
@@ -222,9 +223,6 @@ export default {
       gridCoords = d3.mouse(this.$refs.grid),
       gridPoint = { x: gridCoords[0], y: gridCoords[1] },
       snapTarget = this.findSnapTarget(gridPoint);
-    console.log('gridcoords', gridCoords);
-    console.log('gridpoint', gridPoint);
-    console.log('snapTarget', snapTarget)
 
     // if the snapTarget is the origin of the face being drawn in Polygon mode, close the face and don't add a new point
     if (snapTarget.type === 'vertex' && snapTarget.origin && this.currentTool === 'Polygon') {
@@ -774,7 +772,7 @@ export default {
   drawPolygons() {
     this.recalcScales();
     // remove expired polygons
-    let poly = d3.select(`${ gridIdsvg } .polygons`).selectAll('g.poly')
+    let poly = d3.select(`${gridIdsvg} .polygons`).selectAll('g.poly')
       .data(this.polygons, d => d.face_id);
 
     poly.exit().remove();
@@ -1290,6 +1288,7 @@ export default {
     this.zoomYScale = this.zoomYScale || this.yScale.copy();
   },
   calcGrid() {
+    console.log('hey');
     this.recalcScales();
     const
       width = this.$refs.gridParent.clientWidth,

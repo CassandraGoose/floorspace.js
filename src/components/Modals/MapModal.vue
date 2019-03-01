@@ -56,9 +56,9 @@ export default {
   },
   computed: {
     ...mapState({
-      gridId: state => state.application.currentGridId,
+      svgGridId: state => state.application.currentSvgGridId,
     }),
-    online () { return window.api && window.api.config ? window.api.config.online : true; },
+    online() { return window.api && window.api.config ? window.api.config.online : true; },
     mapEnabled: {
       get() { return this.$store.state.project.map.enabled; },
       set(enabled) {

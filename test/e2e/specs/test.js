@@ -48,7 +48,7 @@ module.exports = {
       .click('.tools [data-tool="Fill"]')
       .perform((client, done) => {
         client
-          .moveToElement('#grid svg', client.xScale(-25), client.yScale(25))
+          .moveToElement('.grid svg', client.xScale(-25), client.yScale(25))
           .pause(10)
           .mouseButtonClick();
         done();
@@ -67,15 +67,15 @@ module.exports = {
         const x0 = -50, y0 = 50;
         console.log(`moving to ${client.xScale(x0)}, ${client.yScale(y0)}`);
         client
-          .waitForElementVisible('#grid svg', 200)
+          .waitForElementVisible('.grid svg', 200)
           .pause(10)
-          .moveToElement('#grid svg', client.xScale(x0), client.yScale(y0))
+          .moveToElement('.grid svg', client.xScale(x0), client.yScale(y0))
           .pause(10)
           .mouseButtonClick()
           .pause(10)
-          .moveToElement('#grid svg', client.xScale(x0 + 50), client.yScale(y0 - 50))
+          .moveToElement('.grid svg', client.xScale(x0 + 50), client.yScale(y0 - 50))
           .pause(10)
-          .moveToElement('#grid svg', client.xScale(x0 + 48), client.yScale(y0 - 48))
+          .moveToElement('.grid svg', client.xScale(x0 + 48), client.yScale(y0 - 48))
           .mouseButtonClick();
 
         done();
@@ -147,11 +147,11 @@ module.exports = {
       .click('.tools [data-tool="Eraser"]')
       .perform((client, done) => {
         client
-        .moveToElement('#grid svg', client.xScale(-55), client.yScale(-5))
+        .moveToElement('.grid svg', client.xScale(-55), client.yScale(-5))
         .pause(10)
         .mouseButtonClick()
         .pause(10)
-        .moveToElement('#grid svg', client.xScale(5), client.yScale(55))
+        .moveToElement('.grid svg', client.xScale(5), client.yScale(55))
         .pause(10)
         .mouseButtonClick()
         .pause(10)

@@ -74,8 +74,6 @@ export default {
     };
   },
   mounted() {
-    methods.setGridIdWithSvg(this.gridId, this.svgGridId);
-    getGridIds(this.gridId);
     // throttle/debounce event handlers
     this.handleMouseMove = d3AwareThrottle(this.highlightSnapTarget, 100);
     // the above debugger is for figuring out why the crosshair isn't where my mouse is
@@ -293,6 +291,10 @@ export default {
   watch: {
     // showTicks() { this.showOrHideAxes(); },
     // TODO: method for when new view dimensions are imported or the px dimensions change
+    gridId() {
+      methods.setGridIdWithSvg(this.gridId, this.svgGridId);
+      getGridIds(this.gridId);
+    },
     gridVisible() { this.showOrHideAxes(); },
     spacing() { this.updateGrid(); },
     units() { this.reloadGridAndScales(); },
@@ -326,9 +328,9 @@ export default {
     transform(newTransform, lastTransform) {
       // hide polygon names if zoomed out enough
       if (newTransform.k < 0.5) {
-        d3.select(this.svgGridId).selectAll('.polygon-text').style('display', 'none');
+        d3.select(`#${this.svgGridId}`).selectAll('.polygon-text').style('display', 'none');
       } else {
-        d3.select(this.svgGridId).selectAll('.polygon-text').style('display', 'initial');
+        d3.select(`#${this.svgGridId}`).selectAll('.polygon-text').style('display', 'initial');
       }
     },
   },

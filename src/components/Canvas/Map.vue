@@ -175,7 +175,6 @@ export default {
 
       // remove reticle
       d3.select('#reticle').remove();
-
       this.gridVisible = this.showGrid;
     },
 

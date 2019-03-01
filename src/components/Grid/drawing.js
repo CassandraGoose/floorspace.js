@@ -747,7 +747,7 @@ export function drawWall() {
 }
 
 export function getGridIds(currentGridId) {
-  gridId = `${currentGridId} svg`;
+  gridId = `#${currentGridId} svg`;
 }
 
 export default function drawMethods({ xScale, yScale, updateImage, selectImage }) {

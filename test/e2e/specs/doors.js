@@ -17,7 +17,7 @@ module.exports = {
       .click('[data-object-type="door_definitions"] .add-new')
       .perform((client, done) => {
         client
-          .moveToElement('#grid svg', client.xScale(-40), client.yScale(50))
+          .moveToElement('.grid svg', client.xScale(-40), client.yScale(50))
           .mouseButtonClick();
 
         done();

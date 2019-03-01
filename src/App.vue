@@ -89,8 +89,8 @@ export default {
         e.preventDefault();
       }
     });
-    this.$store.commit('application/setGridId', { currentSVGGridId: `svg-grid${this.gridId}` });
-    this.$store.commit('application/setGridId', { currentGridId: `grid${this.gridId}` });
+    this.$store.commit('application/setSvgGridId', { currentSvgGridId: `svg-grid${this.makeGridId}` });
+    this.$store.commit('application/setGridId', { currentGridId: `grid${this.makeGridId}` });
   },
 
   computed: {
@@ -99,7 +99,7 @@ export default {
       svgGridId: state => state.application.currentSvgGridId,
       gridId: state => state.application.currentGridId,
     }),
-    gridId() {
+    makeGridId() {
       return 'yxxx'.replace(/[xy]/g, (c) => {
         const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return `${v.toString(4)}`;

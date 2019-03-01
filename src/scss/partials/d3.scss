@@ -24,13 +24,13 @@
   cursor: pointer;
 }
 
-.tool_map #grid svg path.domain {
+.tool_map .grid svg path.domain {
   pointer-events: none;
 }
 
 // styling for svg elements created by d3
 // Vue's inline template styling will not work with dynamically created markup
-#grid svg {
+.grid svg {
     path, circle, line, rect, ellipse, polygon, text, .polygons, .image-group {
         // prevent glitchy points caused by moving mouse over overlapping svg paths
         pointer-events: none;

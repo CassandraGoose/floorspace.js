@@ -106,7 +106,7 @@
 
 <script>
 import _ from 'lodash';
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import { textures } from '../store/modules/application/appconfig';
 
 export default {
@@ -154,7 +154,7 @@ export default {
   },
   computed: {
     modSuffixes() { return _.filter(Object.keys(this.modifiers), _.identity) },
-    ...mapGetters({
+    ...mapState({
       gridId: state => state.application.currentGridId,
     }),
     patterns() {

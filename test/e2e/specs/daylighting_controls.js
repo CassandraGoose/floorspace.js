@@ -17,7 +17,7 @@ module.exports = {
       .click('[data-object-type="daylighting_control_definitions"] .add-new')
       .perform((client, done) => {
         client
-        .moveToElement('#grid svg', client.xScale(-40), client.yScale(40))
+        .moveToElement('.grid svg', client.xScale(-40), client.yScale(40))
         .mouseButtonClick();
 
         done();

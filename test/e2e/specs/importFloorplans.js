@@ -64,7 +64,7 @@ module.exports = {
             .waitForElementVisible('.modal .open-floorplan', 100)
             .setFlagOnError()
             .setValue('#importInput', path.join(__dirname, floorplanPath))
-            .waitForElementVisible('#grid svg polygon', 100)
+            .waitForElementVisible('.grid svg polygon', 100)
             .perform(deleteFloorplan) // delete floorplan so download has correct name
             .click('[title="save floorplan"]')
             .setValue('#download-name', '_nightwatch_exported')
@@ -94,7 +94,7 @@ module.exports = {
       .waitForElementVisible('.modal .open-floorplan', 100)
       .setFlagOnError()
       .setValue('#importInput', exported)
-      .waitForElementVisible('#grid svg polygon', 100)
+      .waitForElementVisible('.grid svg polygon', 100)
       .checkForErrors()
       .end();
   },
@@ -116,7 +116,7 @@ module.exports = {
   'project.north_axis new location': (browser) => {
     browser
       .setValue('#importInput', path.join(__dirname, '../fixtures/floorplan-2017-08-31.json'))
-      .waitForElementVisible('#grid svg polygon', 100)
+      .waitForElementVisible('.grid svg polygon', 100)
       .execute('return window.application.$store.state.project.north_axis', [], ({ value }) => {
         browser.assert.equal(value, 12, 'expected project.config.north_axis to be moved to project.north_axis');
       })
