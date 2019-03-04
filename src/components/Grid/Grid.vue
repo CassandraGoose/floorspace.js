@@ -14,8 +14,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     class="grid"
   >
     <svg ref="grid" :id="svgGridId">
-      <g class="axis axis--x"></g>
-      <g class="axis axis--y"></g>
+      <g :class="`axis ${gridId}axis--x axis--x`"></g>
+      <g :class="`axis ${gridId}axis--y axis--y `"></g>
       <g class="images" data-transform-plz></g>
       <g class="polygons" data-transform-plz></g>
       <g class="walls" data-transform-plz></g>
@@ -292,8 +292,10 @@ export default {
     // showTicks() { this.showOrHideAxes(); },
     // TODO: method for when new view dimensions are imported or the px dimensions change
     gridId() {
-      methods.setGridIdWithSvg(this.gridId, this.svgGridId);
+      console.log('i really should only be called once for each instance', this.gridId);
+      methods.setGridIdWithSvg(this.gridId);
       getGridIds(this.gridId);
+      this.renderGrid();
     },
     gridVisible() { this.showOrHideAxes(); },
     spacing() { this.updateGrid(); },

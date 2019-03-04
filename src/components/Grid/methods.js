@@ -5,8 +5,6 @@
 // (3) Neither the name of the copyright holder nor the names of any contributors may be used to endorse or promote products derived from this software without specific prior written permission from the respective party.
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// import * as d3 from '../../d3';
-// const d3 = window.d3;
 import polylabel from 'polylabel';
 import _ from 'lodash';
 import { snapTargets, snapWindowToEdge, snapToVertexWithinFace, findClosestEdge, findClosestWindow, gridSnapTargets, vertexSnapTargets } from './snapping';
@@ -38,8 +36,9 @@ let gridId;
 export default {
   setGridIdWithSvg(currentGridId) {
     gridIdsvg = `#${currentGridId} svg`;
-    gridId = `#${currentGridId}`;
-    console.log(gridIdsvg, gridId)
+    gridId = `${currentGridId}`;
+    console.log('i also should only be called once and have a different id: ', gridId);
+
   },
   // ****************** USER INTERACTION EVENTS ****************** //
   /*
@@ -286,7 +285,7 @@ export default {
 
     // if snapping to an edisting edge or radius, draw a larger point, if snapping to the grid or just displaying the location of the pointer, create a small point
     if (snapTarget.type === 'vertex') {
-      d3.select(`${gridIdsvg}`)
+      d3.select(this.$refs.grid)
       .append('ellipse')
       .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
       .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
@@ -296,7 +295,7 @@ export default {
       .attr('data-transform-plz', '')
       .attr('vector-effect', 'non-scaling-stroke');
     } else {
-      d3.select(`${gridIdsvg}`)
+      d3.select(this.$refs.grid)
       .append('ellipse')
       .attr('cx', this.rwuToGrid(ellipsePoint.x, 'x'))
       .attr('cy', this.rwuToGrid(ellipsePoint.y, 'y'))
@@ -309,7 +308,7 @@ export default {
 
     // in drawing modes, highlight edges that would be snapped to
     if (snapTarget.type === 'edge' && this.currentTool !== 'Eraser') {
-      d3.select(`${gridIdsvg}`)
+      d3.select(this.$refs.grid)
       .append('line')
       .attr('x1', this.rwuToGrid(snapTarget.v1GridCoords.x, 'x'))
       .attr('y1', this.rwuToGrid(snapTarget.v1GridCoords.y, 'y'))
@@ -326,11 +325,11 @@ export default {
   },
 
   clearHighlights() {
-    d3.selectAll(`${gridId} .highlight, ${gridId} .gridpoint, ${gridId} .guideline`).remove();
+    d3.selectAll(`#${gridId} .highlight, #${gridId} .gridpoint, #${gridId} .guideline`).remove();
     this.componentFacingSelection = null;
   },
   clearComponentHighlights() {
-    d3.selectAll(`${gridId} .highlight, ${gridId} .component-guideline`).remove();
+    d3.selectAll(`#${gridId} .highlight, #${gridId} .component-guideline`).remove();
     this.componentFacingSelection = null;
   },
   highlightComponentToPlaceOrSelect(gridPoint) {
@@ -375,7 +374,7 @@ export default {
       // "Am I selecting or replacing that one?"
       return;
     }
-    d3.select(`${gridIdsvg}`)
+    d3.select(this.$refs.grid)
       .append('g')
       .classed('highlight', true)
       .selectAll('.window')
@@ -400,7 +399,7 @@ export default {
 
     if (!loc) { return; }
 
-    d3.select(`${gridIdsvg}`)
+    d3.select(this.$refs.grid)
       .append('g')
       .classed('highlight', true)
       .selectAll('.window')
@@ -415,7 +414,7 @@ export default {
     this.highlightWindowGuideline(loc);
   },
   highlightWindowGuideline(loc) {
-    d3.select(`${gridIdsvg}`)
+    d3.select(this.$refs.grid)
       .append('g')
       .classed('guideline', true)
       .selectAll('.window-guideline')
@@ -431,7 +430,7 @@ export default {
         this.spacing,
       );
     if (!loc) { return; }
-    d3.select(`${gridIdsvg}`)
+    d3.select(this.$refs.grid)
       .append('g')
       .classed('highlight', true)
       .selectAll('.daylighting-control')
@@ -445,7 +444,7 @@ export default {
       face = _.find(this.denormalizedGeometry.faces, { id: loc.face_id }),
       windows = this.windowsOnFace(face),
       nearestEdge = findClosestWindow(windows, loc) || findClosestEdge(face.edges, loc);
-    d3.select(`${gridIdsvg}`)
+    d3.select(this.$refs.grid)
       .append('g')
       .classed('guideline', true)
       .selectAll('.daylighting-control-guideline')
@@ -458,6 +457,7 @@ export default {
   * drawing a guide rectangle or a guideline between the last point drawn and the guidepoint
   */
   drawGuideLines(e, guidePoint) {
+
     if (!this.points.length) { return; }
 
     // remove expired guideline paths and text
@@ -488,7 +488,7 @@ export default {
     const
       guidelineArea = this.currentTool === 'Polygon' ? [...this.points, guidePoint, this.points[0]] : guidelinePoints,
       guidelinePolys = [guidelineArea, this.points],
-      svg = d3.select(`${gridIdsvg}`);
+      svg = d3.select(this.$refs.grid);
 
     // render a guideline or rectangle
     svg.selectAll('.guideline-line')
@@ -577,7 +577,7 @@ export default {
   * Erase any drawn guidelines
   */
   eraseGuidelines() {
-    d3.selectAll(`${gridId} .guideline`).remove();
+    d3.selectAll(`#${gridId} .guideline`).remove();
   },
   /*
   * Handle escape key presses to cancel current drawing operation
@@ -586,7 +586,7 @@ export default {
     if (e.code === 'Escape' || e.which === 27) {
       this.points = [];
       this.clearHighlights();
-      d3.selectAll(`${gridId} .point-path`).remove();
+      d3.selectAll(`#${gridId} .point-path`).remove();
     }
   },
   // ****************** SAVING FACES ****************** //
@@ -596,7 +596,7 @@ export default {
   */
   savePolygonFace() {
     this.clearHighlights();
-    d3.selectAll(`${gridId} .point-path`).remove();
+    d3.selectAll(`#${gridId} .point-path`).remove();
 
     const payload = {
       points: [...this.points],
@@ -620,7 +620,7 @@ export default {
   */
   saveRectangularFace() {
     this.clearHighlights();
-    d3.selectAll(`${gridId} .point-path`).remove();
+    d3.selectAll(`#${gridId} .point-path`).remove();
 
     // infer 4 corners of the rectangle based on the two points that have been drawn
     const payload = {};
@@ -652,7 +652,7 @@ export default {
   eraseRectangularSelection() {
     // infer 4 corners of the rectangle based on the two points that have been drawn
     this.clearHighlights();
-    d3.selectAll(`${gridId} .point-path`).remove();
+    d3.selectAll(`#${gridId} .point-path`).remove();
 
     const payload = {
       points: [
@@ -676,10 +676,10 @@ export default {
   */
   drawPoints() {
     // remove expired points and guidelines
-    d3.selectAll(`${gridId} .point-path`).remove();
+    d3.selectAll(`#${gridId} .point-path`).remove();
 
     // draw points
-    const pointPath = d3.select(`${gridIdsvg}`)
+    const pointPath = d3.select(this.$refs.grid)
     .selectAll('ellipse.point-path').data(this.points);
 
     pointPath.merge(
@@ -695,7 +695,7 @@ export default {
     .attr('fill', (d, ix) => (ix === 0 ? 'none' : ''));
 
     // connect the points for the face being drawn with a line
-    d3.select(`${gridIdsvg}`).append('path').attr('class', 'point-path')
+    d3.select(this.$refs.grid).append('path').attr('class', 'point-path')
     .datum(this.points)
     .attr('fill', 'none')
     .attr('vector-effect', 'non-scaling-stroke')
@@ -708,7 +708,7 @@ export default {
     d3.selectAll('.vertical, .horizontal').lower();
   },
   registerDrag() {
-    const polygons = d3.select(`${gridIdsvg}`).selectAll('polygon');
+    const polygons = d3.select(this.$refs.grid).selectAll('polygon');
 
     this.deregisterD3Events(polygons);
     if (this.currentTool === 'Select') {
@@ -1288,35 +1288,34 @@ export default {
     this.zoomYScale = this.zoomYScale || this.yScale.copy();
   },
   calcGrid() {
-    console.log('hey');
     this.recalcScales();
     const
       width = this.$refs.gridParent.clientWidth,
       height = this.$refs.gridParent.clientHeight;
     const
-      svg = d3.select(`${gridIdsvg}`),
+      svg = d3.select(this.$refs.grid),
       // keep font size and stroke width visually consistent
       strokeWidth = 1,
       fontSize = '14px';
     svg.attr('height', height)
       .attr('width', width);
-    this.axis.x = svg.selectAll('g.axis--x')
+    this.axis.x = svg.selectAll(`g.${gridId}axis--x`)
       .data([undefined]);
 
     this.axis.x = this.axis.x.merge(
-      this.axis.x.enter().append('g').attr('class', 'axis axis--x'),
+      this.axis.x.enter().append('g').attr('class', `axis ${gridId}axis--x`),
     )
     .attr('stroke-width', strokeWidth)
     .style('font-size', fontSize)
     .style('display', this.gridVisible ? 'inline' : 'none');
 
-    this.axis.y = svg.selectAll('g.axis--y')
+    this.axis.y = svg.selectAll(`g.${gridId}axis--y`)
       .data([undefined]);
 
     this.axis.y = this.axis.y.merge(
-      this.axis.y.enter().append('g').attr('class', 'axis axis--y'),
+      this.axis.y.enter().append('g').attr('class', `axis ${gridId}axis--y`),
     )
-    .attr('class', 'axis axis--y')
+    .attr('class', `axis ${gridId}axis--y`)
     .attr('stroke-width', strokeWidth)
     .style('font-size', fontSize)
     .style('display', this.gridVisible ? 'inline' : 'none');
@@ -1393,7 +1392,7 @@ export default {
       y = (yExtent[0] + yExtent[1]) / 2,
       scale = 0.9 / Math.max(dx / width, dy / height),
       translate = [width / 2 - scale * x, height / 2 - scale * y],
-      svg = d3.select(`${gridIdsvg}`),
+      svg = d3.select(this.$refs.grid),
       transform = d3.zoomIdentity.translate(...translate).scale(scale);
 
     svg.call(this.zoomBehavior.transform, transform);
