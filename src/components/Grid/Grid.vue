@@ -292,10 +292,8 @@ export default {
     // showTicks() { this.showOrHideAxes(); },
     // TODO: method for when new view dimensions are imported or the px dimensions change
     gridId() {
-      console.log('i really should only be called once for each instance', this.gridId);
       methods.setGridIdWithSvg(this.gridId);
       getGridIds(this.gridId);
-      this.renderGrid();
     },
     gridVisible() { this.showOrHideAxes(); },
     spacing() { this.updateGrid(); },

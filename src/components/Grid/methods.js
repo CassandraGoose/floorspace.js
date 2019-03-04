@@ -31,14 +31,10 @@ function transformDiff(t1, t2) {
   );
 }
 
-let gridIdsvg;
 let gridId;
 export default {
   setGridIdWithSvg(currentGridId) {
-    gridIdsvg = `#${currentGridId} svg`;
     gridId = `${currentGridId}`;
-    console.log('i also should only be called once and have a different id: ', gridId);
-
   },
   // ****************** USER INTERACTION EVENTS ****************** //
   /*
@@ -184,9 +180,9 @@ export default {
   },
   raiseOrLowerImages() {
     if (this.currentTool === 'Image') {
-      d3.select(`${gridIdsvg} .images`).raise();
+      d3.select(this.$refs.gridParent).select('svg .images').raise();
     } else {
-      d3.select(`${gridIdsvg} .images`).lower();
+      d3.select(this.$refs.gridParent).select('svg .images').lower();
     }
   },
   placeDaylightingControl() {
@@ -325,11 +321,17 @@ export default {
   },
 
   clearHighlights() {
-    d3.selectAll(`#${gridId} .highlight, #${gridId} .gridpoint, #${gridId} .guideline`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.highlight').remove();
+    d3.select(this.$refs.gridParent).selectAll('.gridpoint').remove();
+    d3.select(this.$refs.gridParent).selectAll('.guideLine').remove();
+    // d3.selectAll(`#${gridId} .highlight, #${gridId} .gridpoint, #${gridId} .guideline`).remove();
     this.componentFacingSelection = null;
   },
   clearComponentHighlights() {
-    d3.selectAll(`#${gridId} .highlight, #${gridId} .component-guideline`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.highlight').remove();
+    d3.select(this.$refs.gridParent).selectAll('.component-guideline').remove();
+
+    // d3.selectAll(`#${gridId} .highlight, #${gridId} .component-guideline`).remove();
     this.componentFacingSelection = null;
   },
   highlightComponentToPlaceOrSelect(gridPoint) {
@@ -577,7 +579,8 @@ export default {
   * Erase any drawn guidelines
   */
   eraseGuidelines() {
-    d3.selectAll(`#${gridId} .guideline`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.guideline').remove();
+    // d3.selectAll(`#${gridId} .guideline`).remove();
   },
   /*
   * Handle escape key presses to cancel current drawing operation
@@ -586,7 +589,8 @@ export default {
     if (e.code === 'Escape' || e.which === 27) {
       this.points = [];
       this.clearHighlights();
-      d3.selectAll(`#${gridId} .point-path`).remove();
+      d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
+      // d3.selectAll(`#${gridId} .point-path`).remove();
     }
   },
   // ****************** SAVING FACES ****************** //
@@ -596,7 +600,8 @@ export default {
   */
   savePolygonFace() {
     this.clearHighlights();
-    d3.selectAll(`#${gridId} .point-path`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
+    // d3.selectAll(`#${gridId} .point-path`).remove();
 
     const payload = {
       points: [...this.points],
@@ -620,7 +625,8 @@ export default {
   */
   saveRectangularFace() {
     this.clearHighlights();
-    d3.selectAll(`#${gridId} .point-path`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
+    // d3.selectAll(`#${gridId} .point-path`).remove();
 
     // infer 4 corners of the rectangle based on the two points that have been drawn
     const payload = {};
@@ -652,7 +658,8 @@ export default {
   eraseRectangularSelection() {
     // infer 4 corners of the rectangle based on the two points that have been drawn
     this.clearHighlights();
-    d3.selectAll(`#${gridId} .point-path`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
+    // d3.selectAll(`#${gridId} .point-path`).remove();
 
     const payload = {
       points: [
@@ -676,8 +683,8 @@ export default {
   */
   drawPoints() {
     // remove expired points and guidelines
-    d3.selectAll(`#${gridId} .point-path`).remove();
-
+    // d3.selectAll(`#${gridId} .point-path`).remove();
+    d3.select(this.$refs.gridParent).selectAll('.point-path');
     // draw points
     const pointPath = d3.select(this.$refs.grid)
     .selectAll('ellipse.point-path').data(this.points);
@@ -772,7 +779,7 @@ export default {
   drawPolygons() {
     this.recalcScales();
     // remove expired polygons
-    let poly = d3.select(`${gridIdsvg} .polygons`).selectAll('g.poly')
+    let poly = d3.select(this.$refs.gridParent).select('svg .polygons').selectAll('g.poly')
       .data(this.polygons, d => d.face_id);
 
     poly.exit().remove();
@@ -833,12 +840,12 @@ export default {
     poly.order();
   },
   drawWalls() {
-    d3.select(`${gridIdsvg} .walls`).selectAll('.wall')
+    d3.select(this.$refs.gridParent).select('svg .walls').selectAll('.wall')
       .data(this.walls, d => d.id)
       .call(this.drawWall);
   },
   drawImages() {
-    d3.select(`${gridIdsvg} .images`).selectAll('.image-group')
+    d3.select(this.$refs.gridParent).select('svg .images').selectAll('.image-group')
       .data(this.images, d => d.id)
       .call(this.drawImage);
   },
