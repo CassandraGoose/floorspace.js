@@ -61,7 +61,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </li>
       </ul>
 
-      <div id="floorspace-grid-settings">
+      <div id="floorspace-grid-settings" :style="styles.toolbarStyles.toolbar.topToolbar.gridSettings">
         <div class="floorspace-input-checkbox">
           <label class="floorspace-label">Story Below</label>
           <input type="checkbox" v-model="previousStoryVisible">
@@ -474,6 +474,13 @@ svg.icon, svg.button {
     position: static;
     opacity: 1;
     pointer-events: auto;
+  }
+
+  #floorspace-grid-settings > div > input[type="checkbox"]:not(:checked)  {
+    position: static;
+    opacity: 1;
+    pointer-events:auto;
+    background-color: white;
   }
 
     #floorspace-grid-settings {
