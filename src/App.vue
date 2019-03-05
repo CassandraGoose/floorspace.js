@@ -48,7 +48,7 @@ import { Resize } from './components/Resize';
 
 export default {
   name: 'app',
-  props: ['styles'],
+  // props: ['styles'],
   data() {
     return {
       error: null,
@@ -127,7 +127,7 @@ body {
   height: 100%;
 }
 .tool_rectangle, .tool_polygon, .tool_eraser {
-  height: 100vh;
+  height: 100%;
   .grid {
     cursor: crosshair;
   }

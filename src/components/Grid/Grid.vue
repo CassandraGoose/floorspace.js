@@ -13,7 +13,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     :class="{ 'reduce-ticks': reduceTicks }"
     class="grid"
   >
-    <svg ref="grid" :id="svgGridId">
+    <svg ref="grid" :id="svgGridId" :style="moveUp">
       <g :class="`axis ${gridId}axis--x axis--x`"></g>
       <g :class="`axis ${gridId}axis--y axis--y `"></g>
       <g class="images" data-transform-plz></g>
@@ -38,6 +38,7 @@ import { expandWindowAlongEdge, windowLocation } from './snapping';
 
 export default {
   name: 'grid',
+  props: ['styles'],
   data() {
     const
       xScale = v => this.rwuToGrid(v, 'x'),
@@ -177,7 +178,9 @@ export default {
         this.$store.dispatch('application/setCurrentComponentInstanceId', { id });
       },
     },
-
+    moveUp() {
+      return { top: '-5rem' };
+    },
     // grid dimensions in real world units
     min_x: {
       get() { return this.$store.state.project.view.min_x; },

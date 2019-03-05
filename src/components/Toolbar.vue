@@ -25,9 +25,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           </div>
         </div>
 
-        <div id="undo-redo" :style="styles.toolbarStyles.toolbar.topToolbar.undoRedo">
-          <div title="undo">
-            <undo-svg @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }"></undo-svg>
+        <div id="undo-redo">
+          <div title="undo" :style="styles.toolbarStyles.toolbar.topToolbar.undoRedo">
+            <undo-svg @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }" :style="styles.toolbarStyles.toolbar.topToolbar.undoButton"></undo-svg>
           </div>
           <div title="redo">
             <redo-svg @click.native="redo" class="button" :disabled="!timetravelInitialized" :class="{ 'disabled' : !timetravelInitialized }"></redo-svg>

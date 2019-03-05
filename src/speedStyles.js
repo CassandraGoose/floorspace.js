@@ -1,8 +1,11 @@
 export default {
   map: {
     mapContainer: {
-
+      top: '-5rem',
     },
+  },
+  grid: {
+    top: '-5rem',
   },
   modal: {
     position: 'fixed',
@@ -59,9 +62,15 @@ export default {
           display: 'flex',
           flexDirection: 'column',
           backgroundColor: '#24292c',
-          height: '100%',
+          height: '40px',
           textAlign: 'center',
+          // verticalAlign: 'top',
           width: '40px',
+          // marginTop: 0,
+        },
+        undoButton: {
+          // marginTop: 0,
+          // verticalAlign: 'top',
         },
         gear: {
           display: 'none',
@@ -85,11 +94,12 @@ export default {
           alignSelf: 'flex-start',
           buttons: {
             backgroundColor: '#24292c',
-            width: '20px',
             textAlign: 'center',
+            width: 'auto',
           },
           svg: {
             textAlign: 'center',
+            verticalAlign: 'top',
           },
         },
       },

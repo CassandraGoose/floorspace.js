@@ -12,7 +12,6 @@
         <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
         </li>
       <div v-if="expanded.includes(i)">
-        <pre>hello{{currentSubSelection.id}}</pre>
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">{{space.name}} </a>
