@@ -13,7 +13,7 @@ export default {
     const subSelectionId = state.currentSelections.subselection_ids[currentStory.id];
     return currentStory.spaces.find(i => i.id === subSelectionId) ||
       currentStory.shading.find(i => i.id === subSelectionId) ||
-      currentStory.images.find(i => i.id === subSelectionId);
+      currentStory.images.find(i => i.id === subSelectionId) || { id: -1 };
   },
   getCurrentGridId(state) {
     // this is dumb but i don't have any other ideas rn.

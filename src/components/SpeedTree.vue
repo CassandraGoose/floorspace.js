@@ -12,9 +12,10 @@
         <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
         </li>
       <div v-if="expanded.includes(i)">
+        <pre>hello{{currentSubSelection.id}}</pre>
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
-            <a @click="selectSubItem(space)" :class="{ selected: space.id === this.currentSubSelectionId }">{{space.name}} </a>
+            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">{{space.name}} </a>
             <a @click="destroyObject('spaces', space)">
               <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
             </a>
@@ -24,7 +25,7 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
-            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === this.currentSubSelectionId }">{{shading.name}}</a>
+            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">{{shading.name}}</a>
               <a @click="destroyObject('shading', shading)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
@@ -75,7 +76,7 @@ export default {
     ...mapGetters({
       currentStoryGeom: 'application/currentStoryDenormalizedGeom',
       currentStory: 'application/currentStory',
-      currentSubSelectionId: 'application/currentSubSelection',
+      currentSubSelection: 'application/currentSubSelection',
     }),
     storyArea() {
       return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
@@ -138,7 +139,6 @@ export default {
           this.$store.dispatch('models/destroyStory', { story: object });
           return;
         case 'spaces':
-        console.log(this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)));
           this.$store.dispatch('models/destroySpace', {
             space: object,
             story: this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)),
