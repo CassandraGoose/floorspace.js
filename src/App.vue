@@ -48,7 +48,7 @@ import { Resize } from './components/Resize';
 
 export default {
   name: 'app',
-  // props: ['styles'],
+  props: ['styles'],
   data() {
     return {
       error: null,

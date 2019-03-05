@@ -6,19 +6,29 @@
       <li>
         <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
         <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
-        <a @click="selectStory(story)">
+        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
           {{story.name}}
         </a>
         <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
         </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
-          <li>{{space.name}} <a @click="destroyObject('spaces', space)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a></li>
+          <li>
+            <a @click="selectSubItem(space)" :class="{ selected: space.id === this.currentSubSelectionId }">{{space.name}} </a>
+            <a @click="destroyObject('spaces', space)">
+              <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+            </a>
+          </li>
         </ol>
       </div>
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
-          <li>{{shading.name}} <a @click="destroyObject('shading', shading)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a></li>
+          <li>
+            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === this.currentSubSelectionId }">{{shading.name}}</a>
+              <a @click="destroyObject('shading', shading)">
+                <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+              </a>
+            </li>
         </ol>
       </div>
     </ol>
@@ -57,9 +67,6 @@ export default {
       expanded: [0],
     };
   },
-  created() {
-    console.log('this', this);
-  },
   computed: {
     ...mapState({
       stories: state => state.models.stories,
@@ -67,6 +74,8 @@ export default {
     }),
     ...mapGetters({
       currentStoryGeom: 'application/currentStoryDenormalizedGeom',
+      currentStory: 'application/currentStory',
+      currentSubSelectionId: 'application/currentSubSelection',
     }),
     storyArea() {
       return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
@@ -77,14 +86,6 @@ export default {
         totalArea += Math.abs(geometryHelpers.areaOfSelection(geom.vertices));
       });
       return totalArea;
-    },
-    currentStory: {
-      get() { return this.$store.getters['application/currentStory']; },
-      set(story) { this.$store.dispatch('application/setCurrentStoryId', { id: story.id }); },
-    },
-    currentSubSelection: {
-      get() { return this.$store.getters['application/currentSubSelection']; },
-      set(item) { this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id }); },
     },
     spaces() { return this.currentStory.spaces; },
     shading() { return this.currentStory.shading; },
@@ -137,6 +138,7 @@ export default {
           this.$store.dispatch('models/destroyStory', { story: object });
           return;
         case 'spaces':
+        console.log(this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)));
           this.$store.dispatch('models/destroySpace', {
             space: object,
             story: this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)),
@@ -281,6 +283,12 @@ ol.tree li:last-child:before {
 img {
   max-height: 10px;
   max-width: 10px;
+}
+
+.selected {
+  text-decoration: underline;
+  color: red;
+  font-weight: bold;
 }
 </style>
 
