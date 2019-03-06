@@ -97,6 +97,9 @@ export default {
             textAlign: 'center',
             width: 'auto',
           },
+          fill: {
+            display: 'none',
+          },
           svg: {
             textAlign: 'center',
             verticalAlign: 'top',

@@ -107,7 +107,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
             <tool-draw-polygon-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-polygon-svg>
           </div>
-          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Fill' }">
+          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.fill" :class="{ active: tool === 'Fill' }">
             <tool-fill-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-fill-svg>
           </div>
           <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Eraser' }">
