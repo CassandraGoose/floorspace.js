@@ -81,6 +81,7 @@ export default {
     // },
 
     setMapLatitude (context, payload) {
+      console.log(payload);
         const validator = new Validator(payload);
         validator.validateFloat('latitude');
         validator.validateMax('latitude', 180);
@@ -89,6 +90,7 @@ export default {
     },
 
     setMapLongitude (context, payload) {
+      console.log(payload);
         const validator = new Validator(payload);
         validator.validateFloat('longitude');
         validator.validateMax('longitude', 180);

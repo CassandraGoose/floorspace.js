@@ -125,7 +125,6 @@ export default {
     * position the map
     */
     updateMapView() {
-      console.log('updateMapView');
       this.map.updateSize();
 
       // current long/lat map position in meters

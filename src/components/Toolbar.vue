@@ -62,22 +62,22 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </ul>
 
       <div id="floorspace-grid-settings" :style="styles.toolbarStyles.toolbar.topToolbar.gridSettings">
-        <div class="floorspace-input-checkbox">
+        <div class="floorspace-input-checkbox" title="Toggle previous story visability.">
           <label class="floorspace-label">Story Below</label>
           <input type="checkbox" v-model="previousStoryVisible">
         </div>
 
-        <div v-if="mapEnabled" class="floorspace-input-checkbox">
+        <div v-if="mapEnabled" class="floorspace-input-checkbox" title="Toggle map visability.">
           <label class="floorspace-label">map</label>
           <input type="checkbox" v-model="mapVisible">
         </div>
 
-        <div class="floorspace-input-checkbox">
+        <div class="floorspace-input-checkbox" title="Toggle grid visability.">
           <label class="floorspace-label">grid</label>
           <input type="checkbox" v-model="gridVisible">
         </div>
 
-        <div class="floorspace-input-number">
+        <div class="floorspace-input-number" title="Specify spacing of the grid in ft.">
           <label class="floorspace-label">spacing</label>
           <input v-model.number.lazy="spacing">
           <label v-if="!allowSettingUnits">{{ rwUnits}}</label>
@@ -101,22 +101,58 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         <div id="instructions" :style="styles.toolbarStyles.toolbar.bottomToolbar.instructions">Draw a floorplan and import images</div>
 
         <div id="drawing-tools" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools" class="tools-list tools">
-          <div @click="tool = 'Rectangle'" data-tool="Rectangle" title="Rectangle" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Rectangle' }">
+          <div
+            @click="tool = 'Rectangle'" 
+            data-tool="Rectangle" 
+            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
+            title="Place a rectangle on the grid using the cursor."
+            :class="{ active: tool === 'Rectangle' }">
             <tool-draw-rectangle-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-rectangle-svg>
           </div>
-          <div @click="tool = 'Polygon'" data-tool="Polygon" title="Polygon" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Polygon' }">
+          <div
+            @click="tool = 'Polygon'" 
+            data-tool="Polygon" 
+            title="Place a polygon on the grid using the cursor." 
+            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
+            :class="{ active: tool === 'Polygon' }">
             <tool-draw-polygon-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-polygon-svg>
           </div>
-          <div @click="tool = 'Fill'" data-tool="Fill" title="Fill" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.fill" :class="{ active: tool === 'Fill' }">
+          <div
+            @click="tool = 'Fill'" 
+            data-tool="Fill" 
+            title="Fill" 
+            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.fill" 
+            :class="{ active: tool === 'Fill' }">
             <tool-fill-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-fill-svg>
           </div>
-          <div @click="tool = 'Eraser'" data-tool="Eraser" title="Eraser" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" :class="{ active: tool === 'Eraser' }">
+          <div 
+            @click="toggle3D()" 
+            data-tool="3D" 
+            title="Toggle 3D view." 
+            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
+            :class="{ active: tool === '3D' }">
+            <tool-3d-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-3d-svg>
+          </div>
+          <div 
+            @click="tool = 'Eraser'" 
+            data-tool="Eraser" 
+            title="Erase a part of your space using the cursor. " 
+            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
+            :class="{ active: tool === 'Eraser' }">
             <tool-erase-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-erase-svg>
           </div>
           <!-- remove Select/Move tool -->
           <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
             <tool-move-size-svg class="button"></tool-move-size-svg>
           </div> -->
+          <div 
+            @click="tool = 'Select'" 
+            data-tool="Select" 
+            title="UPDATE TOOLTIP" 
+            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
+            :class="{ active: tool === 'Select' }">
+            <tool-select-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-select-svg>
+          </div>
           <div @click="setImageTool" data-tool="Image" title="Image" :style="styles.toolbarStyles.toolbar.bottomToolbar.image" :class="{ active: tool === 'Image' }">
             <tool-image-svg class="button"></tool-image-svg>
           </div>
@@ -214,6 +250,10 @@ export default {
       if (this.currentStory.images.length === 0) {
         this.$root.$options.eventBus.$emit('uploadImage');
       }
+    },
+    toggle3D() {
+      this.tool = '3D';
+      this.$root.$options.eventBus.$emit('toggle3D');
     },
     zoomToFit() {
       this.$root.$options.eventBus.$emit('zoomToFit');

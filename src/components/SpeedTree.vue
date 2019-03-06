@@ -4,18 +4,26 @@
     <span><img class="building" src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
       <li>
-        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
-        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
-        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
+        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story.">
+          <img src="https://image.flaticon.com/icons/svg/149/149172.svg"/>
+        </a>
+        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story.">
+          <img src="https://image.flaticon.com/icons/svg/149/149171.svg"/>
+        </a>
+        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select story.">
           {{story.name}}
         </a>
-        <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
-        </li>
+        <a @click="destroyObject('stories', story)" title="Delete Story.">
+          <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+        </a>
+      </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
-            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">{{space.name}} </a>
-            <a @click="destroyObject('spaces', space)">
+            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
+              {{space.name}}
+            </a>
+            <a @click="destroyObject('spaces', space)" title="Delete space.">
               <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
             </a>
           </li>
@@ -24,8 +32,10 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
-            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">{{shading.name}}</a>
-              <a @click="destroyObject('shading', shading)">
+            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
+              {{shading.name}}
+            </a>
+              <a @click="destroyObject('shading', shading)" title="Delete shading.">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
             </li>
@@ -40,10 +50,18 @@
             <div><AddNew class="button"/>{{object}}</div>
           </a>
         </div> -->
-        <a @click="createObject('Story')">
-          <div><AddNew class="button"/>Story</div>
+        <a @click="createObject('Story')" title="Add new story.">
+          <div>
+            <AddNew class="button"/>
+            Story
+          </div>
         </a>
-        <a @click="createObject('Space')"><div><AddNew class="button"/>Space</div></a>
+        <a @click="createObject('Space')" title="Add new space.">
+          <div>
+            <AddNew class="button"/>
+            Space
+          </div>
+        </a>
       </div>
       <div class="area-info">
         <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
