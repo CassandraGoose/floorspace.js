@@ -20,6 +20,7 @@ import toolFillSvg from './../assets/svg-icons/fill_icon.svg';
 import toolPlaceComponent from './../assets/svg-icons/lego_brick_icon.svg';
 import tool3dSvg from './../assets/svg-icons/tool_3d.svg';
 import toolSelect from './../assets/svg-icons/tool_select.svg';
+import toolUndo from './../assets/svg-icons/tool_undo.svg';
 import ZoomToFitSvg from './../assets/svg-icons/zoom_to_fit.svg';
 import zoomInSvg from './../assets/svg-icons/zoom_in.svg';
 import zoomOutSvg from './../assets/svg-icons/zoom_out.svg';
@@ -94,6 +95,7 @@ export default {
   'tool-component-svg': toolPlaceComponent,
   'tool-3d-svg': tool3dSvg,
   'tool-select-svg': toolSelect,
+  'tool-undo': toolUndo,
   'zoom-in-svg': zoomInSvg,
   'zoom-out-svg': zoomOutSvg,
   'pan-svg': panSvg,

@@ -26,7 +26,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </div>
 
         <div id="undo-redo">
-          <div title="undo" :style="styles.toolbarStyles.toolbar.topToolbar.undoRedo">
+          <div title="Undo previous action." :style="styles.toolbarStyles.toolbar.topToolbar.undoRedo">
+            <tool-undo @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }" :style="styles.toolbarStyles.toolbar.topToolbar.speedUndo"></tool-undo>
             <undo-svg @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }" :style="styles.toolbarStyles.toolbar.topToolbar.undoButton"></undo-svg>
           </div>
           <div title="redo">
@@ -148,7 +149,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <div 
             @click="tool = 'Select'" 
             data-tool="Select" 
-            title="UPDATE TOOLTIP" 
+            title="Click to select." 
             :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
             :class="{ active: tool === 'Select' }">
             <tool-select-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-select-svg>

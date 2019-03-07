@@ -69,8 +69,10 @@ export default {
           // marginTop: 0,
         },
         undoButton: {
-          // marginTop: 0,
-          // verticalAlign: 'top',
+          display: 'none',
+        },
+        speedUndo: {
+          // display: 'none',
         },
         gear: {
           display: 'none',

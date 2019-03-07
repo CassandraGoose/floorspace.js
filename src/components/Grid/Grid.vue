@@ -355,6 +355,9 @@ export default {
           };
         });
     },
+    selectSubItem(item) {
+      this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
+    },
     doorCenterLocs(cursor) {
       return this.currentStory.doors
         .map(w => ({ w, e: _.find(this.denormalizedGeometry.edges, { id: w.edge_id }) }))
