@@ -44,7 +44,6 @@ import Toolbar from './components/Toolbar.vue';
 import ImageUpload from './components/ImageUpload.vue';
 import Inspector from './components/Inspector.vue';
 import Textures from './components/Textures.vue';
-import { Resize } from './components/Resize';
 
 export default {
   name: 'app',

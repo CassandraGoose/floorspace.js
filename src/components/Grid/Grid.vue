@@ -484,11 +484,11 @@ export default {
 };
 
 </script>
-<style lang="scss" scoped>@import "./../../scss/config";
-@import "./../../scss/main.scss";
+<style lang="scss">@import "./../../scss/config";
+@import "./../../scss/partials/d3.scss";
 
 // styles for dynamically created d3 elements go into src/scss/partials/d3.scss
-.grid {
+div[id^='grid'] {
   user-select: none;
 
   button {
