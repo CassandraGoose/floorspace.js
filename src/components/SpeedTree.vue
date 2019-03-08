@@ -40,10 +40,17 @@
             <div><AddNew class="button"/>{{object}}</div>
           </a>
         </div> -->
-        <a @click="createObject('Story')">
-          <div><AddNew class="button"/>Story</div>
-        </a>
-        <a @click="createObject('Space')"><div><AddNew class="button"/>Space</div></a>
+        <span>
+          <a @click="createObject('Story')">
+            <AddNew class="button"/>Story
+          </a>
+          <input class="height" v-model="storyHeight">ft
+        </span>
+        <span>
+          <a @click="createObject('Space')">
+            <AddNew class="button"/>Space
+          </a>
+        </span>
       </div>
       <div class="area-info">
         <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
@@ -65,6 +72,7 @@ export default {
   data() {
     return {
       expanded: [0],
+      storyHeight: 8,
     };
   },
   computed: {
@@ -103,6 +111,9 @@ export default {
     storyCollapsed(index) {
       this.expanded = this.expanded.filter(item => item !== index);
     },
+    updateStoryHeight(e) {
+      console.log(e);
+    },
     // REPEATED
     subselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
@@ -113,6 +124,8 @@ export default {
       switch (object) {
         case 'Story':
           this.$store.dispatch('models/initStory');
+          console.log('storyHeight', this.storyHeight);
+          this.$store.dispatch('models/updateStoryWithData', { story: this.$store.state.models.stories.find(s => s.id === this.currentStory.id), floor_to_ceiling_height: this.storyHeight });
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });
@@ -288,6 +301,11 @@ img {
   text-decoration: underline;
   color: red;
   font-weight: bold;
+}
+
+.height {
+  max-width: 5%;
+  margin: 5%;
 }
 </style>
 

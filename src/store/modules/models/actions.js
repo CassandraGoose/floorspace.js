@@ -121,6 +121,7 @@ export default {
     },
 
     updateStoryWithData (context, payload) {
+      console.log(payload)
         const story = context.state.stories.find(s => s.id === payload.story.id),
             validProperties = Object.keys(libconfig.stories.keymap),
             cleanedPayload = {};
