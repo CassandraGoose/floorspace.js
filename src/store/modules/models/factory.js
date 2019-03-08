@@ -67,6 +67,7 @@ export default {
       id: idFactory.generate(),
       name,
       color: appconfig.palette.shading,
+      floor_to_ceiling_height: 8,
     };
   },
   Image(name, src) {

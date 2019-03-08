@@ -51,6 +51,12 @@
             <AddNew class="button"/>Space
           </a>
         </span>
+        <span>
+          <a @click="createObject('Shading')">
+            <AddNew class="button"/>Shading
+          </a>
+            <input class="height" v-model="shadingHeight">ft
+        </span>
       </div>
       <div class="area-info">
         <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
@@ -73,6 +79,7 @@ export default {
     return {
       expanded: [0],
       storyHeight: 8,
+      shadingHeight: 8,
     };
   },
   computed: {
@@ -124,14 +131,14 @@ export default {
       switch (object) {
         case 'Story':
           this.$store.dispatch('models/initStory');
-          console.log('storyHeight', this.storyHeight);
-          this.$store.dispatch('models/updateStoryWithData', { story: this.$store.state.models.stories.find(s => s.id === this.currentStory.id), floor_to_ceiling_height: this.storyHeight });
+          this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, floor_to_ceiling_height: this.storyHeight });
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });
           break;
         case 'Shading':
-          this.$store.dispatch('models/initShading', { story: this.currentStory });
+          this.$store.dispatch('models/initShading', { story: this.$store.state.models.stories.find(s => s.id === '1') });
+          this.$store.dispatch('models/updateShadingWithData', { shading: this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });

@@ -30,7 +30,8 @@ export default {
             }],
             shading: [{
                 name: null,
-                face_id: null
+                face_id: null,
+                floor_to_ceiling_height: 8,
             }],
             images: [{
                 id: null,
