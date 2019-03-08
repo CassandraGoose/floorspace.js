@@ -57,6 +57,17 @@
           </a>
             <input class="height" v-model="shadingHeight">ft
         </span>
+        <span>
+          <a @click="addSpaceType()">
+            <AddNew class="button"/>
+          </a>
+            <select @change="updateSpaceType">
+              <option value="poop" selected disabled>Space Type</option>
+              <option value="Office-Open">Office-Open</option>
+              <option value="Office-Private">Office-Private</option>
+              <option value="Retail-Retail">Retail-Retail</option>
+            </select>
+        </span>
       </div>
       <div class="area-info">
         <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
@@ -80,6 +91,7 @@ export default {
       expanded: [0],
       storyHeight: 8,
       shadingHeight: 8,
+      spaceType: null,
     };
   },
   computed: {
@@ -109,6 +121,12 @@ export default {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
+    updateSpaceType(e) {
+      this.spaceType = e.target.value;
+    },
+    addSpaceType() {
+      this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: this.spaceType });
+    }, 
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
@@ -313,6 +331,16 @@ img {
 .height {
   max-width: 5%;
   margin: 5%;
+}
+
+.input-select {
+  display: inline;
+}
+
+.input-select select{ 
+  color: white;
+  max-width: 75px;
+  padding: 0;
 }
 </style>
 
