@@ -61,24 +61,24 @@
         </div> -->
         <span>
           <a @click="createObject('Story')">
-            <AddNew class="button"/>Story
+            <create-speed class="button tree-button"/>Story
           </a>
           <input class="height" v-model="storyHeight"> ft
         </span>
         <span>
           <a @click="createObject('Space')">
-            <AddNew class="button"/>Space
+            <create-speed class="button tree-button"/>Space
           </a>
         </span>
         <span>
           <a @click="createObject('Shading')">
-            <AddNew class="button"/>Shading
+            <create-speed class="button tree-button"/>Shading
           </a>
             <input class="height" v-model="shadingHeight"> ft
         </span>
         <span>
           <a @click="expandSpaceTypes = true">
-            <AddNew class="button"/>Space Type
+            <create-speed class="button tree-button"/>Space Type
           </a>
           <div v-show="expandSpaceTypes">
             <select @change="addSpaceType" size="5">
@@ -298,6 +298,9 @@ export default {
   flex-direction: column;
   background-color: #4EACEA;
   color: black;
+  a {
+    color: black;
+  }
 }
 
 .tree-container {
@@ -352,6 +355,11 @@ ol.tree li:last-child:before {
   height: 40%;
   justify-content: center;
   margin-left: 25%;
+  color: black !important;
+  padding: 5%;
+  a {
+    color: black;
+  }
 }
 
 .area-info {
