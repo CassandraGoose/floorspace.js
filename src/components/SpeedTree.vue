@@ -1,20 +1,22 @@
 <template>
   <div id="speedNavigation">
     <div class="tree-container">
-    <span><img class="building" src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
+    <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
       <li>
         <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
         <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
         <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
-          {{story.name}}
+          <story-speed class="button"/>{{story.name}}
         </a>
         <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
         </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
-            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">{{space.name}} </a>
+            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
+              <SpaceIconSpeed :id="space.id" />{{space.name}}
+            </a>
             <a @click="destroyObject('spaces', space)">
               <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
             </a>
@@ -24,7 +26,9 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
-            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">{{shading.name}}</a>
+            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
+              <SpaceIconSpeed :color="'#BEBEBE'" />{{shading.name}}
+            </a>
               <a @click="destroyObject('shading', shading)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
@@ -81,6 +85,8 @@ import { mapState, mapGetters } from 'vuex';
 import _ from 'lodash';
 import Library from './Library.vue';
 import AddNew from './../assets/svg-icons/add_new.svg';
+import svgs from './svgs';
+import SpaceIconSpeed from './SpaceIconSpeed.vue';
 import geometryHelpers from './../store/modules/geometry/helpers';
 
 export default {
@@ -229,6 +235,8 @@ export default {
   components: {
     Library,
     AddNew,
+    SpaceIconSpeed,
+    ...svgs,
   },
 };
 </script>
