@@ -88,6 +88,7 @@ export default {
     const areaList = {};
     rootState.models.stories.forEach((story) => {
       const storyGeometry = rootState.geometry.find(g => g.id === story.geometry_id);
+      if (!storyGeometry) return null;
       areaList[story.id] = geometryHelpers.areaOfSelection(storyGeometry.vertices);
     });
     return areaList;
@@ -96,25 +97,30 @@ export default {
     const areaList = {};
     const vertices = [];
     rootState.models.stories.forEach((story) => {
-      story.spaces.forEach((space) => {
-        rootState.geometry.forEach((geometry) => {
-          geometry.faces.forEach((face) => {
-            if (space.face_id === null) return null;
-            const spaceFace = space.face_id === face.id ? face : null;
-            spaceFace.edgeRefs.forEach((edgeRef) => {
-              geometry.edges.forEach((edge) => {
-                if (edgeRef.edge_id === edge.id) {
-                  geometry.vertices.forEach((vertice) => {
-                    if (vertice.id === edge.v1) vertices.push({ id: vertice.id, x: vertice.x, y: vertice.y });
-                    if (vertice.id === edge.v2) vertices.push({ id: vertice.id, x: vertice.x, y: vertice.y });
-                  });
-                }
+      if (story.spaces.length > 0) {
+        story.spaces.forEach((space) => {
+          rootState.geometry.forEach((geometry) => {
+            geometry.faces.forEach((face) => {
+              if (space.face_id === null) return null;
+              const spaceFace = space.face_id === face.id ? face : null;
+              if (!spaceFace) return null;
+              spaceFace.edgeRefs.forEach((edgeRef) => {
+                geometry.edges.forEach((edge) => {
+                  if (edgeRef.edge_id === edge.id) {
+                    geometry.vertices.forEach((vertice) => {
+                      if (vertice.id === edge.v1) vertices.push({ id: vertice.id, x: vertice.x, y: vertice.y });
+                      if (vertice.id === edge.v2) vertices.push({ id: vertice.id, x: vertice.x, y: vertice.y });
+                    });
+                  }
+                });
               });
             });
           });
+          areaList[space.id] = geometryHelpers.areaOfSelection(vertices);
         });
-        areaList[space.id] = geometryHelpers.areaOfSelection(vertices);
-      });
+      } else {
+        return null;
+      }
     });
     return areaList;
   },

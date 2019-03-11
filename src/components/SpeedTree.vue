@@ -14,16 +14,17 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
-            <a v-if="spaceExpanded.includes(j)" @click="spaceCollapse(j)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
-            <a v-if="!spaceExpanded.includes(j)" @click="spaceExpand(j)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
+            <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
+            <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
               <SpaceIconSpeed :id="space.id" />{{space.name}}
               <a @click="destroyObject('spaces', space)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
-              <div v-if="spaceExpanded.includes(j)">
+              <div v-if="spaceExpanded.includes(space.id)">
                 <ol>
                   <li>{{treeSpaceArea(space.id)}} ft²</li>
+                  <li>{{space.type}}</li>
                 </ol>
               </div>
             </a>
@@ -34,7 +35,7 @@
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
             <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
-              <SpaceIconSpeed :color="'#BEBEBE'" />{{shading.name}}
+              <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
               <a @click="destroyObject('shading', shading)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
@@ -141,7 +142,7 @@ export default {
       this.spaceType = e.target.value;
     },
     addSpaceType() {
-      this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: this.spaceType });
+      this.$store.commit('models/updateSpaceWithData', { space: this.currentSubSelection, type: this.spaceType });
     },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
@@ -156,15 +157,14 @@ export default {
       this.spaceExpanded.push(index);
     },
     spaceCollapse(index) {
-      console.log(this.spaceExpanded)
       this.spaceExpanded = this.spaceExpanded.filter(item => item !== index);
-      console.log(this.spaceExpanded)
     },
     updateStoryHeight(e) {
       console.log(e);
     },
     treeSpaceArea(id) {
-      return -(this.spacesArea[id]);
+      if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
+      return this.spacesArea[id];
     },
     // REPEATED
     subselectionType: {
