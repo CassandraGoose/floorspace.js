@@ -14,11 +14,18 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
+            <a v-if="spaceExpanded.includes(j)" @click="spaceCollapse(j)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
+            <a v-if="!spaceExpanded.includes(j)" @click="spaceExpand(j)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
               <SpaceIconSpeed :id="space.id" />{{space.name}}
-            </a>
-            <a @click="destroyObject('spaces', space)">
-              <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+              <a @click="destroyObject('spaces', space)">
+                <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+              </a>
+              <div v-if="spaceExpanded.includes(j)">
+                <ol>
+                  <li>{{treeSpaceArea(space.id)}} ft²</li>
+                </ol>
+              </div>
             </a>
           </li>
         </ol>
@@ -95,6 +102,7 @@ export default {
   data() {
     return {
       expanded: [0],
+      spaceExpanded: [],
       storyHeight: 8,
       shadingHeight: 8,
       spaceType: null,
@@ -109,6 +117,8 @@ export default {
       currentStoryGeom: 'application/currentStoryDenormalizedGeom',
       currentStory: 'application/currentStory',
       currentSubSelection: 'application/currentSubSelection',
+      storiesArea: 'application/allStoriesArea',
+      spacesArea: 'application/allSpacesArea',
     }),
     storyArea() {
       return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
@@ -132,7 +142,7 @@ export default {
     },
     addSpaceType() {
       this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: this.spaceType });
-    }, 
+    },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
@@ -142,8 +152,19 @@ export default {
     storyCollapsed(index) {
       this.expanded = this.expanded.filter(item => item !== index);
     },
+    spaceExpand(index) {
+      this.spaceExpanded.push(index);
+    },
+    spaceCollapse(index) {
+      console.log(this.spaceExpanded)
+      this.spaceExpanded = this.spaceExpanded.filter(item => item !== index);
+      console.log(this.spaceExpanded)
+    },
     updateStoryHeight(e) {
       console.log(e);
+    },
+    treeSpaceArea(id) {
+      return -(this.spacesArea[id]);
     },
     // REPEATED
     subselectionType: {

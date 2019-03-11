@@ -26,12 +26,7 @@ export default {
       allSpaces: 'models/allSpaces',
     }),
     cubeColor() {
-      return this.allSpaces.map((space) => {
-        if (space.id === this.id) {
-          return space.color;
-        }
-        return '#BEBEBE';
-      });
+      return this.allSpaces.map(space => space.id === this.id ? space.color : '#BEBEBE');
     },
   },
 };
