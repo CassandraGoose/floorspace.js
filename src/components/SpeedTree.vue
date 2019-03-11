@@ -56,7 +56,7 @@
           <a @click="createObject('Story')">
             <AddNew class="button"/>Story
           </a>
-          <input class="height" v-model="storyHeight">ft
+          <input class="height" v-model="storyHeight"> ft
         </span>
         <span>
           <a @click="createObject('Space')">
@@ -67,18 +67,24 @@
           <a @click="createObject('Shading')">
             <AddNew class="button"/>Shading
           </a>
-            <input class="height" v-model="shadingHeight">ft
+            <input class="height" v-model="shadingHeight"> ft
         </span>
         <span>
-          <a @click="addSpaceType()">
-            <AddNew class="button"/>
+          <a @click="expandSpaceTypes = true">
+            <AddNew class="button"/>Space Type
           </a>
-            <select @change="updateSpaceType">
+          <div v-show="expandSpaceTypes">
+            <select @change="addSpaceType" size="5">
               <option value="poop" selected disabled>Space Type</option>
               <option value="Office-Open">Office-Open</option>
               <option value="Office-Private">Office-Private</option>
               <option value="Retail-Retail">Retail-Retail</option>
+              <option value="Retail-1">Retail-1</option>
+              <option value="Retail-2">Retail-2</option>
+              <option value="Retail-3">Retail-1</option>
+              <option value="Retail-4">Retail-2</option>
             </select>
+          </div>
         </span>
       </div>
       <div class="area-info">
@@ -107,6 +113,7 @@ export default {
       storyHeight: 8,
       shadingHeight: 8,
       spaceType: null,
+      expandSpaceTypes: false,
     };
   },
   computed: {
@@ -138,11 +145,9 @@ export default {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
-    updateSpaceType(e) {
-      this.spaceType = e.target.value;
-    },
-    addSpaceType() {
-      this.$store.commit('models/updateSpaceWithData', { space: this.currentSubSelection, type: this.spaceType });
+    addSpaceType(e) {
+      this.$store.commit('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
+      this.expandSpaceTypes = false;
     },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
@@ -362,7 +367,8 @@ img {
 
 .height {
   max-width: 5%;
-  margin: 5%;
+  margin-top: 5%;
+  margin-left: 1%;
 }
 
 .input-select {
