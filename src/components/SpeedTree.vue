@@ -177,6 +177,9 @@ export default {
         case 'Story':
           this.$store.dispatch('models/initStory');
           this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, floor_to_ceiling_height: this.storyHeight });
+          if (this.currentStory.name !== 'Story 1') {
+            this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, shading: [] });
+          }
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });
