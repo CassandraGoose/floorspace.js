@@ -34,12 +34,19 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
+            <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
+            <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
             <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
               <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
               <a @click="destroyObject('shading', shading)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
+              <div :if="shadingExpanded.includes(shading.id)">
+                <ol>
+                  <li>{{treeShadeArea(shading.id)}} ft²</li>
+                </ol>
+              </div>
             </li>
         </ol>
       </div>
@@ -114,6 +121,7 @@ export default {
       shadingHeight: 8,
       spaceType: null,
       expandSpaceTypes: false,
+      shadingExpanded: [],
     };
   },
   computed: {
@@ -127,6 +135,7 @@ export default {
       currentSubSelection: 'application/currentSubSelection',
       storiesArea: 'application/allStoriesArea',
       spacesArea: 'application/allSpacesArea',
+      shadingArea: 'application/allShadingArea',
     }),
     storyArea() {
       return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
@@ -164,12 +173,22 @@ export default {
     spaceCollapse(index) {
       this.spaceExpanded = this.spaceExpanded.filter(item => item !== index);
     },
+    shadingExpand(index) {
+      this.shadingExpanded.push(index);
+    },
+    shadingCollapse(index) {
+      this.shadingExpanded = this.spaceExpanded.filter(item => item !== index);
+    },
     updateStoryHeight(e) {
       console.log(e);
     },
     treeSpaceArea(id) {
       if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
       return this.spacesArea[id];
+    },
+    treeShadeArea(id) {
+      if (this.shadingArea[id] < 0) return -(this.shadingArea[id]);
+      return this.shadingArea[id];
     },
     // REPEATED
     subselectionType: {

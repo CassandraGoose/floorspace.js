@@ -93,6 +93,37 @@ export default {
     });
     return areaList;
   },
+  allShadingArea(state, getters, rootState) {
+    const areaList = {};
+    const vertices = [];
+    rootState.models.stories.forEach((story) => {
+      if (story.shading.length > 0) {
+        story.shading.forEach((shading) => {
+          rootState.geometry.forEach((geometry) => {
+            geometry.faces.forEach((face) => {
+              if (shading.face_id === null) return null;
+              const spaceFace = shading.face_id === face.id ? face : null;
+              if (!spaceFace) return null;
+              spaceFace.edgeRefs.forEach((edgeRef) => {
+                geometry.edges.forEach((edge) => {
+                  if (edgeRef.edge_id === edge.id) {
+                    geometry.vertices.forEach((vertice) => {
+                      if (vertice.id === edge.v1) vertices.push({ id: vertice.id, x: vertice.x, y: vertice.y });
+                      if (vertice.id === edge.v2) vertices.push({ id: vertice.id, x: vertice.x, y: vertice.y });
+                    });
+                  }
+                });
+              });
+            });
+          });
+          areaList[shading.id] = geometryHelpers.areaOfSelection(vertices);
+        });
+      } else {
+        return null;
+      }
+    });
+    return areaList;
+  },
   allSpacesArea(state, getters, rootState) {
     const areaList = {};
     const vertices = [];
