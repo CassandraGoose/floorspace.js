@@ -4,8 +4,8 @@
     <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
       <li>
-        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
-        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
+        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><speed-collapse class="button tree-button"/></a>
+        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><speed-expand class="button tree-button"/></a>
         <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
           <story-speed class="button"/>{{story.name}}
         </a>
@@ -14,8 +14,8 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
-            <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
-            <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
+            <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><speed-collapse class="button tree-button"/></a>
+            <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
               <SpaceIconSpeed :id="space.id" />{{space.name}}
               <a @click="destroyObject('spaces', space)">
@@ -34,15 +34,15 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
-            <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><img src="https://image.flaticon.com/icons/svg/149/149172.svg"/></a>
-            <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><img src="https://image.flaticon.com/icons/svg/149/149171.svg"/></a>
+            <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><speed-collapse class="button tree-button"/></a>
+            <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
               <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
               <a @click="destroyObject('shading', shading)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
-              <div :if="shadingExpanded.includes(shading.id)">
+              <div v-if="shadingExpanded.includes(shading.id)">
                 <ol>
                   <li>{{treeShadeArea(shading.id)}} ft²</li>
                 </ol>
@@ -398,6 +398,10 @@ img {
   color: white;
   max-width: 75px;
   padding: 0;
+}
+
+.tree-button {
+  max-height: 14px;
 }
 </style>
 

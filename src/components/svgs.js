@@ -23,7 +23,8 @@ import deleteSpeed from './../assets/svg-icons/delete_speed.svg';
 import createSpeed from './../assets/svg-icons/create_speed.svg';
 import buildingSpeed from './../assets/svg-icons/building_speed.svg';
 import storySpeed from './../assets/svg-icons/story_speed.svg';
-
+import speedExpand from './../assets/svg-icons/speed_expand.svg';
+import speedCollapse from './../assets/svg-icons/speed_collapse.svg';
 import ZoomToFitSvg from './../assets/svg-icons/zoom_to_fit.svg';
 import zoomInSvg from './../assets/svg-icons/zoom_in.svg';
 import zoomOutSvg from './../assets/svg-icons/zoom_out.svg';
@@ -101,6 +102,8 @@ export default {
   'create-speed': createSpeed,
   'delete-speed': deleteSpeed,
   'story-speed': storySpeed,
+  'speed-expand': speedExpand,
+  'speed-collapse': speedCollapse,
 
   'zoom-in-svg': zoomInSvg,
   'zoom-out-svg': zoomOutSvg,
