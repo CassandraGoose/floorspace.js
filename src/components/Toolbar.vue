@@ -90,7 +90,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           :value="rwUnits"
           @change="updateUnits"
         />
-
+        <div class="speed-crosshair-coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">
+          <div>X: {{xCrossHair}}</div>
+          <div>Y: {{yCrossHair}}</div>
+        </div>
         <div :style="styles.toolbarStyles.toolbar.topToolbar.gear" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
@@ -364,6 +367,15 @@ export default {
       }
       return tools;
     },
+    xCrossHair() {
+      // const gridCoords = d3.mouse(this.$refs.grid)
+      // const gridPoint = { x: gridCoords[0], y: gridCoords[1] }
+      // console.log(gridPoint);
+      return '0.0';
+    },
+    yCrossHair() {
+      return '0.0';
+    },
     currentMode: {
       get() { return this.$store.state.application.currentSelections.mode; },
       set(mode) { this.$store.dispatch('application/setCurrentMode', { mode }); },
@@ -531,6 +543,17 @@ svg.icon, svg.button {
         margin-right: .5rem;
       }
     }
+    .speed-crosshair-coordinates {
+      font-size: 8pt;
+      background-color: white;
+      color: black;
+      max-height: 50%;
+      div {
+        padding: .5%;
+        margin: 0;
+      }
+    }
+
   }
 
   #bottom {
@@ -666,6 +689,7 @@ svg.icon, svg.button {
     }
   }
 }
+
 
 
 

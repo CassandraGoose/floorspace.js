@@ -77,6 +77,9 @@ export default {
         gear: {
           display: 'none',
         },
+        crossHairCoordinates: {
+          display: 'flex',
+        },
       },
       bottomToolbar: {
         backgroundColor: 'black',
