@@ -50,6 +50,9 @@ export default {
         flexDirection: 'row',
         flexWrap: 'nowrap',
         gridSettings: {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
           zIndex: 999999,
           marginLeft: '2%',
         },
@@ -86,9 +89,9 @@ export default {
         },
       },
       bottomToolbar: {
-        backgroundColor: 'black',
         display: 'flex',
         justifyContent: 'flex-start',
+        height: 0,
         instructions: {
           display: 'none',
         },

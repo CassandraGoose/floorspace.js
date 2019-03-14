@@ -64,25 +64,25 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
       <div id="floorspace-grid-settings" :style="styles.toolbarStyles.toolbar.topToolbar.gridSettings">
         <div class="north-axis" :style="styles.toolbarStyles.toolbar.topToolbar.northAxis">
-          N {{northAxis}}
+          <div>N</div> <div>{{northAxis}}</div>
         </div>
         <div class="floorspace-input-checkbox" title="Toggle previous story visability.">
-          <label class="floorspace-label">Story Below</label>
+          <label class="floorspace-label">STORY BELOW</label>
           <input type="checkbox" v-model="previousStoryVisible">
         </div>
 
         <div v-if="mapEnabled" class="floorspace-input-checkbox" title="Toggle map visability.">
-          <label class="floorspace-label">map</label>
+          <label class="floorspace-label">MAP</label>
           <input type="checkbox" v-model="mapVisible">
         </div>
 
         <div class="floorspace-input-checkbox" title="Toggle grid visability.">
-          <label class="floorspace-label">grid</label>
+          <label class="floorspace-label">GRID</label>
           <input type="checkbox" v-model="gridVisible">
         </div>
 
         <div class="floorspace-input-number" title="Specify spacing of the grid in ft.">
-          <label class="floorspace-label">spacing</label>
+          <label class="floorspace-label">SPACING</label>
           <input v-model.number.lazy="spacing">
           <label v-if="!allowSettingUnits">{{ rwUnits}}</label>
         </div>
@@ -93,9 +93,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           :value="rwUnits"
           @change="updateUnits"
         />
+        <div class="coordinates-container">
           <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">X: {{xCrossHair}}</div>
           <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Y: {{yCrossHair}}</div>
           <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Z: 0.0</div>
+        </div>
         <div :style="styles.toolbarStyles.toolbar.topToolbar.gear" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
@@ -488,6 +490,7 @@ svg.icon, svg.button {
 #toolbar {
   background-color: $black;
   z-index: 4;
+  font-size: 12pt;
 
   #top {
     height: 2.5rem;
@@ -515,17 +518,18 @@ svg.icon, svg.button {
   }
 
   #floorspace-grid-settings .floorspace-input-checkbox {
-    width: 15%;
+    font-size: 1.3vw;
   }
 
   #floorspace-grid-settings > div > .floorspace-label {
-    font-size: 10px !important;
+    // font-size: 10px !important;
+    font-size: 1.3vw;
     color: white !important;
   }
 
   #floorspace-grid-settings > div > input[type="checkbox"] {
-    min-height: 5px;
-    min-width: 5px;
+    min-height: 3px;
+    min-width: 3px;
   }
 
   #floorspace-grid-settings > div > input[type="checkbox"]:checked {
@@ -554,20 +558,29 @@ svg.icon, svg.button {
     }
   }
 
-  .coordinates {
-    max-height: 50%;      
-    width: 7%;
-    background-color: white !important;
-    font-size: 8pt;
-    color: black;
-    border: 2px solid grey !important;
+  .coordinates-container {
+    display: flex;
+    flex-direction: row;
+    width: 20%;
+    justify-content: center;
+    .coordinates {
+      text-align: center;
+      width: 32%;    
+      background-color: white !important;
+      color: black;
+      border: 2px solid grey !important;
+      font-size: 1.1vw;
+    }
   }
-
+  
   .north-axis {
+    display: flex;
+    justify-content: space-around;
     width: 5%;
-    max-height: 50%;
-    font-size: 8pt;
+    text-align: center;
+    font-size: 1.1vw;
     background-color: $gray-dark;
+    border: 2px solid grey;
   }
 
   #bottom {
