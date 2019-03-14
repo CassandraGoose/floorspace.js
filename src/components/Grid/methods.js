@@ -257,6 +257,7 @@ export default {
       // d3.mouse() will fail if d3.event is a ZoomEvent, or other
       const gridCoords = d3.mouse(this.$refs.grid);
       gridPoint = { x: gridCoords[0], y: gridCoords[1] };
+      this.$root.$options.eventBus.$emit('coordinateUpdate', this.gridPointToRWU(gridPoint));
     } else {
       gridPoint = this.lastMousePosition;
     }

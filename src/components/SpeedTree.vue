@@ -195,6 +195,7 @@ export default {
     },
   },
   mounted() {
+
     this.$store.dispatch('project/setMapEnabled', { enabled: true });
     this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
   },

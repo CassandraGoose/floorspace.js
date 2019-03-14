@@ -245,6 +245,8 @@ export default {
       thingWereSaving: '',
       visibleComponentType: null,
       showGroundPropsModal: false,
+      xCrossHair: 0,
+      yCrossHair: 0,
     };
   },
   methods: {
@@ -366,15 +368,6 @@ export default {
       }
       return tools;
     },
-    xCrossHair() {
-      // const gridCoords = d3.mouse(this.$refs.grid)
-      // const gridPoint = { x: gridCoords[0], y: gridCoords[1] }
-      // console.log(gridPoint);
-      return '0.0';
-    },
-    yCrossHair() {
-      return '0.0';
-    },
     currentMode: {
       get() { return this.$store.state.application.currentSelections.mode; },
       set(mode) { this.$store.dispatch('application/setCurrentMode', { mode }); },
@@ -455,6 +448,12 @@ export default {
     latestCreatedCompId() {
       this.$store.dispatch('application/setCurrentComponentDefinitionId', { id: this.latestCreatedCompId });
     },
+  },
+  mounted() {
+    this.$root.$options.eventBus.$on('coordinateUpdate', (payload) => {
+      this.xCrossHair = payload.x.toFixed(1);
+      this.yCrossHair = payload.y.toFixed(1);
+    });
   },
   components: {
     PrettySelect,
@@ -553,9 +552,9 @@ svg.icon, svg.button {
 
    .coordinates {
       max-height: 50%;      
-      width: 6%;
+      width: 7%;
       background-color: white !important;
-      font-size: 10pt;
+      font-size: 8pt;
       color: black;
       border: 2px solid grey !important;
     }
