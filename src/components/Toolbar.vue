@@ -63,6 +63,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </ul>
 
       <div id="floorspace-grid-settings" :style="styles.toolbarStyles.toolbar.topToolbar.gridSettings">
+        <div class="north-axis" :style="styles.toolbarStyles.toolbar.topToolbar.northAxis">
+          N {{northAxis}}
+        </div>
         <div class="floorspace-input-checkbox" title="Toggle previous story visability.">
           <label class="floorspace-label">Story Below</label>
           <input type="checkbox" v-model="previousStoryVisible">
@@ -92,7 +95,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         />
           <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">X: {{xCrossHair}}</div>
           <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Y: {{yCrossHair}}</div>
-          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Z: {{yCrossHair}}</div>
+          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Z: 0.0</div>
         <div :style="styles.toolbarStyles.toolbar.topToolbar.gear" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
@@ -340,6 +343,7 @@ export default {
       timetravelInitialized: state => state.timetravelInitialized,
       showImportExport: state => state.project.show_import_export,
       allowSettingUnits: state => false, //state.project.config.unitsEditable && state.geometry.length === 1 && state.geometry[0].vertices.length === 0,
+      northAxis: state => state.project.north_axis,
     }),
     currentSubselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
@@ -550,14 +554,21 @@ svg.icon, svg.button {
     }
   }
 
-   .coordinates {
-      max-height: 50%;      
-      width: 7%;
-      background-color: white !important;
-      font-size: 8pt;
-      color: black;
-      border: 2px solid grey !important;
-    }
+  .coordinates {
+    max-height: 50%;      
+    width: 7%;
+    background-color: white !important;
+    font-size: 8pt;
+    color: black;
+    border: 2px solid grey !important;
+  }
+
+  .north-axis {
+    width: 5%;
+    max-height: 50%;
+    font-size: 8pt;
+    background-color: $gray-dark;
+  }
 
   #bottom {
     user-select: none;

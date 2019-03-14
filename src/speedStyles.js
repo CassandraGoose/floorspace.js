@@ -44,13 +44,14 @@ export default {
       flexDirection: 'column',
       left: 'auto',
       top: 'auto',
-      width: '70%',
+      width: '75%',
       color: 'white',
       topToolbar: {
         flexDirection: 'row',
         flexWrap: 'nowrap',
         gridSettings: {
           zIndex: 999999,
+          marginLeft: '2%',
         },
         tabs: {
           display: 'none',
@@ -78,6 +79,9 @@ export default {
           display: 'none',
         },
         crossHairCoordinates: {
+          display: 'flex',
+        },
+        northAxis: {
           display: 'flex',
         },
       },
