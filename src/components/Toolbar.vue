@@ -90,10 +90,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           :value="rwUnits"
           @change="updateUnits"
         />
-        <div class="speed-crosshair-coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">
-          <div>X: {{xCrossHair}}</div>
-          <div>Y: {{yCrossHair}}</div>
-        </div>
+          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">X: {{xCrossHair}}</div>
+          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Y: {{yCrossHair}}</div>
+          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Z: {{yCrossHair}}</div>
         <div :style="styles.toolbarStyles.toolbar.topToolbar.gear" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
@@ -512,6 +511,10 @@ svg.icon, svg.button {
     width: 10px;
   }
 
+  #floorspace-grid-settings .floorspace-input-checkbox {
+    width: 15%;
+  }
+
   #floorspace-grid-settings > div > .floorspace-label {
     font-size: 10px !important;
     color: white !important;
@@ -538,23 +541,24 @@ svg.icon, svg.button {
 
     #floorspace-grid-settings {
       display: flex;
-      margin-left: auto;
+      width: 100%;
+      justify-content: space-around;
+
+      margin: 0;
       >div {
         margin-right: .5rem;
       }
     }
-    .speed-crosshair-coordinates {
-      font-size: 8pt;
-      background-color: white;
-      color: black;
-      max-height: 50%;
-      div {
-        padding: .5%;
-        margin: 0;
-      }
-    }
-
   }
+
+   .coordinates {
+      max-height: 50%;      
+      width: 6%;
+      background-color: white !important;
+      font-size: 10pt;
+      color: black;
+      border: 2px solid grey !important;
+    }
 
   #bottom {
     user-select: none;
