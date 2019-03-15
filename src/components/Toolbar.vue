@@ -127,7 +127,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             @click="tool = 'Fill'" 
             data-tool="Fill" 
             title="Fill" 
-            :class="['speed-drawing-tools-button', { active: tool === 'Fill' }]">
+            :class="['speed-none', { active: tool === 'Fill' }]">
             <tool-fill-svg class="button"></tool-fill-svg>
           </div>
           <div 

@@ -1,9 +1,9 @@
 body {
-    height: 100%;
+  height: 100%;
 }
 
 .tool_rectangle, .tool_polygon, .tool_eraser {
-    height: 100%;
+  height: 100%;
 }
 
 .speed-navigation {
@@ -28,19 +28,17 @@ body {
 }
 
 .map {
-    height: auto;
-    min-width: auto;
+  height: auto;
+  min-width: auto;
 }
 
 #layout-navigation {
-    height: 100%;
+  height: 100%;
 }
 
 #navigation {
   width: 30%;
 }
-
-
 
 .speed-toolbar {
   display: flex;
@@ -73,6 +71,10 @@ body {
     font-size: .6em;
     align-self: center;
   }
+  input:not([Type]) {
+    height: 1rem;
+    margin: 0;
+  }
   > div > .speed-label {
     line-height: initial !important;
     font-size: 1.3vw;
@@ -82,7 +84,7 @@ body {
     min-height: 3px;
     min-width: 3px;
   }
-   > div > input[type="checkbox"]:checked {
+  > div > input[type="checkbox"]:checked {
     background-color: blue;
     position: static;
     opacity: 1;
@@ -126,10 +128,12 @@ body {
   height: 0 !important;
 }
 
-.speed-drawing-tools {
-  flex-direction: column;
+#drawing-tools {
+  height: auto;
+  flex-direction: column !important;
   align-self: flex-start;
   margin-right: 0 !important;
+  height: 40px !important;
   svg {
     text-align: center;
     vertical-align: top;

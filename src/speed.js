@@ -7,11 +7,8 @@ import createStore from './store/index';
 
 Vue.component('pretty-select', PrettySelect);
 
-export default function renderTo(el, customStyles) {
+export default function renderTo(el) {
   const eventBus = new Vue();
-  // const shadow = document.querySelector(el).attachShadow({ mode: 'open' });
-  // const element = document.createElement('div');
-  // shadow.appendChild(element);
   createStore(eventBus).then((store) => {
     store.subscribeAction(() => {
       const data = store.getters['exportData'];
@@ -20,18 +17,13 @@ export default function renderTo(el, customStyles) {
 
     window.application = new Vue({
       store,
-      // el: element,
       el,
       eventBus,
       ...App,
-      data() {
-        return {
-          styles: customStyles,
-        };
-      },
     });
 
     timetravel.init(store);
   });
+
   return eventBus;
 }

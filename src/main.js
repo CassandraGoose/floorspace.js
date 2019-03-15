@@ -15,7 +15,6 @@ import App from './App.vue';
 import PrettySelect from './components/PrettySelect.vue';
 import GenericInput from './components/GenericInput.vue';
 import createStore from './store';
-import speedStyles from './speedStyles';
 
 Vue.component('pretty-select', PrettySelect);
 Vue.component('generic-input', GenericInput);
@@ -32,11 +31,6 @@ createStore(eventBus).then((store) => {
     template: '<App :styles="styles"/>',
     eventBus,
     // REMOVE
-    data() {
-      return {
-        styles: speedStyles,
-      };
-    },
     components: { App },
   });
 
