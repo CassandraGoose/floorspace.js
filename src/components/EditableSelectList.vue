@@ -15,7 +15,7 @@
           <AddNew class="button"/>
         </a>
       </div>
-      <div class="control-group" :style="styles.editableSelectList.doubleArrows">
+      <div class="control-group speed-none">
         <a @click="toggleCompact" :title="compact ? 'expand' : 'contract'">
           <DoubleArrows
             class="button"
@@ -40,7 +40,7 @@
       :duplicateRow="duplicateRow"
     />
     <EditableTable
-      :style="styles.editableSelectList.editableTable"
+      class="speed-none"
       v-else
       :selectRow="selectRow"
       :selectedItemId="selectedRowId"
@@ -64,8 +64,7 @@ export default {
   name: 'EditableSelectList',
   props: [
     'columns', 'rows', 'addRow', 'editRow', 'destroyRow', 'selectRow', 'selectedRowId',
-    'objectTypes', 'selectedObjectType', 'searchAvailable', 'compact', 'duplicateRow', 'styles',
-  ],
+    'objectTypes', 'selectedObjectType', 'searchAvailable', 'compact', 'duplicateRow'],
   data() {
     return {
       search: '',

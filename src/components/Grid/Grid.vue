@@ -38,7 +38,6 @@ import { expandWindowAlongEdge, windowLocation } from './snapping';
 
 export default {
   name: 'grid',
-  props: ['styles'],
   data() {
     const
       xScale = v => this.rwuToGrid(v, 'x'),

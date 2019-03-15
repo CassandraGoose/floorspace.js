@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     @close="$emit('close')"
     :styles="styles"
   >
-    <div class="settings" :style="styles.toolbarStyles.toolbar.topToolbar.settings">
+    <div class="settings speed-none">
       <p>
         <label class="input-text">
           North Axis
@@ -63,7 +63,6 @@ import ExpandableDrawer from '../ExpandableDrawer.vue';
 
 export default {
   name: 'Settings',
-  props: ['styles'],
   computed: {
     ...mapState({
         ground: state => state.project.ground,

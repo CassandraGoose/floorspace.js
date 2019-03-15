@@ -1,3 +1,47 @@
+body {
+    height: 100%;
+}
+
+.tool_rectangle, .tool_polygon, .tool_eraser {
+    height: 100%;
+}
+
+.speed-navigation {
+  width: 30%;
+}
+
+#layout-main {
+  left: 30%;
+}
+
+#speed-main {
+  position: static;
+}
+
+#map-container {
+  top: -5rem !important;
+}
+
+#map {
+  height: auto;
+  min-width: auto;
+}
+
+.map {
+    height: auto;
+    min-width: auto;
+}
+
+#layout-navigation {
+    height: 100%;
+}
+
+#navigation {
+  width: 30%;
+}
+
+
+
 .speed-toolbar {
   display: flex;
   flex-direction: column;
@@ -104,17 +148,25 @@
   width: 20%;
   justify-content: center;
   .speed-coordinates {
-        display: flex;
-        text-align: center;
-        width: 32%;
-        background-color: white !important;
-        color: black;
-        border: 2px solid grey !important;
-        font-size: 1.1vw;
-        line-height: initial !important;
+    display: flex;
+    text-align: center;
+    width: 32%;
+    background-color: white !important;
+    color: black;
+    border: 2px solid grey !important;
+    font-size: 1.1vw;
+    line-height: initial !important;
   }
 }
 
-.speed-none {
-    display: none !important;
+#speed-modal {
+  position: fixed;
+  width: 50%;
+  top: 25%;
 }
+
+.speed-none {
+  display: none !important;
+}
+
+

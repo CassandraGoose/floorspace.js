@@ -204,7 +204,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
     <section class="modals">
       <SaveAsModal
-        :styles='styles'
         v-if="showSaveModal"
         :saveWhat="thingWereSaving"
         :dataToDownload="dataToDownload"

@@ -7,28 +7,27 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 <template>
   <div id="app"
     :class="`tool_${tool.toLowerCase()}`">
-      <toolbar :class="{ 'disabled-component': tool === 'Map' }" :styles="styles"></toolbar>
+      <toolbar :class="{ 'disabled-component': tool === 'Map' }"></toolbar>
       
       <navigation
-          :navigationStyles="styles.navigationStyles"
-          :class="{ 'disabled-component': tool === 'Map' }"
+          :class="['speed-navigation', { 'disabled-component': tool === 'Map' }]"
           @expanded="(val) => { navigationExpanded = val; }"
         ></navigation>
-      <div id="layout-main" :style="styles.layout" :class="{ 'nav-on-top': navigationExpanded }">
+      <div id="layout-main" :class="{ 'nav-on-top': navigationExpanded }">
           
 
-          <main :style="styles.main">
+          <main id="speed-main">
             <div id="alert-text" v-show="error || success" :class="{ error, success }">
                 <p>{{ error || success }}</p>
             </div>
-              <canvas-view :styles="styles" :modal="styles.modal"></canvas-view>
+              <canvas-view></canvas-view>
               <grid-view></grid-view>
           </main>
           <!-- <inspector-view></inspector-view> -->
       </div>
       <ImageUpload />
-      <Textures :style="styles.navigationStyles.nav"/>
-      <PortalTarget :style="styles.navigationStyles.nav" name="texture-options" />
+      <Textures class="speed-none"/>
+      <PortalTarget class="speed-none" name="texture-options" />
   </div>
 </template>
 
@@ -47,7 +46,6 @@ import Textures from './components/Textures.vue';
 
 export default {
   name: 'app',
-  props: ['styles'],
   data() {
     return {
       error: null,
@@ -123,13 +121,11 @@ export default {
 };
 </script>
 
-<!--<style src="./scss/main.scss" lang="scss"></style>-->
 <style lang="scss" scoped>
 @import "./scss/config";
 @import "./scss/main.scss";
-body {
-  height: 100%;
-}
+@import "./speedStyles.scss";
+
 .tool_rectangle, .tool_polygon, .tool_eraser {
   height: 100%;
   .grid {

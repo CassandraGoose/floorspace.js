@@ -6,22 +6,22 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
-  <div id="layout-navigation" :style="navigationStyles">
-    <speed-tree :styles="navigationStyles" :selectItem="row => { selectedObject = row; }"
+  <div id="layout-navigation">
+    <speed-tree :selectItem="row => { selectedObject = row; }"
  :objectTypes="['Story', 'Space', 'Shading', 'Space Type']"/>
-    <nav id="navigation" :style="navigationStyles.nav">
+    <nav id="navigation">
         <section id="selections">
         </section>
         <div id="list" >
           <Library
-            :styles="navigationStyles"
+            class="speed-none"
             :objectTypes="['stories']"
             :mode="'stories'"
             :compact="libraryExpanded !== 'stories'"
             @toggleCompact="libraryExpanded = (libraryExpanded === 'stories' ? false : 'stories')"
           />
           <Library
-            :styles="navigationStyles"
+            class="speed-none"
             addNewOnHotkey="true"
             :objectTypes="objectTypesForTab"
             :mode="subselectionType"
@@ -50,7 +50,6 @@ let fullWidth;
 const collapsedWidth = 8;
 export default {
   name: 'navigation',
-  props: ['navigationStyles'],
   data() {
     return {
       libraryExpanded: false,
@@ -138,10 +137,9 @@ export default {
 <style lang="scss" scoped>
 @import "./../scss/config";
 @import "./../scss/main.scss";
+@import "./../speedStyles.scss";
 
-#layout-navigation {
-  height: 100%;
-}
+
 #navigation {
   background-color: $gray-medium-dark;
   border-right: 1px solid $gray-darkest;

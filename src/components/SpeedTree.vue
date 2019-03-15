@@ -79,7 +79,7 @@ import geometryHelpers from './../store/modules/geometry/helpers';
 
 export default {
   name: 'SpeedTree',
-  props: ['styles', 'objectTypes'],
+  props: ['objectTypes'],
   data() {
     return {
       expanded: [0],

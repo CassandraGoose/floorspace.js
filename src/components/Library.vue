@@ -22,7 +22,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS' AND 
     :compact="compact"
     @toggleCompact="c => $emit('toggleCompact', c)"
     @selectObjectType="changeMode"
-    :styles="styles"
   />
   </div>
 </template>
@@ -47,7 +46,7 @@ function keyForMode(mode) {
 
 export default {
   name: 'Library',
-  props: ['objectTypes', 'mode', 'searchAvailable', 'compact', 'addNewOnHotkey', 'styles'],
+  props: ['objectTypes', 'mode', 'searchAvailable', 'compact', 'addNewOnHotkey'],
   mounted() {
     document.body.addEventListener('keyup', this.hotkeyAddNew);
   },
