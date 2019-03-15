@@ -138,6 +138,25 @@ export function splitEdge(state, { geometry_id, edgeToDelete, newEdges, replaceE
   destroyGeometry(state, { id: edgeToDelete });
 }
 
+export function updateClonedVertices(state, payload) {
+  const newStory = state.find((story) => story.id === payload.currentStoryId);
+  console.log(newStory);
+  Vue.set(newStory, Object.keys(payload)[0], payload[Object.keys(payload)[0]]);
+}
+
+export function updateClonedFaces(state, payload) {
+  const newStory = state.find((story) => story.id === payload.currentStoryId);
+  console.log(newStory);
+  Vue.set(newStory, Object.keys(payload)[0], payload[Object.keys(payload)[0]]);
+}
+
+export function updateClonedStory(state, payload) {
+  const newStory = state.find(story => story.id === payload.currentStoryId);
+  newStory.edges = payload.newGeom.edges;
+  newStory.faces = payload.newGeom.faces;
+  newStory.vertices = payload.newGeom.vertices;
+}
+
 export function replaceFacePoints(state, { geometry_id, vertices, edges, face_id }) {
   const geometry = _.find(state, { id: geometry_id });
 
@@ -154,4 +173,5 @@ export function replaceFacePoints(state, { geometry_id, vertices, edges, face_id
     edge_id: e.id,
     reverse: !!e.reverse,
   }));
+
 }

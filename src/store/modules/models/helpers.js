@@ -195,5 +195,29 @@ const helpers = {
         return state.library[type];
     }
   },
+  
+  replaceIdsUpdateInfoForCloning(story, idMap, state) {
+    const clonedStory = _.cloneDeep(story);
+    // these are really repetitive...but spaces is just diff enough... unsure..
+    clonedStory.doors.forEach((door) => {
+      const newID = idFactory.generate();
+      idMap[door.id] = newID;
+      door.id = newID;
+    });
+    clonedStory.windows.forEach((window) => {
+      const newID = idFactory.generate();
+      idMap[window.id] = newID;
+      window.id = newID;
+    });
+    clonedStory.spaces.forEach((space) => {
+      const newID = idFactory.generate();
+      idMap[space.id] = newID;
+      space.id = newID;
+      space.name = this.generateName(state.models, 'spaces', story);
+      space.face_id = idMap[space.face_id];
+      space.color = generateColor('space');
+    });
+    return { clonedStory };
+  },
 };
 export default helpers;

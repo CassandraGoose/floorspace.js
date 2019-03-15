@@ -394,4 +394,10 @@ export default {
     commit('dropWindows', { story_id });
     commit('dropDoors', { story_id });
   },
+  cloneStory(context, payload) {
+    const currentStory = context.rootGetters['application/currentStory'];
+    context.commit('cloneObjectArray', { doors: payload.doors, currentStoryId: currentStory.id });
+    context.commit('cloneObjectArray', { windows: payload.windows, currentStoryId: currentStory.id });
+    context.commit('cloneObjectArray', { spaces: payload.spaces, currentStoryId: currentStory.id });
+  },
 };

@@ -170,4 +170,8 @@ export default {
       door = _.find(story.doors, { id });
     door[key] = value;
   },
+  cloneObjectArray(state, payload) {
+    const newStory = state.stories.find(story => story.id === payload.currentStoryId);
+    newStory[Object.keys(payload)[0]] = payload[Object.keys(payload)[0]];
+  },
 };

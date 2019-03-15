@@ -663,4 +663,31 @@ export function vertInRing(vert, ring) {
   return helpers.inRing(toLst(vert), ring.map(toLst));
 }
 
+export function replaceIdsForCloning(newStory) {
+  const clonedGeometry = _.cloneDeep(newStory);
+  const idMap = {};
+  // these are so similar but just enough different. unsure...
+  clonedGeometry.vertices.forEach((vertice) => {
+    const newID = idFactory.generate();
+    idMap[vertice.id] = newID;
+    vertice.id = newID;
+  });
+  clonedGeometry.edges.forEach((edge) => {
+    const newID = idFactory.generate();
+    idMap[edge.id] = newID;
+    edge.id = newID;
+    edge.v1 = idMap[edge.v1];
+    edge.v2 = idMap[edge.v2];
+  });
+  clonedGeometry.faces.forEach((face) => {
+    face.edgeRefs.forEach((edge) => {
+      edge.edge_id = idMap[edge.edge_id];
+    });
+    const newID = idFactory.generate();
+    idMap[face.id] = newID;
+    face.id = newID;
+  });
+  return { clonedGeometry, idMap };
+}
+
 export default helpers;

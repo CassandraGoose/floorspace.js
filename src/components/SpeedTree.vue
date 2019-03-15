@@ -1,30 +1,33 @@
 <template>
   <div id="speedNavigation">
     <div class="tree-container">
-    <span><img class="building" src="https://image.flaticon.com/icons/svg/63/63876.svg" alt="building">BUILDING</span>
+    <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
       <li>
-        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story.">
-          <img src="https://image.flaticon.com/icons/svg/149/149172.svg"/>
+        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><speed-collapse class="button tree-button"/></a>
+        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><speed-expand class="button tree-button"/></a>
+        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
+          <story-speed class="button"/>{{story.name}}
         </a>
-        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story.">
-          <img src="https://image.flaticon.com/icons/svg/149/149171.svg"/>
-        </a>
-        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select story.">
-          {{story.name}}
-        </a>
-        <a @click="destroyObject('stories', story)" title="Delete Story.">
-          <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
-        </a>
-      </li>
+        <a @click="cloneStory(story)"><speed-copy class="button"/></a>
+        <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
+        </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
           <li>
-            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
-              {{space.name}}
-            </a>
-            <a @click="destroyObject('spaces', space)" title="Delete space.">
-              <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+            <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><speed-collapse class="button tree-button"/></a>
+            <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><speed-expand class="button tree-button"/></a>
+            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
+              <SpaceIconSpeed :id="space.id" />{{space.name}}
+              <a @click="destroyObject('spaces', space)">
+                <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+              </a>
+              <div v-if="spaceExpanded.includes(space.id)">
+                <ol>
+                  <li>{{treeSpaceArea(space.id)}} ft²</li>
+                  <li>{{space.type}}</li>
+                </ol>
+              </div>
             </a>
           </li>
         </ol>
@@ -32,12 +35,19 @@
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
           <li>
-            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
-              {{shading.name}}
+            <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><speed-collapse class="button tree-button"/></a>
+            <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><speed-expand class="button tree-button"/></a>
+            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
+              <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
-              <a @click="destroyObject('shading', shading)" title="Delete shading.">
+              <a @click="destroyObject('shading', shading)">
                 <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
               </a>
+              <div v-if="shadingExpanded.includes(shading.id)">
+                <ol>
+                  <li>{{treeShadeArea(shading.id)}} ft²</li>
+                </ol>
+              </div>
             </li>
         </ol>
       </div>
@@ -50,18 +60,40 @@
             <div><AddNew class="button"/>{{object}}</div>
           </a>
         </div> -->
-        <a @click="createObject('Story')" title="Add new story.">
-          <div>
-            <AddNew class="button"/>
-            Story
+        <span>
+          <a @click="createObject('Story')">
+            <create-speed class="button tree-button"/>Story
+          </a>
+          <input class="height" v-model="storyHeight"> ft
+        </span>
+        <span>
+          <a @click="createObject('Space')">
+            <create-speed class="button tree-button"/>Space
+          </a>
+        </span>
+        <span>
+          <a @click="createObject('Shading')">
+            <create-speed class="button tree-button"/>Shading
+          </a>
+            <input class="height" v-model="shadingHeight"> ft
+        </span>
+        <span>
+          <a @click="expandSpaceTypes = true">
+            <create-speed class="button tree-button"/>Space Type
+          </a>
+          <div v-show="expandSpaceTypes">
+            <select @change="addSpaceType" size="5">
+              <option value="poop" selected disabled>Space Type</option>
+              <option value="Office-Open">Office-Open</option>
+              <option value="Office-Private">Office-Private</option>
+              <option value="Retail-Retail">Retail-Retail</option>
+              <option value="Retail-1">Retail-1</option>
+              <option value="Retail-2">Retail-2</option>
+              <option value="Retail-3">Retail-1</option>
+              <option value="Retail-4">Retail-2</option>
+            </select>
           </div>
-        </a>
-        <a @click="createObject('Space')" title="Add new space.">
-          <div>
-            <AddNew class="button"/>
-            Space
-          </div>
-        </a>
+        </span>
       </div>
       <div class="area-info">
         <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
@@ -75,28 +107,62 @@ import { mapState, mapGetters } from 'vuex';
 import _ from 'lodash';
 import Library from './Library.vue';
 import AddNew from './../assets/svg-icons/add_new.svg';
-import geometryHelpers from './../store/modules/geometry/helpers';
+import svgs from './svgs';
+import SpaceIconSpeed from './SpaceIconSpeed.vue';
+import geometryHelpers, { replaceIdsForCloning }from './../store/modules/geometry/helpers';
+import modelHelpers from '../store/modules/models/helpers';
+import createFaceFromPoints from '../store/modules/geometry/actions/createFaceFromPoints';
+import methods from './Grid/methods';
+import idFactory from './../store/utilities/generateId';
+import generateColor from './../store/utilities/generateColor';
 
 export default {
   name: 'SpeedTree',
-  props: ['objectTypes'],
+  props: ['styles', 'objectTypes'],
   data() {
     return {
       expanded: [0],
+      spaceExpanded: [],
+      storyHeight: 8,
+      shadingHeight: 8,
+      spaceType: null,
+      expandSpaceTypes: false,
+      shadingExpanded: [],
     };
   },
   computed: {
     ...mapState({
       stories: state => state.models.stories,
       geometry: state => state.geometry,
+      state: state => state,
     }),
     ...mapGetters({
-      currentStoryGeom: 'application/currentStoryDenormalizedGeom',
+      currentStoryGeomDenorm: 'application/currentStoryDenormalizedGeom',
+      currentStoryGeom: 'application/currentStoryGeometry',
       currentStory: 'application/currentStory',
       currentSubSelection: 'application/currentSubSelection',
+      storiesArea: 'application/allStoriesArea',
+      spacesArea: 'application/allSpacesArea',
+      shadingArea: 'application/allShadingArea',
     }),
+    min_x: {
+      get() { return this.$store.state.project.view.min_x; },
+      set(val) { this.$store.dispatch('project/setViewMinX', { min_x: val }); },
+    },
+    min_y: {
+      get() { return this.$store.state.project.view.min_y; },
+      set(val) { this.$store.dispatch('project/setViewMinY', { min_y: val }); },
+    },
+    max_x: {
+      get() { return this.$store.state.project.view.max_x; },
+      set(val) { this.$store.dispatch('project/setViewMaxX', { max_x: val }); },
+    },
+    max_y: {
+      get() { return this.$store.state.project.view.max_y; },
+      set(val) { this.$store.dispatch('project/setViewMaxY', { max_y: val }); },
+    },
     storyArea() {
-      return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeom.vertices));
+      return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeomDenorm.vertices));
     },
     buildingArea() {
       let totalArea = 0;
@@ -112,6 +178,10 @@ export default {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
+    addSpaceType(e) {
+      this.$store.commit('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
+      this.expandSpaceTypes = false;
+    },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
@@ -120,6 +190,40 @@ export default {
     },
     storyCollapsed(index) {
       this.expanded = this.expanded.filter(item => item !== index);
+    },
+    spaceExpand(index) {
+      this.spaceExpanded.push(index);
+    },
+    spaceCollapse(index) {
+      this.spaceExpanded = this.spaceExpanded.filter(item => item !== index);
+    },
+    shadingExpand(index) {
+      this.shadingExpanded.push(index);
+    },
+    shadingCollapse(index) {
+      this.shadingExpanded = this.shadingExpanded.filter(item => item !== index);
+    },
+    updateStoryHeight(e) {
+      console.log(e);
+    },
+    treeSpaceArea(id) {
+      if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
+      return this.spacesArea[id];
+    },
+    treeShadeArea(id) {
+      if (this.shadingArea[id] < 0) return -(this.shadingArea[id]);
+      return this.shadingArea[id];
+    },
+    cloneStory(story) {
+      this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
+      // not sure if it makes sense to do this (below functions) here or if they should be in actions
+      const { clonedGeometry, idMap } = replaceIdsForCloning(this.currentStoryGeom);
+      const { clonedStory } = modelHelpers.replaceIdsUpdateInfoForCloning(story, idMap, this.state);
+      this.createObject('Story');
+      // idk about below... initStory auto creates an empty space. ¯\_(ツ)_/¯
+      this.destroyObject('spaces', this.currentStory.spaces[0]);
+      this.$store.dispatch('models/cloneStory', clonedStory);
+      this.$store.dispatch('geometry/cloneStoryGeometry', clonedGeometry);
     },
     // REPEATED
     subselectionType: {
@@ -131,12 +235,17 @@ export default {
       switch (object) {
         case 'Story':
           this.$store.dispatch('models/initStory');
+          this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, floor_to_ceiling_height: this.storyHeight });
+          if (this.currentStory.name !== 'Story 1') {
+            this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, shading: [] });
+          }
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });
           break;
         case 'Shading':
-          this.$store.dispatch('models/initShading', { story: this.currentStory });
+          this.$store.dispatch('models/initShading', { story: this.$store.state.models.stories.find(s => s.id === '1') });
+          this.$store.dispatch('models/updateShadingWithData', { shading: this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });
@@ -195,7 +304,6 @@ export default {
     },
   },
   mounted() {
-
     this.$store.dispatch('project/setMapEnabled', { enabled: true });
     this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
   },
@@ -210,6 +318,8 @@ export default {
   components: {
     Library,
     AddNew,
+    SpaceIconSpeed,
+    ...svgs,
   },
 };
 </script>
@@ -223,6 +333,9 @@ export default {
   flex-direction: column;
   background-color: #4EACEA;
   color: black;
+  a {
+    color: black;
+  }
 }
 
 .tree-container {
@@ -277,6 +390,11 @@ ol.tree li:last-child:before {
   height: 40%;
   justify-content: center;
   margin-left: 25%;
+  color: black !important;
+  padding: 5%;
+  a {
+    color: black;
+  }
 }
 
 .area-info {
@@ -305,8 +423,28 @@ img {
 
 .selected {
   text-decoration: underline;
-  color: red;
+  color: red !important;
   font-weight: bold;
+}
+
+.height {
+  max-width: 5%;
+  margin-top: 5%;
+  margin-left: 1%;
+}
+
+.input-select {
+  display: inline;
+}
+
+.input-select select{ 
+  color: white;
+  max-width: 75px;
+  padding: 0;
+}
+
+.tree-button {
+  max-height: 14px;
 }
 </style>
 
