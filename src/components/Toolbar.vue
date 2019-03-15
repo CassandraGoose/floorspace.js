@@ -6,11 +6,11 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
-  <nav id="toolbar" :style="styles.toolbarStyles.toolbar">
+  <nav id="toolbar" class="speed-toolbar">
 
     <section id="top">
       <div id="navigation-head">
-        <div v-if="showImportExport" class="import-export-buttons" :style="styles.toolbarStyles.toolbar.topToolbar.importButtons">
+        <div v-if="showImportExport" class="import-export-buttons speed-none">
           <input ref="importLibrary" @change="importDataAsFile($event, 'library')" type="file" />
           <input ref="importInput" @change="importDataAsFile($event, 'floorplan')" type="file" />
 
@@ -26,16 +26,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </div>
 
         <div id="undo-redo">
-          <div title="Undo previous action." :style="styles.toolbarStyles.toolbar.topToolbar.undoRedo">
-            <tool-undo @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }" :style="styles.toolbarStyles.toolbar.topToolbar.speedUndo"></tool-undo>
-            <undo-svg @click.native="undo" class="button" :class="{ 'disabled' : !timetravelInitialized }" :style="styles.toolbarStyles.toolbar.topToolbar.undoButton"></undo-svg>
+          <div title="Undo previous action." class="speed-undo-redo">
+            <tool-undo @click.native="undo" class="button" :class="['speed-flex', { 'disabled' : !timetravelInitialized }]" ></tool-undo>
+            <undo-svg @click.native="undo" class="button" :class="['speed-none', { 'disabled' : !timetravelInitialized }]"></undo-svg>
           </div>
           <div title="redo">
             <redo-svg @click.native="redo" class="button" :disabled="!timetravelInitialized" :class="{ 'disabled' : !timetravelInitialized }"></redo-svg>
           </div>
         </div>
       </div>
-      <ul id="mode-tabs" :style="styles.toolbarStyles.toolbar.topToolbar.tabs">
+      <ul id="mode-tabs" class="speed-none">
         <li @click="modeTab='floorplan'" class="tab" data-modetab="floorplan" :class="{ active: modeTab === 'floorplan' }">
           <span>
             Floorplan
@@ -62,29 +62,29 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </li>
       </ul>
 
-      <div id="floorspace-grid-settings" :style="styles.toolbarStyles.toolbar.topToolbar.gridSettings">
-        <div class="north-axis" :style="styles.toolbarStyles.toolbar.topToolbar.northAxis">
+      <div id="grid-settings" class="speed-grid-settings">
+        <div class="speed-north-axis">
           <div>N</div> <div>{{northAxis}}</div>
         </div>
-        <div class="floorspace-input-checkbox" title="Toggle previous story visability.">
-          <label class="floorspace-label">STORY BELOW</label>
+        <div class="input-checkbox" title="Toggle previous story visability.">
+          <label class="speed-label">STORY BELOW</label>
           <input type="checkbox" v-model="previousStoryVisible">
         </div>
 
-        <div v-if="mapEnabled" class="floorspace-input-checkbox" title="Toggle map visability.">
-          <label class="floorspace-label">MAP</label>
+        <div v-if="mapEnabled" class="input-checkbox" title="Toggle map visability.">
+          <label class="speed-label">MAP</label>
           <input type="checkbox" v-model="mapVisible">
         </div>
 
-        <div class="floorspace-input-checkbox" title="Toggle grid visability.">
-          <label class="floorspace-label">GRID</label>
+        <div class="input-checkbox" title="Toggle grid visability.">
+          <label class="speed-label">GRID</label>
           <input type="checkbox" v-model="gridVisible">
         </div>
 
-        <div class="floorspace-input-number" title="Specify spacing of the grid in ft.">
-          <label class="floorspace-label">SPACING</label>
+        <div class="input-number" title="Specify spacing of the grid in ft.">
+          <label class="speed-label">SPACING</label>
           <input v-model.number.lazy="spacing">
-          <label v-if="!allowSettingUnits">{{ rwUnits}}</label>
+          <label class="floorspace-label" v-if="!allowSettingUnits">{{ rwUnits}}</label>
         </div>
         <PrettySelect
           v-if="allowSettingUnits"
@@ -93,61 +93,56 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           :value="rwUnits"
           @change="updateUnits"
         />
-        <div class="coordinates-container">
-          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">X: {{xCrossHair}}</div>
-          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Y: {{yCrossHair}}</div>
-          <div class="coordinates" :style="styles.toolbarStyles.toolbar.topToolbar.crossHairCoordinates">Z: 0.0</div>
+        <div class="speed-coordinates-container">
+          <div class="speed-coordinates">X: {{xCrossHair}}</div>
+          <div class="speed-coordinates">Y: {{yCrossHair}}</div>
+          <div class="speed-coordinates">Z: 0.0</div>
         </div>
-        <div :style="styles.toolbarStyles.toolbar.topToolbar.gear" @click="showGroundPropsModal = true" title="settings">
+        <div class="speed-none" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
         </div>
       </div>
     </section>
 
-    <section id="bottom" :class="modeTab" :style="styles.toolbarStyles.toolbar.bottomToolbar">
+    <section id="bottom" :class="[modeTab, 'speed-bottom-toolbar']">
       <template  v-if="modeTab ==='floorplan'">
-        <div id="instructions" :style="styles.toolbarStyles.toolbar.bottomToolbar.instructions">Draw a floorplan and import images</div>
+        <div id="instructions" class="speed-none">Draw a floorplan and import images</div>
 
-        <div id="drawing-tools" :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools" class="tools-list tools">
+        <div id="drawing-tools" class="tools-list tools speed-drawing-tools">
           <div
             @click="tool = 'Rectangle'" 
             data-tool="Rectangle" 
-            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
             title="Place a rectangle on the grid using the cursor."
-            :class="{ active: tool === 'Rectangle' }">
-            <tool-draw-rectangle-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-rectangle-svg>
+            :class="['speed-drawing-tools-button',{ active: tool === 'Rectangle' }]">
+            <tool-draw-rectangle-svg class="button"></tool-draw-rectangle-svg>
           </div>
           <div
             @click="tool = 'Polygon'" 
             data-tool="Polygon" 
             title="Place a polygon on the grid using the cursor." 
-            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
-            :class="{ active: tool === 'Polygon' }">
-            <tool-draw-polygon-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-draw-polygon-svg>
+            :class="['speed-drawing-tools-button', { active: tool === 'Polygon' }]">
+            <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
           </div>
           <div
             @click="tool = 'Fill'" 
             data-tool="Fill" 
             title="Fill" 
-            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.fill" 
-            :class="{ active: tool === 'Fill' }">
-            <tool-fill-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-fill-svg>
+            :class="['speed-drawing-tools-button', { active: tool === 'Fill' }]">
+            <tool-fill-svg class="button"></tool-fill-svg>
           </div>
           <div 
             @click="toggle3D()" 
             data-tool="3D" 
             title="Toggle 3D view." 
-            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
-            :class="{ active: tool === '3D' }">
-            <tool-3d-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-3d-svg>
+            :class="['speed-drawing-tools-button', { active: tool === '3D' }]">
+            <tool-3d-svg class="button"></tool-3d-svg>
           </div>
           <div 
             @click="tool = 'Eraser'" 
             data-tool="Eraser" 
             title="Erase a part of your space using the cursor. " 
-            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
-            :class="{ active: tool === 'Eraser' }">
-            <tool-erase-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-erase-svg>
+            :class="['speed-drawing-tools-button', { active: tool === 'Eraser' }]">
+            <tool-erase-svg class="button"></tool-erase-svg>
           </div>
           <!-- remove Select/Move tool -->
           <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
@@ -157,11 +152,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             @click="tool = 'Select'" 
             data-tool="Select" 
             title="Click to select." 
-            :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.buttons" 
-            :class="{ active: tool === 'Select' }">
-            <tool-select-svg :style="styles.toolbarStyles.toolbar.bottomToolbar.drawingTools.svg" class="button"></tool-select-svg>
+            :class="['speed-drawing-tools-button', { active: tool === 'Select' }]">
+            <tool-select-svg class="button"></tool-select-svg>
           </div>
-          <div @click="setImageTool" data-tool="Image" title="Image" :style="styles.toolbarStyles.toolbar.bottomToolbar.image" :class="{ active: tool === 'Image' }">
+          <div @click="setImageTool" data-tool="Image" title="Image" :class="['speed-none', { active: tool === 'Image' }]">
             <tool-image-svg class="button"></tool-image-svg>
           </div>
         </div>
@@ -192,7 +186,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </div> -->
       </template>
 
-      <div id="grid-tools" :style="styles.toolbarStyles.toolbar.bottomToolbar.gridTools">
+      <div id="grid-tools" class="speed-none">
         <RenderByDropdown />
         <div title="zoom to fit">
           <ZoomToFitSvg class="button" @click.native="zoomToFit"></ZoomToFitSvg>
@@ -239,7 +233,6 @@ import appconfig, { componentTypes } from '../store/modules/application/appconfi
 
 export default {
   name: 'toolbar',
-  props: ['styles'],
   data() {
     return {
       componentTypes: {
@@ -475,6 +468,7 @@ export default {
 <style lang="scss" scoped>
 // @import "./../scss/config";
 @import "./../scss/main.scss";
+@import "../speedStyles.scss";
 
 $gray-dark: #333333;
 $black: #000000;
@@ -490,8 +484,6 @@ svg.icon, svg.button {
 #toolbar {
   background-color: $black;
   z-index: 4;
-  font-size: 12pt;
-
   #top {
     height: 2.5rem;
     display: flex;
@@ -512,75 +504,13 @@ svg.icon, svg.button {
         display: none;
       }
     }
-
-  div.floorspace-input-number > input {
-    width: 10px;
-  }
-
-  #floorspace-grid-settings .floorspace-input-checkbox {
-    font-size: 1.3vw;
-  }
-
-  #floorspace-grid-settings > div > .floorspace-label {
-    // font-size: 10px !important;
-    font-size: 1.3vw;
-    color: white !important;
-  }
-
-  #floorspace-grid-settings > div > input[type="checkbox"] {
-    min-height: 3px;
-    min-width: 3px;
-  }
-
-  #floorspace-grid-settings > div > input[type="checkbox"]:checked {
-    background-color: blue;
-    position: static;
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  #floorspace-grid-settings > div > input[type="checkbox"]:not(:checked)  {
-    position: static;
-    opacity: 1;
-    pointer-events:auto;
-    background-color: white;
-  }
-
-    #floorspace-grid-settings {
+    #grid-settings {
       display: flex;
-      width: 100%;
-      justify-content: space-around;
-
-      margin: 0;
+      margin-left: auto;
       >div {
         margin-right: .5rem;
       }
     }
-  }
-
-  .coordinates-container {
-    display: flex;
-    flex-direction: row;
-    width: 20%;
-    justify-content: center;
-    .coordinates {
-      text-align: center;
-      width: 32%;    
-      background-color: white !important;
-      color: black;
-      border: 2px solid grey !important;
-      font-size: 1.1vw;
-    }
-  }
-  
-  .north-axis {
-    display: flex;
-    justify-content: space-around;
-    width: 5%;
-    text-align: center;
-    font-size: 1.1vw;
-    background-color: $gray-dark;
-    border: 2px solid grey;
   }
 
   #bottom {
@@ -593,7 +523,6 @@ svg.icon, svg.button {
     background-color: $gray-medium-light;
     display: flex;
     height: 2.5rem;
-
     .components-list {
       margin-right: auto;
     }
@@ -601,7 +530,6 @@ svg.icon, svg.button {
       display: flex;
       margin-right: 3rem;
       margin-left: 0;
-
       .active {
         background-color: $gray-dark;
       }
@@ -610,14 +538,12 @@ svg.icon, svg.button {
         padding-right: 5px;
       }
     }
-
     #instructions {
       line-height: 2.5rem;
       margin-right: 0;
       margin-left: 10px;
       min-width: calc(21.5rem - 10px);
     }
-
     #grid-tools {
       margin-left: auto;
       display: flex;
@@ -637,7 +563,6 @@ svg.icon, svg.button {
   margin-bottom:0;
   display: flex;
   font-size: 13px;
-
   li {
     cursor: pointer;
     float: left;
@@ -651,16 +576,13 @@ svg.icon, svg.button {
       display: inline-block;
       float: left;
       white-space: nowrap;
-
       svg {
         display: inline-block;
         vertical-align: middle;
         margin-bottom: -10px;
         margin-top: 0px;
       }
-
     }
-
     span::after {
       content: " ";
       display: inline-block;
@@ -716,8 +638,5 @@ svg.icon, svg.button {
     }
   }
 }
-
-
-
-
 </style>
+

@@ -1,0 +1,120 @@
+.speed-toolbar {
+  display: flex;
+  flex-direction: column;
+  left: auto !important;
+  top: 0;
+  width: 75%;
+  color: white;
+  font-size: 12pt;
+}
+
+.speed-grid-settings {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 999999;
+  margin: 0;
+  width: 100%;
+  justify-content: space-around;
+  .input-checkbox {
+    line-height: initial !important;
+    font-size: 1.3vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  .input-number > input {
+    line-height: initial !important;
+    width: 10px;
+    font-size: .6em;
+    align-self: center;
+  }
+  > div > .speed-label {
+    line-height: initial !important;
+    font-size: 1.3vw;
+    color: white !important;
+  }
+  > div > input[type="checkbox"] {
+    min-height: 3px;
+    min-width: 3px;
+  }
+   > div > input[type="checkbox"]:checked {
+    background-color: blue;
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+   }
+  > div > input[type="checkbox"]:not(:checked) {
+    position: static;
+    opacity: 1;
+    pointer-events:auto;
+    background-color: white;
+  }
+}
+
+.speed-undo-redo {
+  display: flex;
+  flex-direction: column;
+  background-color: #24292c;
+  height: 40px;
+  text-align: center;
+  width: 40px;
+}
+
+.speed-flex {
+  display: flex;
+}
+
+.speed-north-axis {
+    display: flex;
+    justify-content: space-around;
+    width: 5%;
+    text-align: center;
+    font-size: 1.1vw;
+    background-color: $gray-dark;
+    border: 2px solid grey;
+    line-height: initial !important;
+}
+
+.speed-bottom-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  height: 0 !important;
+}
+
+.speed-drawing-tools {
+  flex-direction: column;
+  align-self: flex-start;
+  margin-right: 0 !important;
+  svg {
+    text-align: center;
+    vertical-align: top;
+  }
+  .speed-drawing-tools-button {
+    background-color: #24292c;
+    text-align: center;
+    width: auto;
+  }
+}
+
+.speed-coordinates-container {
+  line-height: initial !important;
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+  justify-content: center;
+  .speed-coordinates {
+        display: flex;
+        text-align: center;
+        width: 32%;
+        background-color: white !important;
+        color: black;
+        border: 2px solid grey !important;
+        font-size: 1.1vw;
+        line-height: initial !important;
+  }
+}
+
+.speed-none {
+    display: none !important;
+}
