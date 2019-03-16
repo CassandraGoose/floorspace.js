@@ -21,6 +21,15 @@ import toolPlaceComponent from './../assets/svg-icons/lego_brick_icon.svg';
 import tool3dSvg from './../assets/svg-icons/tool_3d.svg';
 import toolSelect from './../assets/svg-icons/tool_select.svg';
 import toolUndo from './../assets/svg-icons/tool_undo.svg';
+
+import deleteSpeed from './../assets/svg-icons/delete_speed.svg';
+import createSpeed from './../assets/svg-icons/create_speed.svg';
+import buildingSpeed from './../assets/svg-icons/building_speed.svg';
+import storySpeed from './../assets/svg-icons/story_speed.svg';
+import speedExpand from './../assets/svg-icons/speed_expand.svg';
+import speedCollapse from './../assets/svg-icons/speed_collapse.svg';
+import speedCopy from './../assets/svg-icons/speed_copy.svg';
+
 import ZoomToFitSvg from './../assets/svg-icons/zoom_to_fit.svg';
 import zoomInSvg from './../assets/svg-icons/zoom_in.svg';
 import zoomOutSvg from './../assets/svg-icons/zoom_out.svg';
@@ -93,6 +102,15 @@ export default {
   'tool-image-svg': toolImageSvg,
   'tool-fill-svg': toolFillSvg,
   'tool-component-svg': toolPlaceComponent,
+  
+  'building-speed': buildingSpeed,
+  'create-speed': createSpeed,
+  'delete-speed': deleteSpeed,
+  'story-speed': storySpeed,
+  'speed-expand': speedExpand,
+  'speed-collapse': speedCollapse,
+  'speed-copy': speedCopy,
+
   'tool-3d-svg': tool3dSvg,
   'tool-select-svg': toolSelect,
   'tool-undo': toolUndo,
