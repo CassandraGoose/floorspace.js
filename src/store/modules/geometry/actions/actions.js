@@ -186,6 +186,6 @@ export default {
 
   cloneStoryGeometry(context, payload) {
     const currentStory = context.rootGetters['application/currentStoryGeometry'];
-    context.commit('updateClonedStory', { newGeom: payload, currentStoryId: currentStory.id });
+    context.commit('updateClonedGeometry', { newGeom: payload, currentStoryId: currentStory.id });
   },
 };

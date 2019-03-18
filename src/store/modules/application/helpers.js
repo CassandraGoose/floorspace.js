@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import map, { assignableProperties } from './appconfig';
+import geometryHelpers from '../geometry/helpers';
 
 export function displayNameForMode(mode) {
   return map.modes[mode];
@@ -37,4 +38,18 @@ export function spacePropertyById(library, spacePropId) {
   });
 
   return prop ? { ...prop, type } : null;
+}
+
+export function getArea(faces, type, rootState) {
+  if (faces.length === 0) return null;
+  const areaList = {};
+  const faceMatchedToSpace = _.flatMap(rootState.models.stories, story => story[type]).find(item => item.face_id === faces[0].id);
+  areaList[faceMatchedToSpace.id] = geometryHelpers.areaOfSelection(faces[0].vertices);
+  return areaList;
+}
+
+export function getFaces(type, rootState, rootGetters) {
+  const spaceFaceIds = _.flatMap(rootState.models.stories, story => story[type]).map(item => item.face_id);
+  const faces = _.flatMap(rootGetters['geometry/denormalized'], geom => geom.faces).filter(face => spaceFaceIds.includes(face.id));
+  return faces;
 }

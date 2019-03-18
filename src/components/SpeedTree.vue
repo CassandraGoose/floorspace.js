@@ -169,7 +169,7 @@ export default {
       this.geometry.forEach((geom) => {
         totalArea += Math.abs(geometryHelpers.areaOfSelection(geom.vertices));
       });
-      return totalArea;
+      return Math.round(totalArea * 100) / 100;
     },
     spaces() { return this.currentStory.spaces; },
     shading() { return this.currentStory.shading; },
@@ -207,12 +207,14 @@ export default {
       console.log(e);
     },
     treeSpaceArea(id) {
+      if (!this.spacesArea) return '0';
       if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
-      return this.spacesArea[id];
+      return Math.abs(this.spacesArea[id]);
     },
     treeShadeArea(id) {
+      if (!this.shadingArea) return '0';
       if (this.shadingArea[id] < 0) return -(this.shadingArea[id]);
-      return this.shadingArea[id];
+      return Math.abs(this.shadingArea[id]);
     },
     cloneStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });

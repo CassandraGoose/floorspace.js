@@ -173,5 +173,9 @@ export default {
   cloneObjectArray(state, payload) {
     const newStory = state.stories.find(story => story.id === payload.currentStoryId);
     newStory[Object.keys(payload)[0]] = payload[Object.keys(payload)[0]];
+    newStory['spaces'] = payload['spaces'];
+    newStory['doors'] = payload['doors'];
+    newStory['images'] = payload['images'];
+    newStory['windows'] = payload['windows'];
   },
 };
