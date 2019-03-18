@@ -289,9 +289,6 @@ export default {
   watch: {
     // showTicks() { this.showOrHideAxes(); },
     // TODO: method for when new view dimensions are imported or the px dimensions change
-    gridId() {
-      getGridIds(this.gridId);
-    },
     gridVisible() { this.showOrHideAxes(); },
     spacing() { this.updateGrid(); },
     units() { this.reloadGridAndScales(); },
