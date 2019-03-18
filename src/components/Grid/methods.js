@@ -31,11 +31,7 @@ function transformDiff(t1, t2) {
   );
 }
 
-let gridId;
 export default {
-  setGridIdWithSvg(currentGridId) {
-    gridId = `${currentGridId}`;
-  },
   // ****************** USER INTERACTION EVENTS ****************** //
   /*
   * handle a click on the svg grid
@@ -325,14 +321,11 @@ export default {
     d3.select(this.$refs.gridParent).selectAll('.highlight').remove();
     d3.select(this.$refs.gridParent).selectAll('.gridpoint').remove();
     d3.select(this.$refs.gridParent).selectAll('.guideLine').remove();
-    // d3.selectAll(`#${gridId} .highlight, #${gridId} .gridpoint, #${gridId} .guideline`).remove();
     this.componentFacingSelection = null;
   },
   clearComponentHighlights() {
     d3.select(this.$refs.gridParent).selectAll('.highlight').remove();
     d3.select(this.$refs.gridParent).selectAll('.component-guideline').remove();
-
-    // d3.selectAll(`#${gridId} .highlight, #${gridId} .component-guideline`).remove();
     this.componentFacingSelection = null;
   },
   highlightComponentToPlaceOrSelect(gridPoint) {
@@ -581,7 +574,6 @@ export default {
   */
   eraseGuidelines() {
     d3.select(this.$refs.gridParent).selectAll('.guideline').remove();
-    // d3.selectAll(`#${gridId} .guideline`).remove();
   },
   /*
   * Handle escape key presses to cancel current drawing operation
@@ -591,7 +583,6 @@ export default {
       this.points = [];
       this.clearHighlights();
       d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
-      // d3.selectAll(`#${gridId} .point-path`).remove();
     }
   },
   // ****************** SAVING FACES ****************** //
@@ -602,7 +593,6 @@ export default {
   savePolygonFace() {
     this.clearHighlights();
     d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
-    // d3.selectAll(`#${gridId} .point-path`).remove();
 
     const payload = {
       points: [...this.points],
@@ -627,7 +617,6 @@ export default {
   saveRectangularFace() {
     this.clearHighlights();
     d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
-    // d3.selectAll(`#${gridId} .point-path`).remove();
 
     // infer 4 corners of the rectangle based on the two points that have been drawn
     const payload = {};
@@ -660,7 +649,6 @@ export default {
     // infer 4 corners of the rectangle based on the two points that have been drawn
     this.clearHighlights();
     d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
-    // d3.selectAll(`#${gridId} .point-path`).remove();
 
     const payload = {
       points: [
@@ -684,7 +672,6 @@ export default {
   */
   drawPoints() {
     // remove expired points and guidelines
-    // d3.selectAll(`#${gridId} .point-path`).remove();
     d3.select(this.$refs.gridParent).selectAll('.point-path');
     // draw points
     const pointPath = d3.select(this.$refs.grid)
@@ -1307,23 +1294,22 @@ export default {
       fontSize = '14px';
     svg.attr('height', height)
       .attr('width', width);
-    this.axis.x = svg.selectAll(`g.${gridId}axis--x`)
-      .data([undefined]);
+    this.axis.x = svg.selectAll('axis--x').data([undefined]);
 
     this.axis.x = this.axis.x.merge(
-      this.axis.x.enter().append('g').attr('class', `axis ${gridId}axis--x`),
+      this.axis.x.enter().append('g').attr('class', 'axis axis--x'),
     )
     .attr('stroke-width', strokeWidth)
     .style('font-size', fontSize)
     .style('display', this.gridVisible ? 'inline' : 'none');
 
-    this.axis.y = svg.selectAll(`g.${gridId}axis--y`)
+    this.axis.y = svg.selectAll('axis--y')
       .data([undefined]);
 
     this.axis.y = this.axis.y.merge(
-      this.axis.y.enter().append('g').attr('class', `axis ${gridId}axis--y`),
+      this.axis.y.enter().append('g').attr('class', 'axis axis--y'),
     )
-    .attr('class', `axis ${gridId}axis--y`)
+    .attr('class', 'axis axis--y')
     .attr('stroke-width', strokeWidth)
     .style('font-size', fontSize)
     .style('display', this.gridVisible ? 'inline' : 'none');

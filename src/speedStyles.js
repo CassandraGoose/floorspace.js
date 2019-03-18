@@ -122,4 +122,3 @@ export default {
   },
 };
 
-// document.querySelector('.overlaycontainer-stopevent').style.display = 'none';

@@ -7,7 +7,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <template>
     <div id="map-container">
-        <div :id="mapID" ref="map" :style="{ 'pointer-events': tool === 'Map' ? 'all': 'none', 'height': '100%', 'min-width': '100%' }"></div>
+        <div ref="map" :style="{ 'pointer-events': tool === 'Map' ? 'all': 'none', 'height': '100%', 'min-width': '100%' }"></div>
 
         <div v-show="tool === 'Map'" id="autocomplete">
             <span class="input-text">
@@ -19,6 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <button @click="finishSetup">Done</button>
         </div>
 
+        <!-- turn back on when ready -->
         <!-- <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal> -->
         <svg id="reticle"></svg>
     </div>
@@ -36,12 +37,11 @@ const ol = require('openlayers');
 
 export default {
   name: 'map-view',
-  props: ['modal',],
+  props: ['modal'],
   data() {
     return {
       view: null,
       map: null,
-      mapID: null,
       startResolution: null,
       autocomplete: null,
       mapModalVisible: window.api ? window.api.config.showMapDialogOnStart : true,
@@ -67,9 +67,6 @@ export default {
   beforeDestroy() {
     ResizeEvents.$off('resize', this.updateMapView);
     this.$root.$options.eventBus.$off('boundsResolved', this.clearStartResolution);
-  },
-  created() {
-    this.mapID = `map${this.randomMapId}`;
   },
   methods: {
     clearStartResolution() {
@@ -106,7 +103,7 @@ export default {
       this.view = new ol.View();
       this.map = new ol.Map({
         layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
-        target: this.mapID,
+        target: this.$refs.map,
         view: this.view,
       });
       this.view.on('propertychange', (e) => {
@@ -213,12 +210,6 @@ export default {
       units: state => state.project.config.units,
       mapInitialized: state => state.project.map.initialized,
     }),
-    randomMapId() {
-      return 'yxxx'.replace(/[xy]/g, (c) => {
-        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return `${v.toString(4)}`;
-      });
-    },
     mPerFt() { return ol.proj.METERS_PER_UNIT['us-ft']; },
     unAdjustedResolutionMeters() {
       // default map resolution RWU/px

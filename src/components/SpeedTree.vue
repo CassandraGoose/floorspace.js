@@ -83,7 +83,7 @@
           </a>
           <div v-show="expandSpaceTypes">
             <select @change="addSpaceType" size="5">
-              <option value="poop" selected disabled>Space Type</option>
+              <option value="" selected disabled>Space Type</option>
               <option value="Office-Open">Office-Open</option>
               <option value="Office-Private">Office-Private</option>
               <option value="Retail-Retail">Retail-Retail</option>
@@ -447,6 +447,3 @@ img {
   max-height: 14px;
 }
 </style>
-
-
-#speedNavigation > div.controls-container > div.controls > div:nth-child(1) > a > div

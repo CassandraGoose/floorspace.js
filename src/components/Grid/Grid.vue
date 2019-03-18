@@ -13,9 +13,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     :class="{ 'reduce-ticks': reduceTicks }"
     class="grid"
   >
-    <svg ref="grid" :id="svgGridId" :style="moveUp">
-      <g :class="`axis ${gridId}axis--x axis--x`"></g>
-      <g :class="`axis ${gridId}axis--y axis--y `"></g>
+    <svg ref="grid" :id="svgGridId">
+      <g :class="`axis axis--x`"></g>
+      <g :class="`axis axis--y `"></g>
       <g class="images" data-transform-plz></g>
       <g class="polygons" data-transform-plz></g>
       <g class="walls" data-transform-plz></g>
@@ -76,7 +76,6 @@ export default {
   mounted() {
     // throttle/debounce event handlers
     this.handleMouseMove = d3AwareThrottle(this.highlightSnapTarget, 100);
-    // the above debugger is for figuring out why the crosshair isn't where my mouse is
     // render grid first time (not debounced, as this seems to fix an issue
     // where the x bounds are set correctly, and then becomes incorrect when the
     // debounced renderGrid runs)
@@ -176,9 +175,6 @@ export default {
       set(id) {
         this.$store.dispatch('application/setCurrentComponentInstanceId', { id });
       },
-    },
-    moveUp() {
-      return { top: '-5rem' };
     },
     // grid dimensions in real world units
     min_x: {
@@ -294,7 +290,6 @@ export default {
     // showTicks() { this.showOrHideAxes(); },
     // TODO: method for when new view dimensions are imported or the px dimensions change
     gridId() {
-      methods.setGridIdWithSvg(this.gridId);
       getGridIds(this.gridId);
     },
     gridVisible() { this.showOrHideAxes(); },
@@ -330,9 +325,9 @@ export default {
     transform(newTransform, lastTransform) {
       // hide polygon names if zoomed out enough
       if (newTransform.k < 0.5) {
-        d3.select(`#${this.svgGridId}`).selectAll('.polygon-text').style('display', 'none');
+        d3.select(this.$refs.grid).selectAll('.polygon-text').style('display', 'none');
       } else {
-        d3.select(`#${this.svgGridId}`).selectAll('.polygon-text').style('display', 'initial');
+        d3.select(this.$refs.grid).selectAll('.polygon-text').style('display', 'initial');
       }
     },
   },
@@ -496,6 +491,10 @@ div[id^='grid'] {
   }
   img {
     position: absolute;
+  }
+
+  svg[id^='svg'] {
+    top: -5rem;
   }
 
   svg {

@@ -201,7 +201,7 @@ export default {
       return [...this.cssStyles, ...this.windowStyles].join('\n');
     },
   },
-}
+};
 </script>
 <style scoped>
 </style>

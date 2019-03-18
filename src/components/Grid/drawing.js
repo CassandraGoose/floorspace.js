@@ -5,8 +5,6 @@ import {
   edgeDirection, repeatingWindowCenters,
 } from './../../store/modules/geometry/helpers';
 
-let gridId;
-
 function boxAroundWindow({ xScale, yScale, edge, offset }) {
   const
     { dx, dy } = unitPerpVector(edge.start, edge.end);
@@ -476,7 +474,7 @@ const rotateCursor = (
   ) +
   ') 12.8 12.8, pointer');
 
-export function drawImage() {
+export function drawImage() {  
   let
     xScale = _.identity,
     yScale = _.identity,
@@ -500,11 +498,13 @@ export function drawImage() {
       moveable = d3.drag()
       .on('start', function() {
         d3.event.sourceEvent.stopPropagation(); // don't zoom when I'm draggin' an image!
-        [startX, startY] = d3.mouse(document.querySelector(`${gridId}`));
+        // [startX, startY] = d3.mouse(document.querySelector(`${svgGridId}`));
+        [startX, startY] = d3.mouse(document.querySelector(selection.viewportElement));
         currX = currY = undefined;
       })
       .on('drag', function(d) {
-        [currX, currY] = d3.mouse(document.querySelector(`${gridId}`));
+        // [currX, currY] = d3.mouse(document.querySelector(`${svgGridId}`));
+        [currX, currY] = d3.mouse(document.querySelector(selection.viewportElement));
         const { dx, dy } = offset(d);
         d3.select(this)
           .attr('transform', `translate(${dx}, ${dy})`);
@@ -556,11 +556,13 @@ export function drawImage() {
       resizeable = d3.drag()
         .on('start', function() {
           d3.event.sourceEvent.stopPropagation();
-          [startX, startY] = d3.mouse(document.querySelector(`${gridId}`));
+          // [startX, startY] = d3.mouse(document.querySelector(`${svgGridId}`));
+          [startX, startY] = d3.mouse(document.querySelector(selection.viewportElement));
           currX = currY = undefined;
         })
         .on('drag', function(d) {
-          [currX, currY] = d3.mouse(document.querySelector(`${gridId}`));
+          // [currX, currY] = d3.mouse(document.querySelector(`${svgGridId}`));
+          [currX, currY] = d3.mouse(document.querySelector(selection.viewportElement));
           d3.select(this.parentNode.parentNode)
             .attr('transform', scaleTransform(d));
         })
@@ -591,11 +593,13 @@ export function drawImage() {
       rotateable = d3.drag()
         .on('start', function() {
           d3.event.sourceEvent.stopPropagation();
-          [startX, startY] = d3.mouse(document.querySelector(`${gridId}`));
+          // [startX, startY] = d3.mouse(document.querySelector(`${svgGridId}`));
+          [startX, startY] = d3.mouse(document.querySelector(selection.viewportElement));
           currX = currY = undefined;
         })
         .on('drag', function(d) {
-          [currX, currY] = d3.mouse(document.querySelector(`${gridId}`));
+          // [currX, currY] = d3.mouse(document.querySelector(`${svgGridId}`));
+          [currX, currY] = d3.mouse(document.querySelector(selection.viewportElement));
           d3.select(this.parentNode.parentNode)
             .attr('transform', `rotate(${rotationAngle(d)})`);
         })
@@ -688,7 +692,6 @@ export function drawImage() {
           });
       }
     });
-
   }
 
   chart.xScale = function (_) {
@@ -744,10 +747,6 @@ export function drawWall() {
     return chart;
   };
   return chart;
-}
-
-export function getGridIds(currentGridId) {
-  gridId = `#${currentGridId} svg`;
 }
 
 export default function drawMethods({ xScale, yScale, updateImage, selectImage }) {
