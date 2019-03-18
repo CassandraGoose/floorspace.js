@@ -10,7 +10,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     class="settings-modal"
     title="Settings"
     @close="$emit('close')"
-    :styles="styles"
   >
     <div class="settings speed-none">
       <p>

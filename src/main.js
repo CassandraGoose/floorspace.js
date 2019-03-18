@@ -28,7 +28,7 @@ createStore(eventBus).then((store) => {
   window.application = new Vue({
     store,
     el: '#app',
-    template: '<App :styles="styles"/>',
+    template: '<App/>',
     eventBus,
     // REMOVE
     components: { App },

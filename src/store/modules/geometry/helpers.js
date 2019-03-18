@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import ClipperLib from 'js-clipper';
+import idFactory from './../../utilities/generateId';
 import { dropConsecutiveDups } from '../../../utilities';
 
 function ringEqualsWithSameWindingOrder(vs, ws) {

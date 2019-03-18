@@ -210,7 +210,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         @close="() => {showSaveModal = false; thingWereSaving = '';}"
       />
       <Settings
-        :styles="styles"
         v-else-if="showGroundPropsModal"
         @close="showGroundPropsModal = false"
       />

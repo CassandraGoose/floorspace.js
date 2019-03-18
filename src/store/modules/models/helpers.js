@@ -1,4 +1,6 @@
 import map from './libconfig';
+import idFactory from './../../utilities/generateId';
+import generateColor from './../../utilities/generateColor';
 
 const helpers = {
 
