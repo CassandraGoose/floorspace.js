@@ -22,11 +22,12 @@ export default {
     },
 
     initSpace (context, payload) {
-        const story = context.state.stories.find(s => s.id === payload.story.id),
-            name = helpers.generateName(context.state, 'spaces', story),
-            space = new factory.Space(name);
+      const story = context.state.stories.find(s => s.id === payload.story.id),
+          name = helpers.generateName(context.state, 'spaces', story),
+          space = new factory.Space(name);
 
-        context.commit('initSpace', { story, space });
+      context.commit('initSpace', { story, space });
+      context.dispatch('application/setCurrentSubSelectionId', { id: space.id }, { root: true });
     },
 
     initShading (context, payload) {
