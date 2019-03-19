@@ -61,7 +61,6 @@ export default {
       this.$root.$options.eventBus.$emit('sendFloorspaceJSON', this.$store.getters['exportData']);
     });
     this.$root.$options.eventBus.$on('updateLatLong', (data) => {
-      console.log('hey!', data);
       this.$store.dispatch('project/setMapLatitude', { latitude: data.lat });
       this.$store.dispatch('project/setMapLongitude', { longitude: data.long });
     });

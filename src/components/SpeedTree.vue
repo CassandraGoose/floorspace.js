@@ -202,11 +202,9 @@ export default {
       this.shadingExpanded = this.shadingExpanded.filter(item => item !== index);
     },
     updateStoryHeight(e) {
-      console.log(e);
+      // console.log(e);
     },
     treeSpaceArea(id) {
-      console.log(id)
-      console.log(this.spacesArea)
       if (!this.spacesArea) return '0';
       if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
       return Math.abs(this.spacesArea[id]);

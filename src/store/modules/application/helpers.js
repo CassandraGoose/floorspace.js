@@ -43,8 +43,10 @@ export function spacePropertyById(library, spacePropId) {
 export function getArea(faces, type, rootState) {
   if (faces.length === 0) return null;
   const areaList = {};
-  const faceMatchedToSpace = _.flatMap(rootState.models.stories, story => story[type]).find(item => item.face_id === faces[0].id);
-  areaList[faceMatchedToSpace.id] = geometryHelpers.areaOfSelection(faces[0].vertices);
+  faces.forEach((face) => {
+    const faceMatchedToSpace = _.flatMap(rootState.models.stories, story => story[type]).find(item => item.face_id === face.id);
+    areaList[faceMatchedToSpace.id] = geometryHelpers.areaOfSelection(face.vertices);
+  });
   return areaList;
 }
 
