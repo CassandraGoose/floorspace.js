@@ -3,7 +3,7 @@
     <div class="tree-container">
     <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
-      <li>
+      <li class="story-li">
         <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><speed-collapse class="button tree-button"/></a>
         <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><speed-expand class="button tree-button"/></a>
         <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
@@ -14,41 +14,41 @@
         </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
-          <li>
+          <li class="space-li">
             <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><speed-collapse class="button tree-button"/></a>
             <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
-              <SpaceIconSpeed :id="space.id" />{{space.name}}
+              <SpaceIconSpeed :id="space.id"/>{{space.name}}
               <a @click="destroyObject('spaces', space)">
                 <delete-speed class="button tree-button"/>
               </a>
-              <div v-if="spaceExpanded.includes(space.id)">
-                <ol>
-                  <li>{{treeSpaceArea(space.id)}} ft²</li>
-                  <li>{{space.type}}</li>
-                </ol>
-              </div>
             </a>
           </li>
+          <div v-if="spaceExpanded.includes(space.id)">
+            <ol class="space-shade-info">
+              <li><span>{{treeSpaceArea(space.id)}} ft²</span></li>
+              <li><span>{{space.type}}</span></li>
+            </ol>
+          </div>
         </ol>
       </div>
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
-          <li>
+          <li class="space-li">
             <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><speed-collapse class="button tree-button"/></a>
             <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
               <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
-              <a @click="destroyObject('shading', shading)">
-                <delete-speed class="button tree-button"/>
-              </a>
-              <div v-if="shadingExpanded.includes(shading.id)">
-                <ol>
-                  <li>{{treeShadeArea(shading.id)}} ft²</li>
-                </ol>
-              </div>
-            </li>
+            <a @click="destroyObject('shading', shading)">
+              <delete-speed class="button tree-button"/>
+            </a>  
+          </li>
+            <div v-if="shadingExpanded.includes(shading.id)">
+              <ol class="space-shade-info">
+                <li><span>{{treeShadeArea(shading.id)}} ft²</span></li>
+              </ol>
+            </div>
         </ol>
       </div>
     </ol>
@@ -333,8 +333,8 @@ export default {
 @import "./../scss/main.scss";
 
 #speedNavigation {
-  font-size: 75%;
   height: 100%;
+  font-size: 75%;
   display: flex;
   flex-direction: column;
   background-color: #4EACEA;
@@ -345,26 +345,20 @@ export default {
 }
 
 .tree-container {
-  padding-top: 5%;
-  padding-right: 5%;
   display: flex;
   flex-direction: column;
   align-self: flex-start;
   background-color: white;
+  width: 85%;
   align-content: center;
-  height: 50%;
-  width: 100%;
   overflow-y: scroll;
 }
 
 ol.tree, ol.tree ol{
   list-style: none;
-  margin: 1%;
-  padding-left: 10%;
 }
 
 ol.tree li {
-  padding-top: 3%;
   color: black;
   font-weight: bold;
   border-left: 1px dotted black;
@@ -383,7 +377,26 @@ ol.tree li:before {
   border-bottom: 1px dotted black;
   content: "";
   display: inline-block;
-  left: -3%;
+}
+
+.story-li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.space-li {
+  display: inline;
+  vertical-align: center;
+}
+
+.space-shade-info > li {
+  margin-top: 3%;
+  margin-left: 1%;
+}
+
+.space-shade-info > li > span {
+  margin-left: 5%;
 }
 
 ol.tree li:last-child:before {
@@ -393,7 +406,6 @@ ol.tree li:last-child:before {
 .controls {
   display: flex;
   flex-direction: column;
-  height: 40%;
   justify-content: center;
   margin-left: 25%;
   color: black !important;
@@ -405,10 +417,8 @@ ol.tree li:last-child:before {
 
 .area-info {
   display: flex;
-  height: 10%;
   flex-direction: column;
   margin-left: 25%;
-  margin-bottom: 10%;
 }
 
 .area {
@@ -452,4 +462,9 @@ img {
 .tree-button {
   max-height: 14px;
 }
+
+svg.button.tree-button {
+  width: 1.5rem;
+}
+
 </style>
