@@ -10,7 +10,7 @@
           <story-speed class="button"/>{{story.name}}
         </a>
         <a @click="cloneStory(story)"><speed-copy class="button"/></a>
-        <a @click="destroyObject('stories', story)"><img src="https://image.flaticon.com/icons/svg/401/401036.svg"/></a>
+        <a @click="destroyObject('stories', story)"><delete-speed class="button tree-button"/></a>
         </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
@@ -20,7 +20,7 @@
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
               <SpaceIconSpeed :id="space.id" />{{space.name}}
               <a @click="destroyObject('spaces', space)">
-                <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+                <delete-speed class="button tree-button"/>
               </a>
               <div v-if="spaceExpanded.includes(space.id)">
                 <ol>
@@ -41,7 +41,7 @@
               <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
               <a @click="destroyObject('shading', shading)">
-                <img src="https://image.flaticon.com/icons/svg/401/401036.svg"/>
+                <delete-speed class="button tree-button"/>
               </a>
               <div v-if="shadingExpanded.includes(shading.id)">
                 <ol>
@@ -220,11 +220,9 @@ export default {
     },
     cloneStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
-      // not sure if it makes sense to do this (below functions) here or if they should be in actions
       const { clonedGeometry, idMap } = replaceIdsForCloning(this.currentStoryGeom);
       const { clonedStory } = modelHelpers.replaceIdsUpdateInfoForCloning(story, idMap, this.state);
       this.createObject('Story');
-      // idk about below... initStory auto creates an empty space. ¯\_(ツ)_/¯
       this.destroyObject('spaces', this.currentStory.spaces[0]);
       this.$store.dispatch('models/cloneStory', clonedStory);
       this.$store.dispatch('geometry/cloneStoryGeometry', clonedGeometry);

@@ -102,7 +102,7 @@ export default {
   'tool-image-svg': toolImageSvg,
   'tool-fill-svg': toolFillSvg,
   'tool-component-svg': toolPlaceComponent,
-  
+
   'building-speed': buildingSpeed,
   'create-speed': createSpeed,
   'delete-speed': deleteSpeed,
