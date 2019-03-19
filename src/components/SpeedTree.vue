@@ -60,24 +60,24 @@
             <div><AddNew class="button"/>{{object}}</div>
           </a>
         </div> -->
-        <span>
+        <div class="control-button">
           <a @click="createObject('Story')">
             <create-speed class="button tree-button"/>Story
           </a>
           <input class="height" v-model="storyHeight"> ft
-        </span>
-        <span>
+        </div>
+        <div class="control-button">
           <a @click="createObject('Space')">
             <create-speed class="button tree-button"/>Space
           </a>
-        </span>
-        <span>
+        </div>
+        <div class="control-button">
           <a @click="createObject('Shading')">
             <create-speed class="button tree-button"/>Shading
           </a>
             <input class="height" v-model="shadingHeight"> ft
-        </span>
-        <span>
+        </div>
+        <div class="control-button">
           <a @click="expandSpaceTypes = true">
             <create-speed class="button tree-button"/>Space Type
           </a>
@@ -93,11 +93,9 @@
               <option value="Retail-4">Retail-2</option>
             </select>
           </div>
-        </span>
-      </div>
-      <div class="area-info">
-        <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
-        <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+        </div>
+          <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
+          <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
       </div>
     </div>
 </template>
@@ -352,6 +350,7 @@ export default {
   width: 85%;
   align-content: center;
   overflow-y: scroll;
+  height: 60%;
 }
 
 ol.tree, ol.tree ol{
@@ -404,28 +403,38 @@ ol.tree li:last-child:before {
 }
 
 .controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 25%;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-items: center !important;
+  justify-content: center !important;
+  align-items: center !important;
   color: black !important;
-  padding: 5%;
+  width: 100%;
   a {
     color: black;
   }
+  div:nth-child(5), div:nth-child(6) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-self: flex-end;
+    min-width: 100%;
+    margin: 1%;
+    align-items: center;
+    .area {
+      background-color: white;
+      padding: 1% 5% 1% 5%;
+      border: 2px solid gray;
+    }
+  }
+}
+.control-button {
+  width: 40%;
+  padding-top: 3%;
 }
 
-.area-info {
-  display: flex;
-  flex-direction: column;
-  margin-left: 25%;
-}
 
-.area {
-  background-color: white;
-  padding-left: 5%;
-  padding-right: 5%;
-}
 
 .building {
   max-height: 20px;
@@ -444,8 +453,7 @@ img {
 }
 
 .height {
-  max-width: 5%;
-  margin-top: 5%;
+  max-width: 10%;
   margin-left: 1%;
 }
 
