@@ -101,8 +101,11 @@ export default {
   },
 
   allSpacesArea(state, getters, rootState, rootGetters) {
+    debugger;
     const faces = getFaces('spaces', rootState, rootGetters);
+    console.log(faces)
     const areaList = getArea(faces, 'spaces', rootState);
+    console.log(areaList)
     return areaList;
   },
 };

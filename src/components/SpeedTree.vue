@@ -207,6 +207,8 @@ export default {
       console.log(e);
     },
     treeSpaceArea(id) {
+      console.log(id)
+      console.log(this.spacesArea)
       if (!this.spacesArea) return '0';
       if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
       return Math.abs(this.spacesArea[id]);
@@ -229,8 +231,12 @@ export default {
     },
     // REPEATED
     subselectionType: {
-      get() { return this.$store.state.application.currentSelections.subselectionType; },
-      set(sst) { this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); },
+      get() { 
+        return this.$store.state.application.currentSelections.subselectionType; 
+        },
+      set(sst) { 
+        this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); 
+        },
     },
     // REPEATED
     createObject(object) {

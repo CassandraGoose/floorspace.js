@@ -688,6 +688,7 @@ export function replaceIdsForCloning(newStory) {
     idMap[face.id] = newID;
     face.id = newID;
   });
+  console.log('is spaces here', clonedGeometry.faces);
   return { clonedGeometry, idMap };
 }
 

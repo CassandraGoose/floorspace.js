@@ -396,6 +396,6 @@ export default {
   },
   cloneStory(context, payload) {
     const currentStory = context.rootGetters['application/currentStory'];
-    context.commit('cloneObjectArray', { payload, currentStoryId: currentStory.id });
+    context.commit('cloneObjectArray', { storyInfo: payload, currentStoryId: currentStory.id });
   },
 };
