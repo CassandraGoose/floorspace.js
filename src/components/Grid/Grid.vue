@@ -14,8 +14,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     class="grid"
   >
     <svg ref="grid" :id="svgGridId">
-      <g :class="`axis axis--x`"></g>
-      <g :class="`axis axis--y `"></g>
+      <g class="axis axis--x"></g>
+      <g class="axis axis--y"></g>
       <g class="images" data-transform-plz></g>
       <g class="polygons" data-transform-plz></g>
       <g class="walls" data-transform-plz></g>

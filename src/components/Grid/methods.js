@@ -1246,7 +1246,6 @@ export default {
         rwuRange: [this.min_y, this.max_y],
       },
     });
-
     this.calcGrid();
 
     // It took me some time to figure out why this line is necessary. It fixes a problem
@@ -1259,7 +1258,7 @@ export default {
     // to force this to happen immediately.
     this.nullTransform();
 
-    this.draw()
+    this.draw();
   },
   reloadGridAndScales() {
     this.zoomXScale = null;
@@ -1294,7 +1293,7 @@ export default {
       fontSize = '14px';
     svg.attr('height', height)
       .attr('width', width);
-    this.axis.x = svg.selectAll('axis--x').data([undefined]);
+    this.axis.x = svg.selectAll('g.axis--x').data([undefined]);
 
     this.axis.x = this.axis.x.merge(
       this.axis.x.enter().append('g').attr('class', 'axis axis--x'),
@@ -1303,7 +1302,7 @@ export default {
     .style('font-size', fontSize)
     .style('display', this.gridVisible ? 'inline' : 'none');
 
-    this.axis.y = svg.selectAll('axis--y')
+    this.axis.y = svg.selectAll('g.axis--y')
       .data([undefined]);
 
     this.axis.y = this.axis.y.merge(
