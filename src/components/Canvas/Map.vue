@@ -19,8 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <button @click="finishSetup">Done</button>
         </div>
 
-        <!-- turn back on when ready -->
-        <!-- <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal> -->
+        <map-modal :modal="modal" v-if="mapModalVisible && !mapInitialized" @close="mapModalVisible = false; showReticle()"></map-modal>
         <svg id="reticle"></svg>
     </div>
 </template>
@@ -161,7 +160,7 @@ export default {
       const resolution = ol.proj.getPointResolution(this.view.getProjection(), this.view.getResolution(), this.view.getCenter());
       const scale = this.startResolution / resolution;
       console.log(`scaling to ${this.startResolution} / ${resolution} == ${scale}`);
-      this.$root.$options.eventBus.eventBus.$emit('scaleTo', scale);
+      this.$root.$options.eventBus.$emit('scaleTo', scale);
 
       this.rotation = this.view.getRotation();
 
