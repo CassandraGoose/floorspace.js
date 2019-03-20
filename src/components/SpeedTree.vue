@@ -1,5 +1,5 @@
 <template>
-  <div id="speedNavigation">
+  <div id="speedNavigation" :class="{'adjusted-font': adjustSizing}">
     <div class="tree-container">
     <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" v-for="(story, i) in this.stories" :key="i">
@@ -14,7 +14,7 @@
         </li>
       <div v-if="expanded.includes(i)">
         <ol v-for="(space, j) in story.spaces" :key="j">
-          <li class="space-li">
+          <li class="space-li" id="floorspace-spaces-li">
             <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><speed-collapse class="button tree-button"/></a>
             <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
@@ -34,7 +34,7 @@
       </div>
       <div v-if="expanded.includes(i)">
         <ol v-for="(shading, k) in story.shading" :key="k">
-          <li class="space-li">
+          <li class="space-li" id="floorspace-shade-li">
             <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><speed-collapse class="button tree-button"/></a>
             <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
@@ -126,6 +126,7 @@ export default {
       spaceType: null,
       expandSpaceTypes: false,
       shadingExpanded: [],
+      adjustSizing: false,
     };
   },
   computed: {
@@ -302,6 +303,9 @@ export default {
   mounted() {
     this.$store.dispatch('project/setMapEnabled', { enabled: true });
     this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
+    this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
+      this.adjustSizing = bool;
+    });
   },
   watch: {
     // REPEATED
@@ -322,8 +326,13 @@ export default {
 <style lang="scss" scoped>
 @import "./../scss/main.scss";
 
+* {
+  margin: 0px; 
+}
+
 #speedNavigation {
   height: 100%;
+  width: 100%;
   font-size: 75%;
   display: flex;
   flex-direction: column;
@@ -418,15 +427,15 @@ ol.tree li:last-child:before {
       background-color: white;
       padding: 1% 5% 1% 5%;
       border: 2px solid gray;
+      min-width: 20px;
     }
   }
 }
+
 .control-button {
   width: 40%;
   padding-top: 3%;
 }
-
-
 
 .building {
   max-height: 20px;
@@ -465,6 +474,14 @@ img {
 
 svg.button.tree-button {
   width: 1.5rem;
+}
+
+#floorspace-spaces-li, #floorspace-shade-li {
+  height: initial !important;
+}
+
+.adjust-font {
+  font-size: 90%;
 }
 
 </style>

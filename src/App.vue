@@ -6,11 +6,16 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 <template>
   <div id="app"
-    :class="`tool_${tool.toLowerCase()}`">
+    :class="[`tool_${tool.toLowerCase()}`, 'floorspace-app']">
       <toolbar :class="{ 'disabled-component': tool === 'Map' }"></toolbar>
       
+          <!-- :class="['speed-navigation', { 'disabled-component': tool === 'Map' }, {'adjusted-panel': adjustSizing}]" -->
       <navigation
-          :class="['speed-navigation', { 'disabled-component': tool === 'Map' }]"
+          :class="{
+            'speed-navigation': true,
+            'disabled-component': tool === 'Map',
+            'adjusted-panel': adjustSizing
+          }"
           @expanded="(val) => { navigationExpanded = val; }"
         ></navigation>
       <div id="layout-main" :class="{ 'nav-on-top': navigationExpanded }">
@@ -51,6 +56,7 @@ export default {
       error: null,
       success: null,
       navigationExpanded: false,
+      adjustSizing: false,
     };
   },
   beforeCreate() {
@@ -63,6 +69,10 @@ export default {
     this.$root.$options.eventBus.$on('updateLatLong', (data) => {
       this.$store.dispatch('project/setMapLatitude', { latitude: data.lat });
       this.$store.dispatch('project/setMapLongitude', { longitude: data.long });
+    });
+    this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
+      this.adjustSizing = bool;
+      console.log(this.adjustSizing);
     });
     this.$root.$options.eventBus.$on('error', (err) => {
       this.error = err;
@@ -79,7 +89,7 @@ export default {
     });
 
     document.addEventListener('keydown', (e) => {
-      if (!this.$store.timetravel){
+      if (!this.$store.timetravel) {
         return;
       }
       if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
@@ -155,6 +165,11 @@ export default {
     &.error p {
       background: $secondary;
     }
+}
+
+.adjusted-panel {
+  width: 43% !important;
+  font-size: 90% !important;
 }
 
 </style>

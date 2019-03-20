@@ -94,9 +94,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           @change="updateUnits"
         />
         <div class="speed-coordinates-container">
-          <div class="speed-coordinates">X: {{xCrossHair}}</div>
-          <div class="speed-coordinates">Y: {{yCrossHair}}</div>
-          <div class="speed-coordinates">Z: 0.0</div>
+          <div>
+            <div class="speed-coordinates"><p>X: {{xCrossHair}}</p></div>
+            <div class="speed-coordinates"><p>Y: {{yCrossHair}}</p></div>
+            <div class="speed-coordinates"><p>Z: 0.0</p></div>
+          </div>
         </div>
         <div class="speed-none" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />

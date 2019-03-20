@@ -491,7 +491,7 @@ div[id^='grid'] {
   }
 
   svg[id^='svg'] {
-    top: -5rem;
+    // top: -5rem;
   }
 
   svg {
