@@ -86,9 +86,9 @@ function start(browser) {
   return failOnError(withScales(browser))
     .url(browser.globals.devServerURL)
     .resizeWindow(1000, 800)
-    .waitForElementVisible('.modal .new-floorplan', 5000)
+    .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
     .setFlagOnError()
-    .click('.modal .new-floorplan svg')
+    .click('.floorspace-modal .new-floorplan svg')
     .getScales();
 }
 

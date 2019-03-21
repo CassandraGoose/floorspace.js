@@ -10,13 +10,13 @@ module.exports = {
     failOnError(browser)
       .url(devServer)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .open-floorplan', 100)
+      .waitForElementVisible('.floorspae-modal .open-floorplan', 100)
       .setFlagOnError();
   },
   'clearing floor to ceiling replaces default, but good changes are preserved': (browser) => {
     const floorToCeiling = '.column__floor_to_ceiling_height input';
     browser
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .click('[data-object-type="stories"] [title="expand"]')
       .clearValue(floorToCeiling)
       .keys(browser.Keys.ENTER)
@@ -31,7 +31,7 @@ module.exports = {
   'clearing space floor to ceiling is allowed': (browser) => {
     const floorToCeiling = '.column__floor_to_ceiling_height input';
     browser
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .click('[data-object-type="spaces"] [title="expand"]')
       .setValue(floorToCeiling, '12')
       .keys(browser.Keys.ENTER)

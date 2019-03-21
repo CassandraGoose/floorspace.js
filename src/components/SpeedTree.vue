@@ -2,30 +2,30 @@
   <div id="speedNavigation" :class="{'adjusted-font': adjustSizing}">
     <div class="tree-container">
     <span><building-speed class="button"/>BUILDING</span>
-    <ol class="tree" v-for="(story, i) in this.stories" :key="i">
+    <ol class="tree" id="tree-container-story" v-for="(story, i) in this.stories" :key="i">
       <li class="story-li">
-        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)"><speed-collapse class="button tree-button"/></a>
-        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)"><speed-expand class="button tree-button"/></a>
-        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }">
+        <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
+        <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story."><speed-expand class="button tree-button"/></a>
+        <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select Story.">
           <story-speed class="button"/>{{story.name}}
         </a>
-        <a @click="cloneStory(story)"><speed-copy class="button"/></a>
-        <a @click="destroyObject('stories', story)"><delete-speed class="button tree-button"/></a>
+        <a @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
+        <a @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
         </li>
       <div v-if="expanded.includes(i)">
-        <ol v-for="(space, j) in story.spaces" :key="j">
+        <ol id="tree-container-space-list" v-for="(space, j) in story.spaces" :key="j">
           <li class="space-li" id="floorspace-spaces-li">
-            <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)"><speed-collapse class="button tree-button"/></a>
-            <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)"><speed-expand class="button tree-button"/></a>
-            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }">
+            <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
+            <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
+            <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
               <SpaceIconSpeed :id="space.id"/>{{space.name}}
-              <a @click="destroyObject('spaces', space)">
+              <a @click="destroyObject('spaces', space)" title="Delete space.">
                 <delete-speed class="button tree-button"/>
               </a>
             </a>
           </li>
-          <div v-if="spaceExpanded.includes(space.id)">
-            <ol class="space-shade-info">
+          <div v-if="spaceExpanded.includes(space.id)" title="Space info.">
+            <ol id="tree-container-space-details" class="space-shade-info">
               <li><span>{{treeSpaceArea(space.id)}} ft²</span></li>
               <li><span>{{space.type}}</span></li>
             </ol>
@@ -33,19 +33,19 @@
         </ol>
       </div>
       <div v-if="expanded.includes(i)">
-        <ol v-for="(shading, k) in story.shading" :key="k">
+        <ol id="tree-container-shade-list" v-for="(shading, k) in story.shading" :key="k">
           <li class="space-li" id="floorspace-shade-li">
-            <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)"><speed-collapse class="button tree-button"/></a>
-            <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)"><speed-expand class="button tree-button"/></a>
-            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }">
+            <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)" title="Collapse shading."><speed-collapse class="button tree-button"/></a>
+            <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)" title="Expand shading."><speed-expand class="button tree-button"/></a>
+            <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
               <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
-            <a @click="destroyObject('shading', shading)">
+            <a @click="destroyObject('shading', shading)" title="Delete shading.">
               <delete-speed class="button tree-button"/>
             </a>  
           </li>
-            <div v-if="shadingExpanded.includes(shading.id)">
-              <ol class="space-shade-info">
+            <div v-if="shadingExpanded.includes(shading.id)" title="Shading info">
+              <ol id="tree-container-shade-details" class="space-shade-info">
                 <li><span>{{treeShadeArea(shading.id)}} ft²</span></li>
               </ol>
             </div>
@@ -54,30 +54,24 @@
     </ol>
     </div>
     <div class="controls">
-      <!-- when all objectTypes are ready, use the v-for below -->
-        <!-- <div v-for="(object, i) in objectTypes" :key="i">
-          <a @click="createObject(object)">
-            <div><AddNew class="button"/>{{object}}</div>
-          </a>
-        </div> -->
-        <div class="control-button">
+        <div class="control-button" title="Create new story">
           <a @click="createObject('Story')">
             <create-speed class="button tree-button"/>Story
           </a>
-          <input class="height" v-model="storyHeight"> ft
+          <input title="Specify height of new story" class="height" v-model="storyHeight"> ft
         </div>
-        <div class="control-button">
+        <div class="control-button" title="Create new space">
           <a @click="createObject('Space')">
             <create-speed class="button tree-button"/>Space
           </a>
         </div>
-        <div class="control-button">
+        <div class="control-button" title="Create new shading.">
           <a @click="createObject('Shading')">
             <create-speed class="button tree-button"/>Shading
           </a>
-            <input class="height" v-model="shadingHeight"> ft
+            <input class="height" v-model="shadingHeight" title="Specify new shading height"> ft
         </div>
-        <div class="control-button">
+        <div class="control-button" title="Assign type to current space.">
           <a @click="expandSpaceTypes = true">
             <create-speed class="button tree-button"/>Space Type
           </a>
@@ -94,8 +88,8 @@
             </select>
           </div>
         </div>
-          <div>Story Area: <span class="area">{{storyArea}}</span> ft²</div>
-          <div>Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+          <div title="Area of current story.">Story Area: <span class="area">{{storyArea}}</span> ft²</div>
+          <div title="Area of building">Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
       </div>
     </div>
 </template>
@@ -352,6 +346,30 @@ export default {
   align-content: center;
   overflow-y: scroll;
   height: 60%;
+}
+
+.tree-container ol {
+  padding-left: 2%;
+}
+
+#tree-container-story {
+  padding-left: 2%;
+}
+
+#tree-container-space-list {
+  padding-left: 10%;
+}
+
+#tree-container-shade-list {
+  padding-left: 10%;
+}
+
+#tree-container-shade-details {
+  padding-left: 14%;
+}
+
+#tree-container-space-details {
+  padding-left: 14%;
 }
 
 ol.tree, ol.tree ol{

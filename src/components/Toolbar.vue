@@ -27,7 +27,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
         <div id="undo-redo">
           <div title="Undo previous action." class="speed-undo-redo">
-            <tool-undo @click.native="undo" class="button" :class="['speed-flex', { 'disabled' : !timetravelInitialized }]" ></tool-undo>
+            <tool-undo @click.native="undo" title="Undo previous action." class="button" :class="['speed-flex', { 'disabled' : !timetravelInitialized }]" ></tool-undo>
             <undo-svg @click.native="undo" class="button" :class="['speed-none', { 'disabled' : !timetravelInitialized }]"></undo-svg>
           </div>
           <div title="redo">
@@ -63,7 +63,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </ul>
 
       <div id="grid-settings" class="speed-grid-settings">
-        <div class="speed-north-axis">
+        <div class="speed-north-axis" title="North axis">
           <div>N</div> <div>{{Math.round(northAxis * 100) / 100}}</div>
         </div>
         <div class="input-checkbox" title="Toggle previous story visability.">
@@ -93,7 +93,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           :value="rwUnits"
           @change="updateUnits"
         />
-        <div class="speed-coordinates-container">
+        <div class="speed-coordinates-container" title="Coordinates of mouse on grid.">
           <div>
             <div class="speed-coordinates"><p>X: {{xCrossHair}}</p></div>
             <div class="speed-coordinates"><p>Y: {{yCrossHair}}</p></div>

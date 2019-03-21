@@ -9,7 +9,7 @@ module.exports = {
     failOnError(browser)
       .url(browser.globals.devServerURL)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
       .execute(() => {
         window.application.$store.state.geometry[0].vertices.splice(1);
@@ -19,9 +19,9 @@ module.exports = {
   },
   'make space and new story': (browser) => {
     withScales(failOnError(browser))
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales() // assigns to client.xScale, client.yScale.
       // unfortunately, it does so asyncronously, so we have to use .perform()
       // if we want to access them.
@@ -39,9 +39,9 @@ module.exports = {
   },
   'fill space to next story': (browser) => {
     withScales(failOnError(browser))
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales()
       .perform(draw50By50Square)
       .click('[data-object-type="stories"] .add-new')
@@ -59,9 +59,9 @@ module.exports = {
   },
   'in-progress spaces should not capture clicks': (browser) => {
     withScales(failOnError(browser))
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales()
       .perform((client, done) => {
         const x0 = -50, y0 = 50;
@@ -91,9 +91,9 @@ module.exports = {
     failOnError(browser)
       .url(devServer)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .click('.editable-select-list .controls select option[value="shading"]')
       .click('.editable-select-list .controls select option[value="spaces"]')
       .assert.elementCount('[data-object-type="spaces"] .active', 1)
@@ -106,9 +106,9 @@ module.exports = {
     failOnError(browser)
       .url(devServer)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .click('[data-object-type="spaces"] .add-new')
       .click('[data-object-type="spaces"] .add-new')
        // choose the second one
@@ -127,9 +127,9 @@ module.exports = {
     failOnError(browser)
       .url(devServer)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .click('[data-object-type="spaces"] .add-new')
       .assert.elementCount('[data-object-type="spaces"] .rows > div:nth-child(2).active', 1)
       .checkForErrors()
@@ -137,9 +137,9 @@ module.exports = {
   },
   'no text for empty polygons': (browser) => {
     withScales(failOnError(browser))
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales() // assigns to client.xScale, client.yScale.
       // unfortunately, it does so asyncronously, so we have to use .perform()
       // if we want to access them.
@@ -167,9 +167,9 @@ module.exports = {
     failOnError(browser)
       .url(devServer)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .click('.editable-select-list .controls select option[value="images"]')
       .click('[data-object-type="stories"] .add-new')
       .assert.value('#navigation .editable-select-list .controls select', 'images')
@@ -178,9 +178,9 @@ module.exports = {
   },
   'split then cover edge has weird slanty thing': (browser) => {
     withScales(failOnError(browser))
-      .waitForElementVisible('.modal .new-floorplan', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales()
       .perform(draw50By50Square)
       .click('.tools [data-tool="Rectangle"]')

@@ -5,9 +5,9 @@ module.exports = {
   tags: ['performance'],
   setUp: (browser) => {
     withScales(failOnError(browser))
-    .waitForElementVisible('.modal .new-floorplan svg', 5000)
+    .waitForElementVisible('.floorspace-modal .new-floorplan svg', 5000)
     .setFlagOnError()
-    .click('.modal .new-floorplan svg')
+    .click('.floorspace-modal .new-floorplan svg')
     .getScales();
   },
   'lotsa floors': (browser) => {

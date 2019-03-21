@@ -95,7 +95,7 @@ export default {
 @import "./../../scss/config";
 @import "./../../scss/main.scss";
 
-.settings-modal .modal {
+.settings-modal .floorspace-modal {
   width: 260px;
 }
 

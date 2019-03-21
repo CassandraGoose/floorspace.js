@@ -7,8 +7,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 <template>
 <aside>
-    <div class="overlay"></div>
-    <div class="modal" :style="modal">
+    <div class="floorspace-overlay"></div>
+    <div id="speed-modal" class="floorspace-modal" :style="modal">
         <header>
             <h2>Quickstart</h2>
         </header>
@@ -100,7 +100,7 @@ export default {
 @import "./../../scss/config";
 @import "./../../scss/main.scss";
 
-.modal {
+.floorspace-modal {
     width: 35rem;
     background: #CCCCCC;
     header h2 {
@@ -139,6 +139,31 @@ export default {
     height: 4rem;
     width: 4rem;
   }
+}
+
+#speed-modal {
+  text-align: center !important;
+  height: 400px !important;
+}
+
+#speed-modal > div > p:nth-child(1) > a > div.title {
+  height: 100px !important;
+}
+
+#speed-modal > div > p:nth-child(2) > a > div.title {
+  height: 100px !important;
+}
+
+#import > div.title {
+  height: 100px !important;
+}
+
+#speed-modal > div > p > a {
+  text-align: center !important;
+}
+
+#speed-modal > div > p {
+  text-align: center !important;
 }
 
 </style>

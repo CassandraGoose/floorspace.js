@@ -5,9 +5,9 @@ module.exports = {
   tags: ['components', 'doors'],
   setUp: (browser) => {
     withScales(failOnError(browser))
-      .waitForElementVisible('.modal .new-floorplan svg', 5000)
+      .waitForElementVisible('.floorspace-modal .new-floorplan svg', 5000)
       .setFlagOnError()
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales() // assigns to client.xScale, client.yScale.
       // unfortunately, it does so asyncronously, so we have to use .perform()
       // if we want to access them.

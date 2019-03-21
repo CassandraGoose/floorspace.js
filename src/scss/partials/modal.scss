@@ -1,6 +1,6 @@
 @import '../config.scss';
 
-.overlay {
+.floorspace-overlay {
     background-color: $gray-darkest;
     height: 100%;
     left: 0;
@@ -10,7 +10,7 @@
     width: 100%;
     z-index: 4;
 }
-.modal {
+.floorspace-modal {
     background-color: $gray-medium;
     border: 1px solid $gray-medium-light;
     border-radius: 1rem;

@@ -2,10 +2,6 @@ body {
   height: 100vh;
 }
 
-.graphSection div {
-    height: initial !important;
-}
-
 .tool_rectangle, .tool_polygon, .tool_eraser {
   height: 100%;
 }
@@ -190,3 +186,19 @@ body {
   top: 3rem !important;
 }
 
+#speed-modal {
+  text-align: center !important;
+  height: 400px !important;
+}
+
+#speed-modal > div > p:nth-child(1) > a > div.title {
+  height: 100px !important;
+}
+
+#speed-modal > div > p:nth-child(2) > a > div.title {
+  height: 100px !important;
+}
+
+#import > div.title {
+  height: 100px !important;
+}

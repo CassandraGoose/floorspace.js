@@ -51,7 +51,7 @@ module.exports = {
     failOnError(browser)
       .url(devServer)
       .resizeWindow(1000, 800)
-      .waitForElementVisible('.modal .open-floorplan', 100)
+      .waitForElementVisible('.floorspace-modal .open-floorplan', 100)
       .setFlagOnError();
   },
   'import succeeds, export is updated to be valid against schema': (browser) => {
@@ -61,7 +61,7 @@ module.exports = {
           console.log(`testing import, update of ${floorplanPath}`);
           browser
             .refresh()
-            .waitForElementVisible('.modal .open-floorplan', 100)
+            .waitForElementVisible('.floorspace-modal .open-floorplan', 100)
             .setFlagOnError()
             .setValue('#importInput', path.join(__dirname, floorplanPath))
             .waitForElementVisible('.grid svg polygon', 100)
@@ -79,7 +79,7 @@ module.exports = {
   },
   'export is importable': (browser) => {
     withScales(browser)
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales()
       .perform(deleteFloorplan) // delete floorplan so download has correct name
       .perform(draw50By50Square)
@@ -91,7 +91,7 @@ module.exports = {
 
     browser
       .refresh()
-      .waitForElementVisible('.modal .open-floorplan', 100)
+      .waitForElementVisible('.floorspace-modal .open-floorplan', 100)
       .setFlagOnError()
       .setValue('#importInput', exported)
       .waitForElementVisible('.grid svg polygon', 100)
@@ -100,7 +100,7 @@ module.exports = {
   },
   'exported floorplan satisfies schema': (browser) => {
     withScales(browser)
-      .click('.modal .new-floorplan svg')
+      .click('.floorspace-modal .new-floorplan svg')
       .getScales()
       .perform(deleteFloorplan) // delete floorplan so download has correct name
       .perform(draw50By50Square)
