@@ -18,7 +18,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           }"
           @expanded="(val) => { navigationExpanded = val; }"
         ></navigation>
-      <div id="layout-main" :class="{ 'nav-on-top': navigationExpanded }">
+      <div
+        :class="{
+          'layout-main': true,
+          'nav-on-top': navigationExpanded,
+          'adjusted-main': adjustSizing }">
           
 
           <main id="speed-main">
@@ -72,7 +76,6 @@ export default {
     });
     this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
       this.adjustSizing = bool;
-      console.log(this.adjustSizing);
     });
     this.$root.$options.eventBus.$on('error', (err) => {
       this.error = err;
@@ -170,6 +173,10 @@ export default {
 .adjusted-panel {
   width: 43% !important;
   font-size: 90% !important;
+}
+
+.adjusted-main {
+  height: calc(100% - 133px) !important;
 }
 
 </style>

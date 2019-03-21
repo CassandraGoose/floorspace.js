@@ -11,9 +11,10 @@ body {
   background-color: blue;
 }
 
-#layout-main {
+.layout-main {
   left: 30%;
-  top: 2.5rem;
+  top: 2.5rem !important;
+  height: calc(100% - 40px) !important;
 }
 
 #speed-main {
@@ -202,3 +203,4 @@ body {
 #import > div.title {
   height: 100px !important;
 }
+
