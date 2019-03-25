@@ -265,6 +265,7 @@ export default {
           this.$store.dispatch('models/destroyStory', { story: object });
           return;
         case 'spaces':
+        console.log('story', this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)))
           this.$store.dispatch('models/destroySpace', {
             space: object,
             story: this.$store.state.models.stories.find(story => story[type].find(o => o.id === object.id)),

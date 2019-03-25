@@ -53,21 +53,21 @@ export default {
     },
 
     destroySpace (context, payload) {
-        const story = context.state.stories.find(s => s.id === payload.story.id),
-            space = story.spaces.find(s => s.id === payload.space.id);
+      const story = context.state.stories.find(s => s.id === payload.story.id),
+        space = story.spaces.find(s => s.id === payload.space.id);
 
-        context.commit('destroySpace', {
-            space: space,
-            story: story
-        });
-        const face = context.rootGetters['application/currentStoryGeometry'].faces.find(f => f.id === space.face_id);
-        if (face) {
-            // destroy face associated with the space
-            context.dispatch('geometry/destroyFaceAndDescendents', {
-                face: face,
-                geometry_id: context.rootGetters['application/currentStoryGeometry'].id
-            }, { root: true });
-        }
+      context.commit('destroySpace', {
+        space,
+        story,
+      });
+      const face = context.rootState.geometry.find(o => o.id === story.geometry_id).faces.find(f => f.id === space.face_id);
+      if (face) {
+        // destroy face associated with the space
+        context.dispatch('geometry/destroyFaceAndDescendents', {
+          face,
+          geometry_id: story.geometry_id,
+        }, { root: true });
+      }
     },
 
     destroyShading (context, payload) {

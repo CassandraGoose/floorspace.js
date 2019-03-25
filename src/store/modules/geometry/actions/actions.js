@@ -111,7 +111,6 @@ export default {
   */
   destroyFaceAndDescendents(context, payload) {
     const { geometry_id, face } = payload;
-
     const
       geometry = context.state.find(g => g.id === geometry_id),
       // find edges and vertices referenced ONLY by the face being destroyed so that no shared geometry is lost
