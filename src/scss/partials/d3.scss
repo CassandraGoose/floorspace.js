@@ -92,6 +92,7 @@
     }
     .previousStory, .guideLine {
       polygon, rect, path {
+        fill: grey;
         fill-opacity: 0.3;
         z-index: -1;
       }
