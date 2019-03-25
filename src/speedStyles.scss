@@ -184,7 +184,8 @@ body {
 }
 
 #autocomplete {
-  top: 3rem !important;
+  top: 4rem !important;
+  height: initial !important;
 }
 
 #speed-modal {
@@ -204,3 +205,6 @@ body {
   height: 100px !important;
 }
 
+div#help-text {
+  height: initial !important;
+}

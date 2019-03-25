@@ -203,6 +203,11 @@ export default {
     };
     this.$store.dispatch('models/createDaylightingControl', payload);
   },
+  checkPointExists(newPoint) {
+    const match = _.find(this.points, point => (point.x === newPoint.x) && (point.y === newPoint.y));
+    if (match) return true;
+    return false;
+  },
   /*
   * If the grid is clicked when a drawing tool or the eraser tool is active, add a point to the component
   * if the new point completes a face being drawn, save the face
@@ -223,6 +228,23 @@ export default {
 
     // create the point
     const newPoint = snapTarget.type === 'edge' ? snapTarget.projection : snapTarget;
+
+    // remove the point if it is clicked a second time
+    const previousPointClicked = this.checkPointExists(newPoint);
+    if (previousPointClicked) {
+      // const allEllipses = d3.selectAll('ellipse');
+      console.log('points', this.points);
+      // const cx = newPoint.cx
+      // allEllipses.filter(function(d) { return d.cx !== cx })
+      //   ('cx', d => this.rwuToGrid(d.x, 'x'))
+      //   .attr('cy', d => this.rwuToGrid(d.y, 'y')
+      // allEllipses._groups[allEllipses._groups.length - 1].selectAll('.highlight').remove();
+      console.log(this.points);
+      this.points.pop();
+      console.log(this.points);
+      this.drawPoints();
+      return;
+    }
     this.points.push(newPoint);
     this.drawPoints();
     // if the Rectangle or Eraser tool is active and two points have been drawn (to define a rectangle)
@@ -230,7 +252,6 @@ export default {
     if (this.currentTool === 'Eraser' && this.points.length === 2) { this.eraseRectangularSelection(); }
     if (this.currentTool === 'Rectangle' && this.points.length === 2) { this.saveRectangularFace(); }
   },
-
   /*
   * When a mousemove event is triggered on the grid and
   * the 'Rectangle' or 'Polygon' tool is active and a space or shading is selected or the 'Eraser' tool is active
@@ -664,15 +685,13 @@ export default {
     // clear points from the grid
     this.points = [];
   },
-
-
   // ****************** d3 RENDERING ****************** //
   /*
   * render points for the face being drawn, connect them with a guideline
   */
   drawPoints() {
     // remove expired points and guidelines
-    d3.select(this.$refs.gridParent).selectAll('.point-path');
+    d3.select(this.$refs.gridParent).selectAll('.point-path').remove();
     // draw points
     const pointPath = d3.select(this.$refs.grid)
     .selectAll('ellipse.point-path').data(this.points);

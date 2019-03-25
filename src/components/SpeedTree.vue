@@ -1,6 +1,6 @@
 <template>
   <div id="speedNavigation" :class="{'adjusted-font': adjustSizing}">
-    <div class="tree-container">
+    <div id="tree-container">
     <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" id="tree-container-story" v-for="(story, i) in this.stories" :key="i">
       <li class="story-li">
@@ -12,7 +12,7 @@
         <a @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
         <a @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
         </li>
-      <div v-if="expanded.includes(i)">
+      <div id="space-list-div" v-if="expanded.includes(i)">
         <ol id="tree-container-space-list" v-for="(space, j) in story.spaces" :key="j">
           <li class="space-li" id="floorspace-spaces-li">
             <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
@@ -58,7 +58,12 @@
           <a @click="createObject('Story')">
             <create-speed class="button tree-button"/>Story
           </a>
-          <input title="Specify height of new story" class="height" v-model="storyHeight"> ft
+          <input
+            title="Specify height of new story"
+            class="height"
+            v-model="storyHeight"
+            size="3"
+            > ft
         </div>
         <div class="control-button" title="Create new space">
           <a @click="createObject('Space')">
@@ -69,13 +74,18 @@
           <a @click="createObject('Shading')">
             <create-speed class="button tree-button"/>Shading
           </a>
-            <input class="height" v-model="shadingHeight" title="Specify new shading height"> ft
+            <input
+            class="height"
+            v-model="shadingHeight"
+            title="Specify new shading height"
+            size="3"
+            > ft
         </div>
         <div class="control-button" title="Assign type to current space.">
           <a @click="expandSpaceTypes = true">
             <create-speed class="button tree-button"/>Space Type
           </a>
-          <div v-show="expandSpaceTypes">
+          <div class="space-type-select" v-show="expandSpaceTypes">
             <select @change="addSpaceType" size="5">
               <option value="" selected disabled>Space Type</option>
               <option value="Office-Open">Office-Open</option>
@@ -88,8 +98,8 @@
             </select>
           </div>
         </div>
-          <div title="Area of current story.">Story Area: <span class="area">{{storyArea}}</span> ft²</div>
-          <div title="Area of building">Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+          <div class="areas" title="Area of current story.">Story Area: <span class="area">{{storyArea}}</span> ft²</div>
+          <div class="areas" title="Area of building">Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
       </div>
     </div>
 </template>
@@ -172,8 +182,8 @@ export default {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
     addSpaceType(e) {
-      this.$store.commit('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
       this.expandSpaceTypes = false;
+      this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
     },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
@@ -196,16 +206,15 @@ export default {
     shadingCollapse(index) {
       this.shadingExpanded = this.shadingExpanded.filter(item => item !== index);
     },
-    updateStoryHeight(e) {
-      // console.log(e);
-    },
     treeSpaceArea(id) {
       if (!this.spacesArea) return '0';
+      if (!this.spacesArea[id]) return '0';
       if (this.spacesArea[id] < 0) return -(this.spacesArea[id]);
       return Math.abs(this.spacesArea[id]);
     },
     treeShadeArea(id) {
       if (!this.shadingArea) return '0';
+      if (!this.shadingArea[id]) return '0';
       if (this.shadingArea[id] < 0) return -(this.shadingArea[id]);
       return Math.abs(this.shadingArea[id]);
     },
@@ -335,9 +344,12 @@ export default {
   a {
     color: black;
   }
+  div {
+    height: initial;
+  }
 }
 
-.tree-container {
+#tree-container {
   display: flex;
   flex-direction: column;
   align-self: flex-start;
@@ -345,11 +357,11 @@ export default {
   width: 85%;
   align-content: center;
   overflow-y: scroll;
-  height: 60%;
+  height: 60% !important;
 }
 
-.tree-container ol {
-  padding-left: 2%;
+#tree-container ol {
+  padding-left: 8%;
 }
 
 #tree-container-story {
@@ -357,19 +369,19 @@ export default {
 }
 
 #tree-container-space-list {
-  padding-left: 10%;
+  padding-left: 28%;
 }
 
 #tree-container-shade-list {
-  padding-left: 10%;
+  padding-left: 28%;
 }
 
 #tree-container-shade-details {
-  padding-left: 14%;
+  padding-left: 40%;
 }
 
 #tree-container-space-details {
-  padding-left: 14%;
+  padding-left: 40%;
 }
 
 ol.tree, ol.tree ol{
@@ -422,6 +434,7 @@ ol.tree li:last-child:before {
 }
 
 .controls {
+  height: initial !important;
   display: flex !important;
   flex-direction: column !important;
   justify-items: center !important;
@@ -429,30 +442,38 @@ ol.tree li:last-child:before {
   align-items: center !important;
   color: black !important;
   width: 100%;
+  height: 100%;
   a {
     color: black;
   }
   div:nth-child(5), div:nth-child(6) {
+    height: initial !important;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-end;
     align-self: flex-end;
-    min-width: 100%;
-    margin: 1%;
+    min-width: 40%;
+    padding-right: 2%;
     align-items: center;
+    margin-top: 2rem;
     .area {
       background-color: white;
-      padding: 1% 5% 1% 5%;
+      padding: 1% 4% 1% 4%;
       border: 2px solid gray;
-      min-width: 20px;
+      width: 52px;
     }
   }
 }
 
 .control-button {
+  height: initial !important;
   width: 40%;
+  height: 1rem;
   padding-top: 3%;
+  input {
+    min-width: 1.6rem !important;
+  }
 }
 
 .building {
@@ -481,6 +502,7 @@ img {
 }
 
 .input-select select{ 
+  height: initial !important;
   color: white;
   max-width: 75px;
   padding: 0;
@@ -500,6 +522,17 @@ svg.button.tree-button {
 
 .adjust-font {
   font-size: 90%;
+}
+
+.space-type-select {
+  position: absolute;
+  z-index: 900;
+  margin: 1%;
+  min-height: 2rem;
+}
+
+#space-list-div {
+  height: initial !important;
 }
 
 </style>

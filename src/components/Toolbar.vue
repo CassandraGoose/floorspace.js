@@ -97,7 +97,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <div>
             <div class="speed-coordinates"><p>X: {{xCrossHair}}</p></div>
             <div class="speed-coordinates"><p>Y: {{yCrossHair}}</p></div>
-            <div class="speed-coordinates"><p>Z: 0.0</p></div>
+            <div class="speed-coordinates"><p>Z: 0 </p></div>
           </div>
         </div>
         <div class="speed-none" @click="showGroundPropsModal = true" title="settings">
@@ -450,8 +450,8 @@ export default {
   },
   mounted() {
     this.$root.$options.eventBus.$on('coordinateUpdate', (payload) => {
-      this.xCrossHair = payload.x.toFixed(1);
-      this.yCrossHair = payload.y.toFixed(1);
+      this.xCrossHair = payload.x.toFixed(0);
+      this.yCrossHair = payload.y.toFixed(0);
     });
   },
   components: {
