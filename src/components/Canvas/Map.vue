@@ -11,7 +11,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
         <div v-show="tool === 'Map'" id="autocomplete">
             <span class="input-text">
-                <input ref="addressSearch" type="text" placeholder="Search for a location"/>
+                <input ref="addressSearch" v-model="speedProjectLocation" type="text" placeholder="Search for a location"/>
             </span>
         </div>
         <div v-show="tool === 'Map'" id="help-text">
@@ -45,6 +45,7 @@ export default {
       autocomplete: null,
       mapModalVisible: window.api ? window.api.config.showMapDialogOnStart : true,
       showGrid: false,
+      speedProjectLocation: '',
     };
   },
 
@@ -58,6 +59,11 @@ export default {
     this.loadMap();
     ResizeEvents.$on('resize', this.updateMapView);
     this.$root.$options.eventBus.$on('boundsResolved', this.clearStartResolution);
+    this.$root.$options.eventBus.$on('setLocationFloorspace', (data) => {
+      this.speedProjectLocation = data.location;
+      this.latitude = data.latitude;
+      this.longitude = data.longitude;
+    });
   },
 
   /*
@@ -66,6 +72,7 @@ export default {
   beforeDestroy() {
     ResizeEvents.$off('resize', this.updateMapView);
     this.$root.$options.eventBus.$off('boundsResolved', this.clearStartResolution);
+    this.$root.$options.eventBus.$off('setLocationFloorspace');
   },
   methods: {
     clearStartResolution() {
@@ -262,6 +269,9 @@ export default {
     projectView: {
       handler() { this.updateMapView(); },
       deep: true,
+    },
+    speedProjectLocation() {
+      this.updateMapView();
     },
   },
   components: {

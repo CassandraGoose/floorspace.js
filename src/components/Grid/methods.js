@@ -232,16 +232,7 @@ export default {
     // remove the point if it is clicked a second time
     const previousPointClicked = this.checkPointExists(newPoint);
     if (previousPointClicked) {
-      // const allEllipses = d3.selectAll('ellipse');
-      console.log('points', this.points);
-      // const cx = newPoint.cx
-      // allEllipses.filter(function(d) { return d.cx !== cx })
-      //   ('cx', d => this.rwuToGrid(d.x, 'x'))
-      //   .attr('cy', d => this.rwuToGrid(d.y, 'y')
-      // allEllipses._groups[allEllipses._groups.length - 1].selectAll('.highlight').remove();
-      console.log(this.points);
       this.points.pop();
-      console.log(this.points);
       this.drawPoints();
       return;
     }
