@@ -585,6 +585,8 @@ export default {
   * Erase any drawn guidelines
   */
   eraseGuidelines() {
+    console.log(d3.select(this.$refs.gridParent));
+    console.log(d3.select(this.$refs.gridParent).selectAll('.guideline'));
     d3.select(this.$refs.gridParent).selectAll('.guideline').remove();
   },
   /*
@@ -1322,7 +1324,6 @@ export default {
     .attr('stroke-width', strokeWidth)
     .style('font-size', fontSize)
     .style('display', this.gridVisible ? 'inline' : 'none');
-
     // now that the axis g tags exist, call axis_generator on them.
     this.updateGrid();
 
