@@ -19,10 +19,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       <g class="images" data-transform-plz></g>
       <g class="polygons" data-transform-plz></g>
       <g class="walls" data-transform-plz></g>
-    </svg>
-    <svg id="mapScale">
-      <line id="mapScale-line" x1="0" y1="20" x2="240" y2="20" stroke="black" data-transform-plz></line>
-      <g class="axis axis--y" id="mapScale-ticks" v-for="(mapScaleTick, i) in mapScaleTicks" :key="i">
+      <g id="mapScale" text-anchor="middle">
+        <line class="domain" stroke="black" :x1="mapScale.min" :x2="mapScale.max" :y1="mapScale.y" :y2="mapScale.y"></line> 
+        <text :x="mapScale.max + 20" :y="mapScale.y">{{Math.round(mapScale.distance)}} ft</text>
       </g>
     </svg>
   </div>
@@ -40,7 +39,6 @@ import applicationHelpers from './../../store/modules/application/helpers';
 import { ResizeEvents } from '../../components/Resize';
 import drawMethods from './drawing';
 import { expandWindowAlongEdge, windowLocation } from './snapping';
-import MapScale from '../../components/MapScale';
 
 export default {
   name: 'grid',
@@ -59,6 +57,7 @@ export default {
         x: null,
         y: null,
       },
+      mapScale: {},
       reduceTicks: false,
       componentFacingSelection: null,
       transform: { k: 1, x: 0, y: 0 },
@@ -78,9 +77,6 @@ export default {
         '': '#222'
       },
     };
-  },
-  components: {
-    MapScale,
   },
   mounted() {
     // throttle/debounce event handlers
@@ -103,6 +99,10 @@ export default {
 
     this.$root.$options.eventBus.$on('zoomToFit', this.zoomToFit);
     this.$root.$options.eventBus.$on('scaleTo', this.scaleTo);
+
+    this.mapScale = this.mapScaleInfo();
+
+    console.log(this.mapScale);
   },
   beforeDestroy() {
     this.$refs.grid.removeEventListener('reloadGrid', this.reloadGridAndScales);
@@ -146,9 +146,6 @@ export default {
       currentComponentInstance: 'application/currentComponentInstance',
       currentSpaceProperty: 'application/currentSpaceProperty',
     }),
-    mapScaleTicks() {
-      return [{x: 20}, {x: 40}, {x:60}];
-    },
     spacePropertyKey() {
       switch (this.currentSpaceProperty.type) {
         case 'building_units': return 'building_unit_id';
@@ -522,15 +519,5 @@ div[id^='grid'] {
     width: 100%;
     z-index: 2;
   }
-}
-
-#mapScale {
-  height: 4rem;
-  width: 16rem;
-  bottom: 2rem !important;
-  right: 3rem !important;
-  top: auto !important;
-  left: auto !important;
-  z-index: 999;
 }
 </style>

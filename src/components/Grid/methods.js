@@ -585,8 +585,6 @@ export default {
   * Erase any drawn guidelines
   */
   eraseGuidelines() {
-    console.log(d3.select(this.$refs.gridParent));
-    console.log(d3.select(this.$refs.gridParent).selectAll('.guideline'));
     d3.select(this.$refs.gridParent).selectAll('.guideline').remove();
   },
   /*
@@ -1277,6 +1275,7 @@ export default {
     this.zoomYScale = null;
     this.resolveBounds();
     this.renderGrid();
+    this.mapScaleInfo();
   },
   recalcScales() {
     const
@@ -1479,12 +1478,28 @@ export default {
     this.axis.x.call(this.axis_generator.x);
   },
 
+  mapScaleInfo() {
+    const fullWidth = this.xScale.range()[1];
+    const bottom = this.yScale.range()[0];
+    const start = fullWidth - 100 - 60;
+    const stop = fullWidth - 60;
+    const startRWU = this.gridPointToRWU({ x: start, y: bottom - 50 });
+    const stopRWU = this.gridPointToRWU({ x: stop, y: bottom - 50 });
+    return {
+      min: start,
+      max: stop,
+      y: bottom - 50,
+      distance: stopRWU.x - startRWU.x,
+    };
+  },
+
+
   // ****************** SCALING FUNCTIONS ****************** //
 
   /*
   * take a rwu value (from the datastore), find the corresponding coordinates in the svg grid
   */
-  rwuToGrid (rwu, axis) {
+  rwuToGrid(rwu, axis) {
     let scale;
     if (axis === 'x') {
       scale = this.xScale;
