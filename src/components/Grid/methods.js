@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { snapTargets, snapWindowToEdge, snapToVertexWithinFace, findClosestEdge, findClosestWindow, gridSnapTargets, vertexSnapTargets } from './snapping';
 import geometryHelpers, { distanceBetweenPoints, fitToAspectRatio, projectionOfPointToLine } from './../../store/modules/geometry/helpers';
 import modelHelpers from './../../store/modules/models/helpers';
+import map from '../../store/modules/models/libconfig';
 
 function ticksInRange(start, stop, spacing) {
   return _.range(
@@ -770,6 +771,33 @@ export default {
       });
     polygons.call(drag);
   },
+  drawMapScale() {
+    const info = this.mapScaleInfo();
+    const mapScale = d3.select(this.$refs.gridParent).select('#mapScale');
+
+    mapScale.selectAll('line').remove();
+    mapScale.select('text').remove();
+
+    mapScale.append('line')
+      .attr('x1', info.min)
+      .attr('x2', info.max)
+      .attr('y1', info.y)
+      .attr('y2', info.y)
+      .attr('stroke', 'black');
+      
+    mapScale.append('line')
+      .attr('x1', info.min)
+      .attr('x2', info.min)
+      .attr('y1', info.y)
+      .attr('y2', info.y - 6)
+      .attr('stroke', 'black');
+
+    mapScale.append('text')
+      .attr('x', info.max + 10)
+      .attr('y', info.y)
+      .attr('font-size', '8pt')
+      .text(`${Math.round(info.distance)} ft`);
+  },
   /*
   * render saved faces as polygons
   * handle clicks to select faces
@@ -857,6 +885,7 @@ export default {
     this.drawWalls();
     this.drawImages();
     this.raiseOrLowerImages();
+    this.drawMapScale();
 
     const redrawPoints = zoomEnd && this.points.length > 0;
     if (redrawPoints) {
@@ -1275,7 +1304,6 @@ export default {
     this.zoomYScale = null;
     this.resolveBounds();
     this.renderGrid();
-    this.mapScaleInfo();
   },
   recalcScales() {
     const
@@ -1294,6 +1322,7 @@ export default {
   },
   calcGrid() {
     this.recalcScales();
+
     const
       width = this.$refs.gridParent.clientWidth,
       height = this.$refs.gridParent.clientHeight;
@@ -1481,10 +1510,27 @@ export default {
   mapScaleInfo() {
     const fullWidth = this.xScale.range()[1];
     const bottom = this.yScale.range()[0];
-    const start = fullWidth - 100 - 60;
-    const stop = fullWidth - 60;
+    const start = fullWidth - 96 - 100;
+    const stop = fullWidth - 100;
     const startRWU = this.gridPointToRWU({ x: start, y: bottom - 50 });
     const stopRWU = this.gridPointToRWU({ x: stop, y: bottom - 50 });
+    const linearMapScale = d3.scaleLinear().domain([startRWU.x, stopRWU.x]).range([start, stop]);
+    const distanceRWU = Math.round(stopRWU.x - startRWU.x);
+
+    if (distanceRWU % this.spacing !== 0) {
+      const adjustedDistanceRWU = distanceRWU - distanceRWU % this.spacing;
+      const newStartRWU = startRWU.x + distanceRWU % this.spacing;
+      if (Math.round(stopRWU.x - newStartRWU) === adjustedDistanceRWU) {
+        const newStartPix = linearMapScale(newStartRWU);
+        const newStopPix = linearMapScale(stopRWU.x);
+        return {
+          min: newStartPix,
+          max: newStopPix,
+          y: bottom - 50,
+          distance: adjustedDistanceRWU,
+        };
+      }
+    }
     return {
       min: start,
       max: stop,

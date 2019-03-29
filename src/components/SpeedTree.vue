@@ -26,7 +26,7 @@
           </li>
           <div v-if="spaceExpanded.includes(space.id)" title="Space info.">
             <ol id="tree-container-space-details" class="space-shade-info">
-              <li><span>{{treeSpaceArea(space.id)}} ft²</span></li>
+              <li><span>{{Math.round(treeSpaceArea(space.id) * 100) / 100}} ft²</span></li>
               <li><span>{{space.type}}</span></li>
             </ol>
           </div>
@@ -46,7 +46,7 @@
           </li>
             <div v-if="shadingExpanded.includes(shading.id)" title="Shading info">
               <ol id="tree-container-shade-details" class="space-shade-info">
-                <li><span>{{treeShadeArea(shading.id)}} ft²</span></li>
+                <li><span>{{Math.round(treeShadeArea(shading.id) * 100) / 100}} ft²</span></li>
               </ol>
             </div>
         </ol>
@@ -111,12 +111,8 @@ import Library from './Library.vue';
 import AddNew from './../assets/svg-icons/add_new.svg';
 import svgs from './svgs';
 import SpaceIconSpeed from './SpaceIconSpeed.vue';
-import geometryHelpers, { replaceIdsForCloning }from './../store/modules/geometry/helpers';
+import geometryHelpers, { replaceIdsForCloning } from './../store/modules/geometry/helpers';
 import modelHelpers from '../store/modules/models/helpers';
-import createFaceFromPoints from '../store/modules/geometry/actions/createFaceFromPoints';
-import methods from './Grid/methods';
-import idFactory from './../store/utilities/generateId';
-import generateColor from './../store/utilities/generateColor';
 
 export default {
   name: 'SpeedTree',
@@ -125,8 +121,8 @@ export default {
     return {
       expanded: [0],
       spaceExpanded: [],
-      storyHeight: 8,
-      shadingHeight: 8,
+      storyHeight: 10,
+      shadingHeight: 10,
       spaceType: null,
       expandSpaceTypes: false,
       shadingExpanded: [],
@@ -227,16 +223,10 @@ export default {
       this.$store.dispatch('models/cloneStory', clonedStory);
       this.$store.dispatch('geometry/cloneStoryGeometry', clonedGeometry);
     },
-    // REPEATED
     subselectionType: {
-      get() { 
-        return this.$store.state.application.currentSelections.subselectionType; 
-        },
-      set(sst) { 
-        this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); 
-        },
+      get() { return this.$store.state.application.currentSelections.subselectionType; },
+      set(sst) { this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); },
     },
-    // REPEATED
     createObject(object) {
       switch (object) {
         case 'Story':
@@ -258,7 +248,6 @@ export default {
           break;
       }
     },
-    // REPEATED W/O type param... so need to refactor 
     destroyObject(type, object) {
       switch (type) {
         case 'stories':
@@ -309,14 +298,6 @@ export default {
     this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
       this.adjustSizing = bool;
     });
-  },
-  watch: {
-    // REPEATED
-    rows() {
-      if (!(this.selectedObject && _.includes(_.map(this.rows, 'id'), this.selectedObject.id)) && this.rows.length > 0) {
-        this.selectedObject = this.rows[0];
-      }
-    },
   },
   components: {
     Library,
@@ -473,6 +454,7 @@ ol.tree li:last-child:before {
   padding-top: 3%;
   input {
     min-width: 1.6rem !important;
+    margin-bottom: 0 !important;
   }
 }
 
@@ -506,6 +488,10 @@ img {
   color: white;
   max-width: 75px;
   padding: 0;
+}
+
+select {
+  height: initial !important;
 }
 
 .tree-button {
