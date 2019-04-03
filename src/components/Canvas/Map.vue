@@ -270,8 +270,7 @@ export default {
       handler() { this.updateMapView(); },
       deep: true,
     },
-    speedProjectLocation() {
-      this.updateMapView();
+    speedProjectLocation() { this.updateMapView();
     },
   },
   components: {

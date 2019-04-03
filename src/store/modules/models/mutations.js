@@ -49,9 +49,9 @@ export default {
     },
 
     updateSpaceWithData (state, payload) {
-        var space = payload.space;
-        Object.assign(space, payload);
-        delete space.space;
+      var space = payload.space;
+      Object.assign(space, payload);
+      delete space.space;
     },
 
     updateShadingWithData (state, payload) {

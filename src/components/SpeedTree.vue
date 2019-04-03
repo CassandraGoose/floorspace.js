@@ -1,5 +1,5 @@
 <template>
-  <div id="speedNavigation" :class="{'adjusted-font': adjustSizing}">
+  <div id="speedNavigation" :class="{'adjusted-tree': adjustSizing}">
     <div id="tree-container">
     <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" id="tree-container-story" v-for="(story, i) in this.stories" :key="i">
@@ -161,7 +161,7 @@ export default {
       set(val) { this.$store.dispatch('project/setViewMaxY', { max_y: val }); },
     },
     storyArea() {
-      return Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeomDenorm.vertices));
+      return Math.round(Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeomDenorm.vertices)) * 100) / 100;
     },
     buildingArea() {
       let totalArea = 0;
@@ -442,14 +442,14 @@ ol.tree li:last-child:before {
       background-color: white;
       padding: 1% 4% 1% 4%;
       border: 2px solid gray;
-      width: 52px;
+      width: 60px;
     }
   }
 }
 
 .control-button {
   height: initial !important;
-  width: 40%;
+  width: 45%;
   height: 1rem;
   padding-top: 3%;
   input {
@@ -519,6 +519,11 @@ svg.button.tree-button {
 
 #space-list-div {
   height: initial !important;
+}
+
+.adjusted-tree {
+  height: 82vh !important;
+  font-size: 1.1rem !important;
 }
 
 </style>

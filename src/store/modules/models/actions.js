@@ -139,10 +139,10 @@ export default {
     },
 
     updateSpaceWithData (context, payload) {
+
         const space = context.getters.allSpaces.find(s => s.id === payload.space.id),
             validProperties = Object.keys(space),
             cleanedPayload = {};
-
         // remove extra properties from the payload
         for (var key in payload) {
             if (payload.hasOwnProperty(key) && ~validProperties.indexOf(key)) {
@@ -150,7 +150,6 @@ export default {
             }
         }
         cleanedPayload.space = space;
-
         // TODO: validation
         context.commit('updateSpaceWithData', cleanedPayload);
     },
