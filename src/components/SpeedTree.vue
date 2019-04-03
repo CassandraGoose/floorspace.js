@@ -173,6 +173,11 @@ export default {
     spaces() { return this.currentStory.spaces; },
     shading() { return this.currentStory.shading; },
   },
+  watch: {
+    currentStory() {
+      this.expanded.push(this.stories.indexOf(this.currentStory));
+    },
+  },
   methods: {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
@@ -298,6 +303,10 @@ export default {
     this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
     this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
       this.adjustSizing = bool;
+    });
+    this.$store.dispatch('models/destroyShading', {
+      shading: this.currentStory.shading[0],
+      story: this.$store.state.models.stories.find(story => story.shading.find(o => o.id === this.currentStory.shading[0].id)),
     });
   },
   components: {
