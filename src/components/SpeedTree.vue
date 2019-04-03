@@ -10,7 +10,7 @@
           <story-speed class="button"/>{{story.name}}
         </a>
         <a @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
-        <a v-show="currentStory.id == story.id" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
+        <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
         </li>
       <div id="space-list-div" v-if="expanded.includes(i)">
         <ol id="tree-container-space-list" v-for="(space, j) in story.spaces" :key="j">
