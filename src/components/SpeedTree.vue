@@ -10,7 +10,7 @@
           <story-speed class="button"/>{{story.name}}
         </a>
         <a @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
-        <a @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
+        <a v-show="currentStory.id == story.id" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
         </li>
       <div id="space-list-div" v-if="expanded.includes(i)">
         <ol id="tree-container-space-list" v-for="(space, j) in story.spaces" :key="j">
@@ -19,7 +19,7 @@
             <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
             <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
               <SpaceIconSpeed :id="space.id"/>{{space.name}}
-              <a @click="destroyObject('spaces', space)" title="Delete space.">
+              <a v-show="currentSubSelection.id == space.id" @click="destroyObject('spaces', space)" title="Delete space.">
                 <delete-speed class="button tree-button"/>
               </a>
             </a>
@@ -40,7 +40,7 @@
             <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
               <SpaceIconSpeed :id="0" />{{shading.name}}
             </a>
-            <a @click="destroyObject('shading', shading)" title="Delete shading.">
+            <a v-show="currentSubSelection.id == shading.id" @click="destroyObject('shading', shading)" title="Delete shading.">
               <delete-speed class="button tree-button"/>
             </a>  
           </li>
