@@ -48,7 +48,8 @@ export default {
       if (stories.length === 0) {
         context.dispatch('initStory');
       } else {
-        context.dispatch('selectStory', { story: stories[storyIndex - 1] });
+        if (storyIndex - 1 >= 0) context.dispatch('selectStory', { story: stories[storyIndex - 1] });
+        else context.dispatch('selectStory', { story: stories[0] });
       }
     },
 
@@ -396,6 +397,6 @@ export default {
   },
   cloneStory(context, payload) {
     const currentStory = context.rootGetters['application/currentStory'];
-    context.commit('cloneObjectArray', { storyInfo: payload, currentStoryId: currentStory.id });
+    context.commit('cloneObjectArray', { storyInfo: payload, currentStory });
   },
 };

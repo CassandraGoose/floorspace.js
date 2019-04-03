@@ -230,7 +230,6 @@ export default {
       const { clonedStory } = modelHelpers.replaceIdsUpdateInfoForCloning(story, idMap, this.state, this.currentStory);
       this.destroyObject('spaces', this.currentStory.spaces[0]);
       this.$store.dispatch('models/cloneStory', clonedStory);
-      modelHelpers.replaceSpaceNamesForCloning(this.state, 'spaces', this.currentStory);
       this.$store.dispatch('geometry/cloneStoryGeometry', clonedGeometry);
     },
     subselectionType: {

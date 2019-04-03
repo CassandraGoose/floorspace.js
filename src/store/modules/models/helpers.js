@@ -223,7 +223,7 @@ const helpers = {
 
   replaceSpaceNamesForCloning(state, type, story) {
     story.spaces.forEach((space) => {
-      space.name = this.generateName(state.models, type, story);
+      space.name = this.generateName(state, type, story);
     });
   },
 };

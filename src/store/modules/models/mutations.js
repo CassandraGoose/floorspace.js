@@ -171,8 +171,9 @@ export default {
     door[key] = value;
   },
   cloneObjectArray(state, payload) {
-    const newStory = state.stories.find(story => story.id === payload.currentStoryId);
+    const newStory = state.stories.find(story => story.id === payload.currentStory.id);
     newStory['spaces'] = payload.storyInfo['spaces'];
+    helpers.replaceSpaceNamesForCloning(state, 'spaces', payload.currentStory);
     newStory['doors'] = payload.storyInfo['doors'];
     newStory['images'] = payload.storyInfo['images'];
     newStory['windows'] = payload.storyInfo['windows'];
