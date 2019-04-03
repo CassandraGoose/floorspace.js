@@ -120,7 +120,7 @@ export default {
   data() {
     return {
       expanded: [0],
-      spaceExpanded: [],
+      spaceExpanded: [0],
       storyHeight: 10,
       shadingHeight: 10,
       spaceType: null,
@@ -176,6 +176,10 @@ export default {
   watch: {
     currentStory() {
       this.expanded.push(this.stories.indexOf(this.currentStory));
+    },
+    currentSubSelection() {
+      if (this.currentSubSelection.type === 'space') this.spaceExpanded.push(this.currentSubSelection.id);
+      else this.shadingExpanded.push(this.currentSubSelection.id);
     },
   },
   methods: {
