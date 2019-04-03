@@ -192,7 +192,7 @@ export default {
     },
     selectSubItem(item) {
       const parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));
-      console.log(parentStory);
+      if (!parentStory) return;
       this.$store.dispatch('application/setCurrentStoryId', { id: parentStory.id });
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
