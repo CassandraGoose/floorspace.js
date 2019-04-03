@@ -191,6 +191,9 @@ export default {
       this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
     },
     selectSubItem(item) {
+      const parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));
+      console.log(parentStory);
+      this.$store.dispatch('application/setCurrentStoryId', { id: parentStory.id });
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
     storyExpanded(index) {
