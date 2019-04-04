@@ -538,7 +538,7 @@ svg.button.tree-button {
 }
 
 .adjusted-tree {
-  height: 82vh !important;
+  height: 65vh !important;
   font-size: 1.1rem !important;
 }
 

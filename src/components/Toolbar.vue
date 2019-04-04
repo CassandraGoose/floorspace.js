@@ -27,10 +27,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
         <div id="undo-redo">
           <div title="Undo previous action." class="speed-undo-redo">
-            <tool-undo @click.native="undo" title="Undo previous action." class="button" :class="['speed-flex', { 'disabled' : !timetravelInitialized }]" ></tool-undo>
+            <tool-undo @click.native="undo" title="Undo previous action." class="button" :class="{ 'disabled' : !timetravelInitialized }" ></tool-undo>
             <undo-svg @click.native="undo" class="button" :class="['speed-none', { 'disabled' : !timetravelInitialized }]"></undo-svg>
           </div>
-          <div title="redo">
+          <div title="redo" id="redo">
             <redo-svg @click.native="redo" class="button" :disabled="!timetravelInitialized" :class="{ 'disabled' : !timetravelInitialized }"></redo-svg>
           </div>
         </div>
@@ -109,59 +109,57 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     <section id="bottom" :class="[modeTab, 'speed-bottom-toolbar']">
       <template  v-if="modeTab ==='floorplan'">
         <div id="instructions" class="speed-none">Draw a floorplan and import images</div>
-
-        <div id="drawing-tools" class="tools-list tools speed-drawing-tools">
-          <div
-            @click="tool = 'Rectangle'" 
-            data-tool="Rectangle" 
-            title="Place a rectangle on the grid using the cursor."
-            :class="['speed-drawing-tools-button',{ active: tool === 'Rectangle' }]">
-            <tool-draw-rectangle-svg class="button"></tool-draw-rectangle-svg>
+          <div id="drawing-tools" class="tools-list tools speed-drawing-tools">
+            <div
+              @click="tool = 'Rectangle'" 
+              data-tool="Rectangle" 
+              title="Place a rectangle on the grid using the cursor."
+              :class="['speed-drawing-tools-button',{ active: tool === 'Rectangle' }]">
+              <tool-draw-rectangle-svg class="button"></tool-draw-rectangle-svg>
+            </div>
+            <div
+              @click="tool = 'Polygon'" 
+              data-tool="Polygon" 
+              title="Place a polygon on the grid using the cursor." 
+              :class="['speed-drawing-tools-button', { active: tool === 'Polygon' }]">
+              <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
+            </div>
+            <div
+              @click="tool = 'Fill'" 
+              data-tool="Fill" 
+              title="Fill" 
+              :class="['speed-none', { active: tool === 'Fill' }]">
+              <tool-fill-svg class="button"></tool-fill-svg>
+            </div>
+            <div 
+              @click="toggle3D()" 
+              data-tool="3D" 
+              title="Toggle 3D view." 
+              :class="['speed-drawing-tools-button', { active: tool === '3D' }]">
+              <tool-3d-svg class="button"></tool-3d-svg>
+            </div>
+            <div 
+              @click="tool = 'Eraser'" 
+              data-tool="Eraser" 
+              title="Erase a part of your space using the cursor. " 
+              :class="['speed-drawing-tools-button', { active: tool === 'Eraser' }]">
+              <tool-erase-svg class="button"></tool-erase-svg>
+            </div>
+            <!-- remove Select/Move tool -->
+            <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
+              <tool-move-size-svg class="button"></tool-move-size-svg>
+            </div> -->
+            <div 
+              @click="tool = 'Select'" 
+              data-tool="Select" 
+              title="Click to select." 
+              :class="['speed-drawing-tools-button', { active: tool === 'Select' }]">
+              <tool-select-svg class="button"></tool-select-svg>
+            </div>
+            <div @click="setImageTool" data-tool="Image" title="Image" :class="['speed-none', { active: tool === 'Image' }]">
+              <tool-image-svg class="button"></tool-image-svg>
+            </div>
           </div>
-          <div
-            @click="tool = 'Polygon'" 
-            data-tool="Polygon" 
-            title="Place a polygon on the grid using the cursor." 
-            :class="['speed-drawing-tools-button', { active: tool === 'Polygon' }]">
-            <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
-          </div>
-          <div
-            @click="tool = 'Fill'" 
-            data-tool="Fill" 
-            title="Fill" 
-            :class="['speed-none', { active: tool === 'Fill' }]">
-            <tool-fill-svg class="button"></tool-fill-svg>
-          </div>
-          <div 
-            @click="toggle3D()" 
-            data-tool="3D" 
-            title="Toggle 3D view." 
-            :class="['speed-drawing-tools-button', { active: tool === '3D' }]">
-            <tool-3d-svg class="button"></tool-3d-svg>
-          </div>
-          <div 
-            @click="tool = 'Eraser'" 
-            data-tool="Eraser" 
-            title="Erase a part of your space using the cursor. " 
-            :class="['speed-drawing-tools-button', { active: tool === 'Eraser' }]">
-            <tool-erase-svg class="button"></tool-erase-svg>
-          </div>
-          <!-- remove Select/Move tool -->
-          <!-- <div @click="tool = 'Select'" data-tool="Select" title="Select" :class="{ active: tool === 'Select' }">
-            <tool-move-size-svg class="button"></tool-move-size-svg>
-          </div> -->
-          <div 
-            @click="tool = 'Select'" 
-            data-tool="Select" 
-            title="Click to select." 
-            :class="['speed-drawing-tools-button', { active: tool === 'Select' }]">
-            <tool-select-svg class="button"></tool-select-svg>
-          </div>
-          <div @click="setImageTool" data-tool="Image" title="Image" :class="['speed-none', { active: tool === 'Image' }]">
-            <tool-image-svg class="button"></tool-image-svg>
-          </div>
-        </div>
-
       </template>
 
       <template v-if="modeTab === 'components'">

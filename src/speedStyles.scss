@@ -40,7 +40,7 @@ body {
   flex-direction: column;
   left: auto !important;
   top: 0;
-  width: 76%;
+  width: 70%;
   color: white;
   font-size: 12pt;
   height: initial;
@@ -97,9 +97,9 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #24292c;
-  height: 40px;
+  height: 42px;
   text-align: center;
-  width: 40px;
+  width: 42px;
 }
 
 .speed-flex {
@@ -132,11 +132,14 @@ body {
   padding-left: 0;
 }
 
+
 #drawing-tools {
   height: auto;
   flex-direction: column !important;
   align-self: flex-start;
-  height: 40px !important;
+  height: 42px !important;
+  position: absolute;
+  left: -40px;
   svg {
     text-align: center;
     vertical-align: top;
@@ -146,6 +149,23 @@ body {
     text-align: center;
     width: auto;
   }
+}
+
+#redo {
+  display: none !important;
+}
+
+#undo-redo {
+  width: 42px !important;
+}
+
+#undo-redo>div.speed-undo-redo>svg:nth-child(1) {
+  vertical-align: top;
+}
+
+#navigation-head {
+  position: absolute;
+  left: -40px;
 }
 
 .speed-coordinates-container {
