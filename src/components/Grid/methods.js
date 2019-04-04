@@ -718,7 +718,8 @@ export default {
 
     this.deregisterD3Events(polygons);
     if (this.currentTool === 'Select') {
-      this.registerSelectEvents(polygons);
+      this.speedSelectEvent(polygons);
+      // this.registerSelectEvents(polygons);
     } else if (this.currentTool === 'Fill') {
       this.registerFillEvents(polygons);
     }
@@ -736,6 +737,19 @@ export default {
         this.savePolygonFace();
       }
     });
+  },
+  
+  speedSelectEvent(polygons) {
+//HERE
+    const drag = d3.drag()
+      .on('start', (d) => {
+        console.log(d)
+        if (d.previous_story) { return; }
+        // if a face on the current story is clicked while the Select tool is active
+        // lookup its corresponding model (space/shading) and select it
+        this.currentSubSelection = modelHelpers.modelForFace(this.$store.state.models, d.face_id);
+      });
+    polygons.call(drag)
   },
 
   registerSelectEvents(polygons) {
