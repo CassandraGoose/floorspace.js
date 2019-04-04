@@ -97,7 +97,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <div>
             <div class="speed-coordinates"><p>X: {{xCrossHair}}</p></div>
             <div class="speed-coordinates"><p>Y: {{yCrossHair}}</p></div>
-            <div class="speed-coordinates"><p>Z: 0 </p></div>
+            <div class="speed-coordinates"><p>Z: {{heightAtCurrentStoryFloor}} </p></div>
           </div>
         </div>
         <div class="speed-none" @click="showGroundPropsModal = true" title="settings">
@@ -327,9 +327,13 @@ export default {
     currentComponentDefinition() {
       return this.currentComponent.definition;
     },
+    heightAtCurrentStoryFloor() {
+      return this.buildingHeightMap[this.currentStory.id];
+    },
     ...mapGetters({
       currentSpaceProperty: 'application/currentSpaceProperty',
       currentStory: 'application/currentStory',
+      buildingHeightMap: 'application/buildingHeightMap',
     }),
     ...mapState({
       gridId: state => state.application.currentGridId,

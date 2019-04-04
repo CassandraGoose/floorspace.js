@@ -105,4 +105,15 @@ export default {
     const areaList = getArea(faces, 'spaces', rootState);
     return areaList;
   },
+
+  buildingHeightMap(state, getters, rootState) {
+    const stories = rootState.models.stories;
+    const heightMap = {};
+    let fullHeight = 0;
+    stories.forEach((story) => {
+      heightMap[story.id] = fullHeight;
+      fullHeight += story.floor_to_ceiling_height;
+    });
+    return heightMap;
+  },
 };

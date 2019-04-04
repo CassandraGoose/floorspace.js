@@ -496,7 +496,7 @@
 						"null"
 					],
 					"minimum": 0,
-					"default": 8,
+					"default": 10,
 					"si_units": "m",
 					"ip_units": "ft"
 				},
