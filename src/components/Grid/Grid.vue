@@ -325,6 +325,7 @@ export default {
       if (this.points.length === 0) {
         this.eraseGuidelines();
       }
+      this.listenForDeleteLastPoint();
       this.drawPoints();
     },
     transform(newTransform, lastTransform) {
@@ -353,6 +354,13 @@ export default {
             ...proj,
           };
         });
+    },
+    listenForDeleteLastPoint() {
+      d3.select(`#${this.svgGridId}`).on('contextmenu', () => {
+        d3.event.preventDefault();
+        const gridCoord = d3.mouse(this.$refs.grid);
+        this.removeLastDrawnPoint(gridCoord);
+      });
     },
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });

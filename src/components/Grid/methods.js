@@ -204,6 +204,18 @@ export default {
     };
     this.$store.dispatch('models/createDaylightingControl', payload);
   },
+  removeLastDrawnPoint(gridCoords) {
+    const gridPoint = { x: gridCoords[0], y: gridCoords[1] },
+      snapTarget = this.findSnapTarget(gridPoint);
+    const newPoint = snapTarget.type === 'edge' ? snapTarget.projection : snapTarget;
+    const previousPointClicked = this.checkPointExists(newPoint);
+    if (previousPointClicked) {
+      this.points.pop();
+      this.drawPoints();
+    }
+    this.$root.$options.eventBus.$emit('success', 'Deleted last drawn point.');
+  },
+  // see if where the mouse coords are matches where the last point was drawn
   checkPointExists(newPoint) {
     const match = _.find(this.points, point => (point.x === newPoint.x) && (point.y === newPoint.y));
     if (match) return true;
@@ -229,14 +241,6 @@ export default {
 
     // create the point
     const newPoint = snapTarget.type === 'edge' ? snapTarget.projection : snapTarget;
-
-    // remove the point if it is clicked a second time
-    const previousPointClicked = this.checkPointExists(newPoint);
-    if (previousPointClicked) {
-      this.points.pop();
-      this.drawPoints();
-      return;
-    }
     this.points.push(newPoint);
     this.drawPoints();
     // if the Rectangle or Eraser tool is active and two points have been drawn (to define a rectangle)
