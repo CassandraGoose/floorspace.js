@@ -191,7 +191,6 @@ export default {
       this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
     },
     selectSubItem(item) {
-      console.log('hey')
       let parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));
     
       if (!parentStory) parentStory = this.stories.find(story => story.shading.find(shade => shade.id === item.id));

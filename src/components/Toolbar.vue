@@ -289,7 +289,7 @@ export default {
 
       if (file) { reader.readAsText(file); }
     },
-    undo() { this.$store.timetravel.undo(); },
+    undo() { this.$store.timetravel.undo(this.$root.$options.eventBus); },
     redo() { this.$store.timetravel.redo(); },
     updateUnits(val) {
       if (this.allowSettingUnits) {

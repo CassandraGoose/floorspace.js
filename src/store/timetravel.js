@@ -136,7 +136,7 @@ export default {
     });
   },
 
-  undo() {
+  undo(eventBus) {
     if (!this.pastTimetravelStates.length) { return; }
     const { state: replacementState, triggeringAction } = this.pastTimetravelStates.pop();
     const oldAction = this.triggeringAction;
@@ -147,7 +147,7 @@ export default {
     this.triggeringAction = triggeringAction;
     this.store.replaceState(replacementState);
     console.log('undo', replacementState);
-    this.$root.$options.eventBus.$emit('success', `undo ${oldAction}`);
+    eventBus.$emit('success', `undo ${oldAction}`);
   },
 
   redo() {
