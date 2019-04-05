@@ -187,8 +187,8 @@ export default {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
     addSpaceType(e) {
-      this.expandSpaceTypes = false;
       this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
+      this.expandSpaceTypes = false;
     },
     selectSubItem(item) {
       let parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));

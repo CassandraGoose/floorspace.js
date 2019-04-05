@@ -212,8 +212,8 @@ export default {
     if (previousPointClicked) {
       this.points.pop();
       this.drawPoints();
+      this.$root.$options.eventBus.$emit('success', 'Deleted last drawn point.');
     }
-    this.$root.$options.eventBus.$emit('success', 'Deleted last drawn point.');
   },
   // see if where the mouse coords are matches where the last point was drawn
   checkPointExists(newPoint) {

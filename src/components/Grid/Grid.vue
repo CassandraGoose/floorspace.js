@@ -426,12 +426,11 @@ export default {
     },
     polygonsFromGeometry(geometry, extraPolygonAttrs = {}) {
       const
-        geom = geometryHelpers.denormalize(geometry)
+        geom = geometryHelpers.denormalize(geometry);
       const polygons = geom.faces.map((face) => {
         // look up the model (space or shading) associated with the face
-        const
-          model = modelHelpers.modelForFace(this.$store.state.models, face.id),
-          // <polygon> are automatically closed, so no need to repeat start vertex
+        const model = modelHelpers.modelForFace(this.$store.state.models, face.id, this.$store),
+        // <polygon> are automatically closed, so no need to repeat start vertex
           points = face.vertices.slice(0, -1),
           polygon = {
             face_id: face.id,
@@ -455,11 +454,9 @@ export default {
               })),
             ...extraPolygonAttrs,
           };
-
         if (!points.length) {
           return null; // don't render point-less polygons
         }
-
         // if the model is a space, set the polygon's color based on the current mode
         if (model.type === 'space') {
           if (this.currentMode === 'thermal_zones') {
@@ -484,7 +481,6 @@ export default {
         }
         return polygon;
       });
-
       return _.sortBy(_.compact(polygons), 'current');
     }
   },
