@@ -10,7 +10,6 @@ export default {
   initStory(context) {
       const name = helpers.generateName(context.state, 'stories');
       const story = new factory.Story(name);
-
       // create story
       context.commit('initStory', { story });
       // create geometry
@@ -36,6 +35,7 @@ export default {
             shading = new factory.Shading(name);
 
         context.commit('initShading', { story, shading });
+        context.dispatch('application/setCurrentSubSelectionId', { id: shading.id }, { root: true });
     },
 
     destroyStory(context, payload) {
@@ -74,13 +74,12 @@ export default {
     destroyShading (context, payload) {
         const story = context.state.stories.find(s => s.id === payload.story.id),
             shading = story.shading.find(s => s.id === payload.shading.id);
-
+        const face_id = shading.face_id;
         context.commit('destroyShading', {
             shading: shading,
             story: story
         });
-
-        const face = context.rootGetters['application/currentStoryGeometry'].faces.find(f => f.id === shading.face_id);
+        const face = context.rootGetters['application/currentStoryGeometry'].faces.find(f => f.id === face_id);
         if (face) {
             // destroy face associated with the space
             context.dispatch('geometry/destroyFaceAndDescendents', {

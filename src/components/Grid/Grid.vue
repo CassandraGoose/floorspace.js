@@ -427,12 +427,13 @@ export default {
     polygonsFromGeometry(geometry, extraPolygonAttrs = {}) {
       const
         geom = geometryHelpers.denormalize(geometry);
-      const polygons = geom.faces.map((face) => {
+        const polygons = geom.faces.map((face) => {
         // look up the model (space or shading) associated with the face
-        const model = modelHelpers.modelForFace(this.$store.state.models, face.id, this.$store),
+        const model = modelHelpers.modelForFace(this.$store.state.models, face.id);
+        //model comes back undefined.
         // <polygon> are automatically closed, so no need to repeat start vertex
-          points = face.vertices.slice(0, -1),
-          polygon = {
+        const points = face.vertices.slice(0, -1);
+        const polygon = {
             face_id: face.id,
             name: model.name,
             modelType: model.type,

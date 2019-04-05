@@ -236,6 +236,11 @@ export default {
       this.destroyObject('spaces', this.currentStory.spaces[0]);
       this.$store.dispatch('models/cloneStory', clonedStory);
       this.$store.dispatch('geometry/cloneStoryGeometry', clonedGeometry);
+      this.currentStory.shading.forEach((shade) => {
+        this.$store.dispatch('models/destroyShading', {
+          shading: shade, story: this.currentStory,
+        });
+      });
     },
     subselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
@@ -246,9 +251,6 @@ export default {
         case 'Story':
           this.$store.dispatch('models/initStory');
           this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, floor_to_ceiling_height: this.storyHeight });
-          if (this.currentStory.name !== 'Story 1') {
-            this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, shading: [] });
-          }
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });

@@ -16,9 +16,9 @@ export default {
         }), 1);
     },
     destroyShading (state, payload) {
-        payload.story.shading.splice(payload.story.shading.findIndex((s) => {
-            return s.id === payload.shading.id;
-        }), 1);
+      payload.story.shading.splice(payload.story.shading.findIndex((s) => {
+          return s.id === payload.shading.id;
+      }), 1);
     },
     destroyImage (state, payload) {
         payload.story.images.splice(payload.story.images.findIndex((i) => {
@@ -174,6 +174,7 @@ export default {
     const newStory = state.stories.find(story => story.id === payload.currentStory.id);
     newStory['spaces'] = payload.storyInfo['spaces'];
     helpers.replaceSpaceNamesForCloning(state, 'spaces', payload.currentStory);
+    newStory['shading'] = payload.storyInfo['shading'];
     newStory['doors'] = payload.storyInfo['doors'];
     newStory['images'] = payload.storyInfo['images'];
     newStory['windows'] = payload.storyInfo['windows'];

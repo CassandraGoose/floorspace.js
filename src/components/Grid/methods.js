@@ -747,7 +747,6 @@ export default {
 //HERE
     const drag = d3.drag()
       .on('start', (d) => {
-        console.log(d)
         if (d.previous_story) { return; }
         // if a face on the current story is clicked while the Select tool is active
         // lookup its corresponding model (space/shading) and select it

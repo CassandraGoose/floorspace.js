@@ -220,6 +220,13 @@ const helpers = {
       space.face_id = idMap[space.face_id];
       space.color = generateColor('space');
     });
+    clonedStory.shading.forEach((shade) => {
+      const newID = idFactory.generate();
+      idMap[shade.id] = newID;
+      shade.id = newID;
+      shade.name = '';
+      shade.face_id = idMap[shade.face_id];
+    });
     return { clonedStory };
   },
 
