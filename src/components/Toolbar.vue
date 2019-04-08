@@ -305,7 +305,6 @@ export default {
     determineDrawingToolsSize() {
       const newSize = document.getElementById('speedNavigation').getBoundingClientRect().width * 0.15;
       this.drawingToolsSize = `${newSize}px`;
-      console.log('SIZE', this.drawingToolsSize);
     },
   },
   computed: {
