@@ -1,5 +1,5 @@
 <template>
-  <div id="speedNavigation" :class="{'adjusted-tree': adjustSizing}">
+  <div id="speedNavigation" ref="speedNavigation" :class="{'adjusted-tree': adjustSizing}">
     <div id="tree-container">
     <span><building-speed class="button"/>BUILDING</span>
     <ol class="tree" id="tree-container-story" v-for="(story, i) in this.stories" :key="i">
@@ -192,8 +192,9 @@ export default {
     },
     selectSubItem(item) {
       let parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));
-    
-      if (!parentStory) parentStory = this.stories.find(story => story.shading.find(shade => shade.id === item.id));
+      if (!parentStory) {
+        parentStory = this.stories.find(story => story.shading.find(shade => shade.id === item.id));
+      }
       if (!parentStory) return;
       this.$store.dispatch('application/setCurrentStoryId', { id: parentStory.id });
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
@@ -251,6 +252,12 @@ export default {
         case 'Story':
           this.$store.dispatch('models/initStory');
           this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, floor_to_ceiling_height: this.storyHeight });
+          if (this.currentStory.name !== 'Story 1') {
+            this.$store.dispatch('models/destroyShading', {
+              shading: this.currentStory.shading[0],
+              story: this.currentStory,
+            });
+          }
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });
@@ -258,6 +265,7 @@ export default {
         case 'Shading':
           this.$store.dispatch('models/initShading', { story: this.$store.state.models.stories.find(s => s.id === '1') });
           this.$store.dispatch('models/updateShadingWithData', { shading: this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
+          this.selectSubItem(this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1]);
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });
@@ -313,11 +321,13 @@ export default {
     this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
     this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
       this.adjustSizing = bool;
+      this.eventBus.$emit('drawingToolsSizeUpdate');
     });
     this.$store.dispatch('models/destroyShading', {
       shading: this.currentStory.shading[0],
       story: this.$store.state.models.stories.find(story => story.shading.find(o => o.id === this.currentStory.shading[0].id)),
     });
+    this.$root.$options.eventBus.$emit('drawingToolsSizeUpdate');
   },
   components: {
     Library,

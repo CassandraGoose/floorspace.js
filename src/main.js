@@ -9,7 +9,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'babel-polyfill';
 import Vue from 'vue';
-
 import timetravel from './store/timetravel';
 import App from './App.vue';
 import PrettySelect from './components/PrettySelect.vue';

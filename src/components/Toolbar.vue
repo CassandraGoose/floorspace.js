@@ -9,7 +9,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   <nav id="toolbar" class="speed-toolbar">
 
     <section id="top">
-      <div id="navigation-head">
+      <div id="navigation-head" :style="{'width': `${drawingToolsSize}`, 'left': `-${drawingToolsSize}`, 'height': `${drawingToolsSize}`}">
         <div v-if="showImportExport" class="import-export-buttons speed-none">
           <input ref="importLibrary" @change="importDataAsFile($event, 'library')" type="file" />
           <input ref="importInput" @change="importDataAsFile($event, 'floorplan')" type="file" />
@@ -26,8 +26,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </div>
 
         <div id="undo-redo">
-          <div title="Undo previous action." class="speed-undo-redo">
-            <tool-undo @click.native="undo" title="Undo previous action." class="button" :class="{ 'disabled' : !timetravelInitialized }" ></tool-undo>
+          <div title="Undo previous action." class="speed-undo-redo" :style="{'width': `${drawingToolsSize} !important`, 'height': `${drawingToolsSize}`, 'left': `-${drawingToolsSize}`}">
+            <tool-undo @click.native="undo" title="Undo previous action." class="button" :class="{ 'disabled' : !timetravelInitialized }"></tool-undo>
             <undo-svg @click.native="undo" class="button" :class="['speed-none', { 'disabled' : !timetravelInitialized }]"></undo-svg>
           </div>
           <div title="redo" id="redo">
@@ -109,7 +109,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     <section id="bottom" :class="[modeTab, 'speed-bottom-toolbar']">
       <template  v-if="modeTab ==='floorplan'">
         <div id="instructions" class="speed-none">Draw a floorplan and import images</div>
-          <div id="drawing-tools" class="tools-list tools speed-drawing-tools">
+          <div id="drawing-tools" :style="{'width': `${drawingToolsSize}`, 'left': `-${drawingToolsSize}`}" class="tools-list tools speed-drawing-tools">
             <div
               @click="tool = 'Rectangle'" 
               data-tool="Rectangle" 
@@ -243,6 +243,7 @@ export default {
       showGroundPropsModal: false,
       xCrossHair: 0,
       yCrossHair: 0,
+      drawingToolsSize: '40px',
     };
   },
   methods: {
@@ -301,6 +302,11 @@ export default {
       // this.$store.dispatch('changeUnits', { newUnits: val });
     },
     displayNameForMode(mode) { return applicationHelpers.displayNameForMode(mode); },
+    determineDrawingToolsSize() {
+      const newSize = document.getElementById('speedNavigation').getBoundingClientRect().width * 0.15;
+      this.drawingToolsSize = `${newSize}px`;
+      console.log('SIZE', this.drawingToolsSize);
+    },
   },
   computed: {
     latestCreatedCompId() {
@@ -455,6 +461,13 @@ export default {
       this.xCrossHair = payload.x.toFixed(0);
       this.yCrossHair = payload.y.toFixed(0);
     });
+    this.$root.$options.eventBus.$on('drawingToolsSizeUpdate', () => {
+      this.determineDrawingToolsSize();
+    });
+    window.addEventListener('resize', this.determineDrawingToolsSize);
+  },
+  beforeDestory() {
+    window.removeEventListener('resize', this.determineDrawingToolsSize);
   },
   components: {
     PrettySelect,

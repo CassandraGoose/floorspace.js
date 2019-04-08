@@ -96,7 +96,7 @@ body {
 .speed-undo-redo {
   display: flex;
   flex-direction: column;
-  background-color: #24292c;
+  background-color: #585956;
   height: 42px;
   text-align: center;
   width: 42px;
@@ -156,6 +156,7 @@ body {
 }
 
 #undo-redo {
+  float: none !important;
   width: 42px !important;
 }
 
@@ -231,3 +232,12 @@ body {
 div#help-text {
   height: initial !important;
 }
+
+#toolbar #bottom .tools-list > div {
+  background-color: #585956 !important;
+}
+
+#toolbar #bottom .tools-list .active {
+  background-color: black !important;
+}
+
