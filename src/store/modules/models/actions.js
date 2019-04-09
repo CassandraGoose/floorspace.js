@@ -8,17 +8,22 @@ import geometryHelpers from '../geometry/helpers';
 
 export default {
   initStory(context) {
-      const name = helpers.generateName(context.state, 'stories');
-      const story = new factory.Story(name);
-      // create story
-      context.commit('initStory', { story });
-      // create geometry
-      context.dispatch('geometry/initGeometry', { story_id: story.id }, { root: true });
-      // create space and select
-      context.dispatch('initSpace', { story });
-      context.dispatch('initShading', { story });
-      context.dispatch('selectStory', { story });
-    },
+    const name = helpers.generateName(context.state, 'stories');
+    const story = new factory.Story(name);
+    // create story
+    context.commit('initStory', { story });
+    // create geometry
+    context.dispatch('geometry/initGeometry', { story_id: story.id }, { root: true });
+    // create space and select
+    context.dispatch('initSpace', { story });
+    context.dispatch('models/createObjectWithType', { type: 'thermal_zones' }, { root: true });
+    const currentThermalZones = context.rootState.models.library.thermal_zones;
+    // only using below because getters apparently aren't ready the first time we perform this action...
+    const currentSpace = context.rootState.models.stories[context.rootState.models.stories.length - 1].spaces[context.rootState.models.stories[context.rootState.models.stories.length - 1].spaces.length - 1];
+    context.dispatch('updateSpaceWithData', { space: currentSpace, thermal_zone_id: currentThermalZones[currentThermalZones.length - 1] });
+    context.dispatch('initShading', { story });
+    context.dispatch('selectStory', { story });
+  },
 
     initSpace (context, payload) {
       const story = context.state.stories.find(s => s.id === payload.story.id),
