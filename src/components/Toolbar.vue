@@ -64,7 +64,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
       <div id="grid-settings" class="speed-grid-settings">
         <div class="speed-north-axis" title="North axis">
-          <div>N</div> <div>{{Math.round(northAxis * 100) / 100}}</div>
+          <div>N</div> <div>{{Math.round(northAxis)}}</div>
         </div>
         <div class="input-checkbox" title="Toggle previous story visability.">
           <label class="speed-label">STORY BELOW</label>
