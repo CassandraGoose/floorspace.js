@@ -551,9 +551,11 @@ export default {
       return dist ? dist.toFixed(2) : '';
     })
     .classed('guideline guideline-text guideline-dist', true)
-    .attr('font-family', 'sans-serif')
+    .attr('font-family', 'Open Sans')
     .attr('fill', 'red')
     .style('font-size', '1em');
+
+
 
     if (guidelineArea.length > 3) {
       const
@@ -578,7 +580,7 @@ export default {
       .classed('guideline guideline-text guideline-area-text guideLine', true)
       .attr('data-transform-plz', '')
       .attr('text-anchor', 'middle')
-      .attr('font-family', 'sans-serif')
+      .attr('font-family', 'Open Sans')
       .attr('fill', 'red')
       .style('font-size', '1em')
       .raise();
@@ -858,8 +860,8 @@ export default {
       .attr('text-anchor', 'middle')
       .style('font-size', '14px')
       .style('font-weight', 'bold')
-      .attr('font-family', 'sans-serif')
-      .attr('fill', 'red')
+      .attr('font-family', 'Open Sans')
+      .attr('fill', 'black')
       .classed('polygon-text', true);
 
     poly.select('.windows')

@@ -750,7 +750,6 @@ export function drawWall() {
 }
 
 export default function drawMethods({ xScale, yScale, updateImage, selectImage }) {
-
   return {
     drawWindow: drawWindow()
       .xScale(xScale)

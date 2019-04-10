@@ -496,6 +496,7 @@ svg.icon, svg.button {
 }
 
 #toolbar {
+  font-family: 'Open Sans', sans-serif;
   background-color: $black;
   z-index: 4;
   #top {

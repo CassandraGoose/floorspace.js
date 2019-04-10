@@ -27,7 +27,7 @@
           <div v-if="spaceExpanded.includes(space.id)" title="Space info.">
             <ol id="tree-container-space-details" class="space-shade-info">
               <li><span>{{Math.round(treeSpaceArea(space.id) * 100) / 100}} ft²</span></li>
-              <li><span>{{space.type}}</span></li>
+              <li><span>{{getSpaceType(space.space_type_id)}}</span></li>
             </ol>
           </div>
         </ol>
@@ -136,6 +136,7 @@ export default {
       state: state => state,
     }),
     ...mapGetters({
+      currentSpace: 'application/currentSpace',
       currentStoryGeomDenorm: 'application/currentStoryDenormalizedGeom',
       currentStoryGeom: 'application/currentStoryGeometry',
       currentStory: 'application/currentStory',
@@ -201,6 +202,9 @@ export default {
     },
     storyExpanded(index) {
       this.expanded.push(index);
+    },
+    getSpaceType(space_type_id) {
+      return 'undefined';
     },
     storyCollapsed(index) {
       this.expanded = this.expanded.filter(item => item !== index);
@@ -345,12 +349,13 @@ export default {
 }
 
 #speedNavigation {
+  font-family: 'Open Sans', sans-serif;
   height: 100%;
   width: 100%;
   font-size: 75%;
   display: flex;
   flex-direction: column;
-  background-color: #4EACEA;
+  background-color: #0073aa;
   color: black;
   a {
     color: black;

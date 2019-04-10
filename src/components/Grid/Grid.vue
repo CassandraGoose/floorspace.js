@@ -166,7 +166,21 @@ export default {
     currentComponentDefinition() { return this.currentComponent.definition; },
     currentSubSelection: {
       get() { return this.$store.getters['application/currentSubSelection']; },
-      set(item) { this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id }); },
+      set(item) {
+        this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
+        this.styleSelectedFace();
+      //   const that = this;
+      //   d3.select(this.$refs.grid).selectAll('.polygon-text').each(
+      //   function () {
+      //     console.log(this.id, `text-${that.currentSpace.face_id}`);
+      //     if (this.id === `text-${that.currentSpace.face_id}`) {
+      //       d3.select(this).style('text-decoration', 'underline');
+      //     } else {
+      //       d3.select(this).style('text-decoration', 'none');
+      //     }
+      //   },
+      // );
+      },
     },
     currentComponentInstanceId: {
       get() {
@@ -295,7 +309,10 @@ export default {
     spacing() { this.updateGrid(); },
     units() { this.reloadGridAndScales(); },
     currentMode() { this.draw(); },
-    polygons() { this.draw(); },
+    polygons() { 
+      this.draw();
+      this.styleSelectedFace();
+    },
     images() { this.draw(); },
     windowDefs() { this.draw(); },
     doorDefs() { this.draw(); },
@@ -365,6 +382,18 @@ export default {
     selectSubItem(item) {
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
+    styleSelectedFace() {
+        const that = this;
+        d3.select(this.$refs.grid).selectAll('.polygon-text').each(
+        function () {
+          if (this.id === `text-${that.currentSpace.face_id}`) {
+            d3.select(this).style('text-decoration', 'underline').style('font-weight', 'bold');
+          } else {
+            d3.select(this).style('text-decoration', 'none').style('font-weight', 'normal');
+          }
+        },
+      );
+    },
     doorCenterLocs(cursor) {
       return this.currentStory.doors
         .map(w => ({ w, e: _.find(this.denormalizedGeometry.edges, { id: w.edge_id }) }))
@@ -430,7 +459,6 @@ export default {
         const polygons = geom.faces.map((face) => {
         // look up the model (space or shading) associated with the face
         const model = modelHelpers.modelForFace(this.$store.state.models, face.id);
-        //model comes back undefined.
         // <polygon> are automatically closed, so no need to repeat start vertex
         const points = face.vertices.slice(0, -1);
         const polygon = {
@@ -480,7 +508,7 @@ export default {
           }
 
         }
-        return polygon;
+          return polygon;
       });
       return _.sortBy(_.compact(polygons), 'current');
     }
@@ -517,5 +545,10 @@ div[id^='grid'] {
     width: 100%;
     z-index: 2;
   }
+}
+
+.selected-space {
+  color: pink;
+  fill: pink;
 }
 </style>

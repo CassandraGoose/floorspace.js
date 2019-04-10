@@ -101,6 +101,7 @@ export default {
 @import "./../../scss/main.scss";
 
 .floorspace-modal {
+    font-family: 'Open Sans', sans-serif;
     width: 35rem;
     background: #CCCCCC;
     header h2 {
