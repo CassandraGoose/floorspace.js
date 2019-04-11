@@ -3,12 +3,12 @@
     <div id="main-tree-container">
     <span><building-speed class="button"/>BUILDING</span>
       <ol id="first-ol" v-for="(story, i) in this.stories" :key="i">
-        <li class="tree-container">
-          <p>            
+        <li class="tree-container" id="second">
+          <p class="story-p">            
             <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
             <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story."><speed-expand class="button tree-button"/></a>
-            <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select Story.">
-              <story-speed class="button"/>{{story.name}}
+            <a id="story-a" @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select Story.">
+              <story-speed id="story-speed" class="button"/>{{story.name}}
             </a>
             <a v-show="currentStory.id == story.id" @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
             <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
@@ -20,9 +20,9 @@
                   <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
                   <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
                     <SpaceIconSpeed :id="space.id"/>{{space.name}}
-                    <a v-show="currentSubSelection.id == space.id" @click="destroyObject('spaces', space)" title="Delete space.">
-                      <delete-speed class="button tree-button"/>
-                    </a>
+                  </a>
+                  <a v-show="currentSubSelection.id == space.id" @click="destroyObject('spaces', space)" title="Delete space.">
+                    <delete-speed class="button tree-button"/>
                   </a>
                 </p>
                 <div  title="Space info.">
@@ -382,12 +382,14 @@ export default {
 }
 
 div#main-tree-container {
+  font-size: 1rem !important;
   width: 85%;
+  height: 60% !important;
   background-color: white !important;
 }
 
 #first-ol {
-  border-top: 1px solid white;
+  border-top: 3px solid white;
 }
 
 ol, li { 
@@ -397,39 +399,66 @@ ol, li {
 }
 
 ol {
-  padding-left: 1em;
+  padding-left: 1rem;
 }
 
 li {
   padding-left: 1.2rem;
   border: 3px dashed black;
-  border-width: 0 0 1px 1px;
+  border-width: 0 0 3px 3px;
 }
 
 li.tree-container {
   border-bottom: 0px;
 }
 
+li.tree-container > p {
+  vertical-align: bottom;
+}
+
+.story-p {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+#story-a {
+  display: flex;
+  align-items: flex-end;
+  svg {
+    vertical-align: bottom;
+  }
+}
+
+div#main-tree-container #first-ol:last-child  li.tree-container:last-child ol:last-child li.tree-container:last-child {
+  height: 1.8rem;
+}
+
 li p {
   margin: 0;
   background: white;
   position: relative;
-  top: 0.5em;
+  top: 0.75em;
 }
 
 li ol {
-  border-top: 1px dashed black;
+  border-top: 3px dashed black;
   margin-left: -1em;
-  padding-left: 2em;
+  padding-left: 1.6em;
 }
 
 ol li:last-child ol {
   border-left: 3px solid white;
-  margin-left: -17px;
+  margin-left: -17px;  
 }
 
-#speed-collapse, #speed-expand {
+#speed-collapse, #speed-expand, #story-speed, #space-cube {
   vertical-align: bottom !important;
+  background-color: white !important;
+}
+
+#story-speed {
+  margin-bottom: -.25rem !important;
 }
 
 .controls {
