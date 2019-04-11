@@ -169,17 +169,6 @@ export default {
       set(item) {
         this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
         this.styleSelectedFace();
-      //   const that = this;
-      //   d3.select(this.$refs.grid).selectAll('.polygon-text').each(
-      //   function () {
-      //     console.log(this.id, `text-${that.currentSpace.face_id}`);
-      //     if (this.id === `text-${that.currentSpace.face_id}`) {
-      //       d3.select(this).style('text-decoration', 'underline');
-      //     } else {
-      //       d3.select(this).style('text-decoration', 'none');
-      //     }
-      //   },
-      // );
       },
     },
     currentComponentInstanceId: {
@@ -389,7 +378,7 @@ export default {
           if (this.id === `text-${that.currentSpace.face_id}`) {
             d3.select(this).style('text-decoration', 'underline').style('font-weight', 'bold');
           } else {
-            d3.select(this).style('text-decoration', 'none').style('font-weight', 'normal');
+            d3.select(this).style('font-weight', '300').style('text-decoration', 'none');
           }
         },
       );

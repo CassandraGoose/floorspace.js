@@ -9,7 +9,7 @@
         <a @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select Story.">
           <story-speed class="button"/>{{story.name}}
         </a>
-        <a @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
+        <a v-show="currentStory.id == story.id" @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
         <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
         </li>
       <div id="space-list-div" v-if="expanded.includes(i)">
@@ -26,8 +26,8 @@
           </li>
           <div v-if="spaceExpanded.includes(space.id)" title="Space info.">
             <ol id="tree-container-space-details" class="space-shade-info">
-              <li><span>{{Math.round(treeSpaceArea(space.id) * 100) / 100}} ft²</span></li>
-              <li><span>{{getSpaceType(space.space_type_id)}}</span></li>
+              <li :class="{ 'space-detail': currentSubSelection.id === space.id}"><span>{{Math.round(treeSpaceArea(space.id) * 100) / 100}} ft²</span></li>
+              <li :class="{ 'space-detail': currentSubSelection.id === space.id}"><span>{{getSpaceType(space.space_type_id)}}</span></li>
             </ol>
           </div>
         </ol>
@@ -54,32 +54,36 @@
     </ol>
     </div>
     <div class="controls">
-        <div class="control-button" title="Create new story">
-          <a @click="createObject('Story')">
-            <create-speed class="button tree-button"/>Story
-          </a>
-          <input
-            title="Specify height of new story"
-            class="height"
-            v-model="storyHeight"
-            size="3"
-            > ft
-        </div>
-        <div class="control-button" title="Create new space">
-          <a @click="createObject('Space')">
-            <create-speed class="button tree-button"/>Space
-          </a>
-        </div>
-        <div class="control-button" title="Create new shading.">
+        <div class="control-button create-with-input" title="Create new shading.">
           <a @click="createObject('Shading')">
             <create-speed class="button tree-button"/>Shading
           </a>
+          <div>
             <input
             class="height"
             v-model="shadingHeight"
             title="Specify new shading height"
             size="3"
             > ft
+          </div>
+        </div>
+        <div class="control-button create-with-input" title="Create new story">
+          <a @click="createObject('Story')">
+            <create-speed class="button tree-button"/>Story
+          </a>
+          <div>
+            <input
+              title="Specify height of new story"
+              class="height"
+              v-model="storyHeight"
+              size="3"
+              > ft
+          </div>
+        </div>
+        <div class="control-button" title="Create new space">
+          <a @click="createObject('Space')">
+            <create-speed class="button tree-button"/>Space
+          </a>
         </div>
         <div class="control-button" title="Assign type to current space.">
           <a @click="expandSpaceTypes = true">
@@ -98,8 +102,16 @@
             </select>
           </div>
         </div>
-          <div class="areas" title="Area of current story.">Story Area: <span class="area">{{storyArea}}</span> ft²</div>
-          <div class="areas" title="Area of building">Building Area: <span class="area">{{buildingArea}}</span> ft²</div>
+        <div id="area-container">
+          <div class="areas" title="Area of current story."> 
+            <div>Story Area: </div>
+            <div><input size="10" :value="storyArea" readonly/> ft²</div>
+          </div>
+          <div class="areas" title="Area of building">
+            <div>Building Area: </div>
+            <div><input input size="10" :value="buildingArea" readonly/> ft²</div>
+          </div>
+        </div>
       </div>
     </div>
 </template>
@@ -162,14 +174,14 @@ export default {
       set(val) { this.$store.dispatch('project/setViewMaxY', { max_y: val }); },
     },
     storyArea() {
-      return Math.round(Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeomDenorm.vertices)) * 100) / 100;
+      return Math.round(Math.abs(geometryHelpers.areaOfSelection(this.currentStoryGeomDenorm.vertices)));
     },
     buildingArea() {
       let totalArea = 0;
       this.geometry.forEach((geom) => {
         totalArea += Math.abs(geometryHelpers.areaOfSelection(geom.vertices));
       });
-      return Math.round(totalArea * 100) / 100;
+      return Math.round(totalArea);
     },
     spaces() { return this.currentStory.spaces; },
     shading() { return this.currentStory.shading; },
@@ -179,8 +191,10 @@ export default {
       this.expanded.push(this.stories.indexOf(this.currentStory));
     },
     currentSubSelection() {
-      if (this.currentSubSelection.type === 'space') this.spaceExpanded.push(this.currentSubSelection.id);
-      else this.shadingExpanded.push(this.currentSubSelection.id);
+      if (this.currentSubSelection.type === 'space') {
+        this.spaceExpanded = [];
+        this.spaceExpanded.push(this.currentSubSelection.id);
+      } else this.shadingExpanded.push(this.currentSubSelection.id);
     },
   },
   methods: {
@@ -350,6 +364,7 @@ export default {
 
 #speedNavigation {
   font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
   height: 100%;
   width: 100%;
   font-size: 75%;
@@ -406,7 +421,7 @@ ol.tree, ol.tree ol{
 
 ol.tree li {
   color: black;
-  font-weight: bold;
+  font-weight: normal;
   border-left: 1px dotted black;
 }
 
@@ -450,46 +465,71 @@ ol.tree li:last-child:before {
 }
 
 .controls {
+  font-size: 1rem !important;
   height: initial !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-items: center !important;
-  justify-content: center !important;
-  align-items: center !important;
-  color: black !important;
+  color: white !important;
   width: 100%;
-  height: 100%;
   a {
-    color: black;
-  }
-  div:nth-child(5), div:nth-child(6) {
-    height: initial !important;
+    color: white !important;
+  } 
+  #area-container {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    align-self: flex-end;
-    min-width: 40%;
-    padding-right: 2%;
-    align-items: center;
-    margin-top: 2rem;
-    .area {
-      background-color: white;
-      padding: 1% 4% 1% 4%;
-      border: 2px solid gray;
-      width: 60px;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    height: initial !important;
+  }
+  .areas {
+    height: initial !important;
+    display: flex !important;
+    flex-direction: column !important;
+    > div {
+      display: flex;
+      flex-direction: row;
     }
+  }
+  input {
+    background-color: white !important;
+    border: 1px black solid !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    max-width: 100% !important;
+    color: black !important;
+    height: 1rem !important;
+  }
+}
+
+.create-with-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50% !important;
+  > div {
+    display: flex;
+    flex-direction: row;
   }
 }
 
 .control-button {
+  margin-top: 5%;
+  margin-left: 10%;
   height: initial !important;
   width: 45%;
   height: 1rem;
   padding-top: 3%;
   input {
-    min-width: 1.6rem !important;
+    background-color: white;
     margin-bottom: 0 !important;
+    border: 1px black solid !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    max-width: 100% !important;
+    color: black !important;
+    height: 1rem !important;
   }
 }
 
@@ -505,7 +545,11 @@ img {
 
 .selected {
   text-decoration: underline;
-  color: red !important;
+  color: black !important;
+  font-weight: bold;
+}
+
+.selected-details {
   font-weight: bold;
 }
 
@@ -559,6 +603,10 @@ svg.button.tree-button {
 .adjusted-tree {
   height: 65vh !important;
   font-size: 1.1rem !important;
+}
+
+#tree-container-space-details > li.space-detail {
+  font-weight: bold;
 }
 
 </style>

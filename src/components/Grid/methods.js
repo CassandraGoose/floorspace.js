@@ -859,7 +859,7 @@ export default {
       .text(p => p.name)
       .attr('text-anchor', 'middle')
       .style('font-size', '14px')
-      .style('font-weight', 'bold')
+      // .style('font-weight', 'bold')
       .attr('font-family', 'Open Sans')
       .attr('fill', 'black')
       .classed('polygon-text', true);
