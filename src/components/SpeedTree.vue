@@ -2,7 +2,7 @@
   <div id="speedNavigation" ref="speedNavigation" :class="{'adjusted-tree': adjustSizing}">
     <div id="main-tree-container">
     <span><building-speed class="button"/>BUILDING</span>
-      <ol v-for="(story, i) in this.stories" :key="i">
+      <ol id="first-ol" v-for="(story, i) in this.stories" :key="i">
         <li class="tree-container">
           <p>            
             <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
@@ -13,43 +13,43 @@
             <a v-show="currentStory.id == story.id" @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
             <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
           </p>
-          <ol v-for="(space, j) in story.spaces" :key="j">
-            <li class="tree-container">
-              <p>
-                <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
-                <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
-                <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
-                  <SpaceIconSpeed :id="space.id"/>{{space.name}}
-                  <a v-show="currentSubSelection.id == space.id" @click="destroyObject('spaces', space)" title="Delete space.">
-                    <delete-speed class="button tree-button"/>
+            <ol v-for="(space, j) in story.spaces" :key="j">
+              <li class="tree-container" v-if="expanded.includes(i)">
+                <p>
+                  <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
+                  <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
+                  <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
+                    <SpaceIconSpeed :id="space.id"/>{{space.name}}
+                    <a v-show="currentSubSelection.id == space.id" @click="destroyObject('spaces', space)" title="Delete space.">
+                      <delete-speed class="button tree-button"/>
+                    </a>
                   </a>
-                </a>
-              </p>
-              <div v-if="spaceExpanded.includes(space.id)" title="Space info.">
+                </p>
+                <div  title="Space info.">
+                  <ol>
+                    <li v-if="spaceExpanded.includes(space.id)" :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{Math.round(treeSpaceArea(space.id))}} ft²</p></li>
+                    <li v-if="spaceExpanded.includes(space.id)" :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{getSpaceType(space.space_type_id)}}</p></li>
+                  </ol>
+                </div>
+              </li>
+              <div v-for="(shading, k) in story.shading" :key="k">
+              <li class="tree-container">
+                <p>
+                  <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)" title="Collapse shading."><speed-collapse class="button tree-button"/></a>
+                  <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)" title="Expand shading."><speed-expand class="button tree-button"/></a>
+                  <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
+                    <SpaceIconSpeed :id="0" />{{shading.name}}
+                  </a>
+                  <a v-show="currentSubSelection.id == shading.id" @click="destroyObject('shading', shading)" title="Delete shading.">
+                    <delete-speed class="button tree-button"/>
+                  </a>  
+                </p>
                 <ol>
-                  <li :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{Math.round(treeSpaceArea(space.id))}} ft²</p></li>
-                  <li :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{getSpaceType(space.space_type_id)}}</p></li>
+                    <li><p>{{Math.round(treeShadeArea(shading.id))}} ft²</p></li>
                 </ol>
+              </li>
               </div>
-            </li>
-            <div v-for="(shading, k) in story.shading" :key="k">
-            <li class="tree-container">
-              <p>
-                <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)" title="Collapse shading."><speed-collapse class="button tree-button"/></a>
-                <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)" title="Expand shading."><speed-expand class="button tree-button"/></a>
-                <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
-                  <SpaceIconSpeed :id="0" />{{shading.name}}
-                </a>
-                <a v-show="currentSubSelection.id == shading.id" @click="destroyObject('shading', shading)" title="Delete shading.">
-                  <delete-speed class="button tree-button"/>
-                </a>  
-              </p>
-              <ol>
-                  <li><p>{{Math.round(treeShadeArea(shading.id))}} ft²</p></li>
-              </ol>
-            </li>
-            </div>
-          </ol>
+            </ol>
         </li>
         
       </ol>
@@ -382,8 +382,12 @@ export default {
 }
 
 div#main-tree-container {
-  width: 100%;
+  width: 85%;
   background-color: white !important;
+}
+
+#first-ol {
+  border-top: 1px solid white;
 }
 
 ol, li { 
@@ -397,8 +401,8 @@ ol {
 }
 
 li {
-  padding-left: 1em;
-  border: 1px dotted black;
+  padding-left: 1.2rem;
+  border: 3px dashed black;
   border-width: 0 0 1px 1px;
 }
 
@@ -414,14 +418,18 @@ li p {
 }
 
 li ol {
-  border-top: 1px dotted black;
+  border-top: 1px dashed black;
   margin-left: -1em;
   padding-left: 2em;
 }
 
 ol li:last-child ol {
-  border-left: 1px solid white;
+  border-left: 3px solid white;
   margin-left: -17px;
+}
+
+#speed-collapse, #speed-expand {
+  vertical-align: bottom !important;
 }
 
 .controls {
