@@ -108,6 +108,11 @@
               <option value="Retail-10">Retail-10</option>
             </select>
           </div>
+          <div class="project-space-types-div" v-show="expandProjectSpaceTypes">
+            <select v-for="(type, i) in this.projectSpaceTypes" :key="i" class="project-space-types" size="10" @change="addSpaceType">
+                <option value="type">{{type.name}}</option>
+            </select>
+          </div>
         </div>
         <div id="area-container">
           <div class="areas" title="Area of current story."> 
@@ -144,6 +149,7 @@ export default {
       shadingHeight: 10,
       spaceType: null,
       expandSpaceTypes: false,
+      expandProjectSpaceTypes: false,
       shadingExpanded: [],
       adjustSizing: false,
     };
@@ -153,6 +159,7 @@ export default {
       stories: state => state.models.stories,
       geometry: state => state.geometry,
       state: state => state,
+      projectSpaceTypes: state => state.models.library.space_types,
     }),
     ...mapGetters({
       currentSpace: 'application/currentSpace',
@@ -235,9 +242,12 @@ export default {
       this.expandSpaceTypes = false;
     },
     addSpaceTypeToProject(e) {
-      this.$store.dispatch('updatethe whole thing here fren', { type: e.target.value });
+      this.$store.dispatch('models/createObjectWithType', { type: 'space_types' });
+      const recentlyAddedType = this.projectSpaceTypes[this.projectSpaceTypes.length - 1];
+      this.$store.dispatch('models/updateObjectWithData', { object: recentlyAddedType, name: e.target.value });
       this.expandSpaceTypes = false;
-      // this.expandProjectspaceTypes = true;
+      console.log('hey', this.projectSpaceTypes);
+      this.expandProjectSpaceTypes = true;
     },
     selectSubItem(item) {
       let parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));
@@ -645,15 +655,21 @@ svg.button.tree-button {
   font-size: 90%;
 }
 
-.space-type-select-div {
+.space-type-select-div, .project-space-types-div {
   position: absolute;
-  z-index: 900;
+  z-index: 999;
   margin: 1%;
   min-height: 2rem;
 }
 
 .space-type-select {
   background-color: grey !important;
+  width: 14rem !important;
+  font-size: 1rem !important;
+}
+
+.project-space-types {
+  background-color: white !important;
   width: 14rem !important;
   font-size: 1rem !important;
 }
