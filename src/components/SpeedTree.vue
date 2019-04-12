@@ -4,7 +4,6 @@
     <span><building-speed class="button"/>BUILDING</span>
       <ol id="first-ol" v-for="(story, i) in this.stories" :key="i">
         <li class="tree-container" id="second">
-          <!-- <div id="i" v-show="i !== stories.length-1" :class="{'empty-expanded': empty(story), 'empty-collapsed': !empty(story)}"></div> -->
           <p class="story-p">            
             <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
             <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story."><speed-expand class="button tree-button"/></a>
@@ -15,7 +14,7 @@
             <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
           </p>
             <ol :class="{'no-top-border': notTopOl(j)}" v-for="(space, j) in story.spaces" :key="j">
-              <li class="tree-container" v-if="expanded.includes(i)">                
+              <li class="tree-container" v-if="expanded.includes(i)">
                 <p>
                   <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
                   <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
@@ -52,7 +51,7 @@
               </div>
             </ol>
         </li>
-        
+        <div id="i" v-show="i !== stories.length-1" :class="{'empty-expanded': empty(story), 'empty-collapsed': !empty(story)}"></div>              
       </ol>
     </div>
     <div class="controls">
@@ -203,9 +202,29 @@ export default {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
-    // empty(story) {
-    //   return story.spaces.some(space => this.spaceExpanded.includes(space.id) && story.spaces[story.spaces.length - 1].id === space.id);
-    // },
+    empty(story) {
+      // if last space expanded, add the full extra
+      // else if any of the other spaces of a story are expanded, the last space gets small extra
+      let thing3;
+      let thing4;
+      let thing5;
+      const thing1 = story.spaces.some((space) => {
+        // if this space is expanded
+        const thing2 = this.spaceExpanded.includes(space.id);
+        // if this space is the last space
+        thing3 = story.spaces[story.spaces.length - 1].id === space.id;
+        thing4 = story.spaces.filter((filterSpace) => {
+          return filterSpace.id !== story.spaces[story.spaces.length - 1];
+        });
+        thing5 = thing4.some((someSpace) => {
+          return this.spaceExpanded.includes(someSpace.id);
+        });
+        return thing2;
+      });
+      if (thing1 && thing3) return 'last-empty';
+      else if (thing1 && thing3 && thing5) return 'aboved-expanded-last-empty';
+      else return;
+    },
     notTopOl(index) {
       return index !== 0;
     },
@@ -399,27 +418,25 @@ div#main-tree-container {
   border-top: 3px solid white;
 }
 
+.empty-collapsed {
+  position: absolute;
+  height: 1.4rem !important;
+  width: 2px;
+  margin-top: .3rem;
+  margin-left: 2rem;
+  border-left: 3px dashed black;
+  z-index: 99;
+}
 
-// if story is expanded and is not the last one.
-// .empty-collapsed {
-//   position: absolute;
-//   height: 2rem !important;
-//   width: 2px;
-//   margin-top: 5rem;
-//   margin-left: .7rem;
-//   border-left: 3px dashed red;
-//   z-index: 999999999999;
-// }
-
-// .empty-expanded {
-//   position: absolute;
-//   height: 2rem !important;
-//   width: 2px;
-//   margin-top: 8rem;
-//   margin-left: .7rem;
-//   border-left: 3px dashed blue;
-//   z-index: 999999999999;
-// }
+.empty-expanded {
+  position: absolute;
+  height: 1.4rem !important;
+  width: 2px;
+  margin-top: .3rem;
+  margin-left: 2rem;
+  border-left: 3px dashed black;
+  z-index: 99;
+}
 
 .no-top-border {
   border: 0px;
