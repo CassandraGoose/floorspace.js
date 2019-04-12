@@ -203,27 +203,23 @@ export default {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
     empty(story) {
-      // if last space expanded, add the full extra
-      // else if any of the other spaces of a story are expanded, the last space gets small extra
-      let thing3;
-      let thing4;
-      let thing5;
-      const thing1 = story.spaces.some((space) => {
-        // if this space is expanded
-        const thing2 = this.spaceExpanded.includes(space.id);
-        // if this space is the last space
-        thing3 = story.spaces[story.spaces.length - 1].id === space.id;
-        thing4 = story.spaces.filter((filterSpace) => {
+      let thisSpaceLast;
+      let notLastSpaceList;
+      let aboveSpacesExpanded;
+      const someSpacesExpanded = story.spaces.some((space) => {
+        const thisSpaceExpanded = this.spaceExpanded.includes(space.id);
+        thisSpaceLast = story.spaces[story.spaces.length - 1].id === space.id;
+        notLastSpaceList = story.spaces.filter((filterSpace) => {
           return filterSpace.id !== story.spaces[story.spaces.length - 1];
         });
-        thing5 = thing4.some((someSpace) => {
+        aboveSpacesExpanded = notLastSpaceList.some((someSpace) => {
           return this.spaceExpanded.includes(someSpace.id);
         });
-        return thing2;
+        return thisSpaceExpanded;
       });
-      if (thing1 && thing3) return 'last-empty';
-      else if (thing1 && thing3 && thing5) return 'aboved-expanded-last-empty';
-      else return;
+      if (someSpacesExpanded && thisSpaceLast) return 'last-empty';
+      else if (someSpacesExpanded && thisSpaceLast && aboveSpacesExpanded) return 'aboved-expanded-last-empty'
+      return '';
     },
     notTopOl(index) {
       return index !== 0;
@@ -482,7 +478,7 @@ li.tree-container > p {
   }
 }
 
-div#main-tree-container #first-ol:last-child  li.tree-container:last-child ol:last-child li.tree-container:last-child {
+div#main-tree-container #first-ol:last-child li.tree-container:last-child { 
   height: 1.8rem;
 }
 
@@ -514,7 +510,6 @@ ol li:last-child ol {
 }
 
 .controls {
-  z-index: 99;
   font-size: 1rem !important;
   height: initial !important;
   display: flex !important;
