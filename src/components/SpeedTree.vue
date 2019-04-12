@@ -4,6 +4,7 @@
     <span><building-speed class="button"/>BUILDING</span>
       <ol id="first-ol" v-for="(story, i) in this.stories" :key="i">
         <li class="tree-container" id="second">
+          <!-- <div id="i" v-show="i !== stories.length-1" :class="{'empty-expanded': empty(story), 'empty-collapsed': !empty(story)}"></div> -->
           <p class="story-p">            
             <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
             <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story."><speed-expand class="button tree-button"/></a>
@@ -13,8 +14,8 @@
             <a v-show="currentStory.id == story.id" @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
             <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
           </p>
-            <ol v-for="(space, j) in story.spaces" :key="j">
-              <li class="tree-container" v-if="expanded.includes(i)">
+            <ol :class="{'no-top-border': notTopOl(j)}" v-for="(space, j) in story.spaces" :key="j">
+              <li class="tree-container" v-if="expanded.includes(i)">                
                 <p>
                   <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
                   <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
@@ -201,6 +202,12 @@ export default {
   methods: {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
+    },
+    // empty(story) {
+    //   return story.spaces.some(space => this.spaceExpanded.includes(space.id) && story.spaces[story.spaces.length - 1].id === space.id);
+    // },
+    notTopOl(index) {
+      return index !== 0;
     },
     addSpaceType(e) {
       this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
@@ -390,6 +397,32 @@ div#main-tree-container {
 
 #first-ol {
   border-top: 3px solid white;
+}
+
+
+// if story is expanded and is not the last one.
+// .empty-collapsed {
+//   position: absolute;
+//   height: 2rem !important;
+//   width: 2px;
+//   margin-top: 5rem;
+//   margin-left: .7rem;
+//   border-left: 3px dashed red;
+//   z-index: 999999999999;
+// }
+
+// .empty-expanded {
+//   position: absolute;
+//   height: 2rem !important;
+//   width: 2px;
+//   margin-top: 8rem;
+//   margin-left: .7rem;
+//   border-left: 3px dashed blue;
+//   z-index: 999999999999;
+// }
+
+.no-top-border {
+  border: 0px;
 }
 
 ol, li { 
