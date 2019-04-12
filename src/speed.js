@@ -12,7 +12,6 @@ export default function renderTo(el) {
   createStore(eventBus).then((store) => {
     store.subscribeAction(() => {
       const data = store.getters['exportData'];
-      console.log('floorspaceJSON', data);
       eventBus.$emit('sendFloorspaceJSON', data);
     });
 

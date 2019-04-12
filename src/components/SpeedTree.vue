@@ -90,16 +90,22 @@
           <a @click="expandSpaceTypes = true">
             <create-speed class="button tree-button"/>Space Type
           </a>
-          <div class="space-type-select" v-show="expandSpaceTypes">
-            <select @change="addSpaceType" size="5">
+          <div class="space-type-select-div" v-show="expandSpaceTypes">
+            <select class="space-type-select" @change="addSpaceTypeToProject" size="10">
               <option value="" selected disabled>Space Type</option>
               <option value="Office-Open">Office-Open</option>
               <option value="Office-Private">Office-Private</option>
               <option value="Retail-Retail">Retail-Retail</option>
               <option value="Retail-1">Retail-1</option>
               <option value="Retail-2">Retail-2</option>
-              <option value="Retail-3">Retail-1</option>
-              <option value="Retail-4">Retail-2</option>
+              <option value="Retail-3">Retail-3</option>
+              <option value="Retail-4">Retail-4</option>
+              <option value="Retail-5">Retail-5</option>
+              <option value="Retail-6">Retail-6</option>
+              <option value="Retail-7">Retail-7</option>
+              <option value="Retail-8">Retail-8</option>
+              <option value="Retail-9">Retail-0</option>
+              <option value="Retail-10">Retail-10</option>
             </select>
           </div>
         </div>
@@ -227,6 +233,11 @@ export default {
     addSpaceType(e) {
       this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
       this.expandSpaceTypes = false;
+    },
+    addSpaceTypeToProject(e) {
+      this.$store.dispatch('updatethe whole thing here fren', { type: e.target.value });
+      this.expandSpaceTypes = false;
+      // this.expandProjectspaceTypes = true;
     },
     selectSubItem(item) {
       let parentStory = this.stories.find(story => story.spaces.find(space => space.id === item.id));
@@ -634,11 +645,17 @@ svg.button.tree-button {
   font-size: 90%;
 }
 
-.space-type-select {
+.space-type-select-div {
   position: absolute;
   z-index: 900;
   margin: 1%;
   min-height: 2rem;
+}
+
+.space-type-select {
+  background-color: grey !important;
+  width: 14rem !important;
+  font-size: 1rem !important;
 }
 
 #space-list-div {
