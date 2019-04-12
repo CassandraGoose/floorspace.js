@@ -408,14 +408,16 @@ export default {
 }
 
 div#main-tree-container {
+  position: relative;
   font-size: 1rem !important;
   width: 85%;
   height: 60% !important;
   background-color: white !important;
+  overflow: scroll;
 }
 
 #first-ol {
-  border-top: 3px solid white;
+  border-top: 3px solid transparent;
 }
 
 .empty-collapsed {
@@ -425,7 +427,7 @@ div#main-tree-container {
   margin-top: .3rem;
   margin-left: 2rem;
   border-left: 3px dashed black;
-  z-index: 99;
+  z-index: 2;
 }
 
 .empty-expanded {
@@ -435,7 +437,7 @@ div#main-tree-container {
   margin-top: .3rem;
   margin-left: 2rem;
   border-left: 3px dashed black;
-  z-index: 99;
+  z-index: 2;
 }
 
 .no-top-border {
@@ -498,7 +500,7 @@ li ol {
 }
 
 ol li:last-child ol {
-  border-left: 3px solid white;
+  border-left: 3px solid transparent;
   margin-left: -17px;  
 }
 
@@ -512,6 +514,7 @@ ol li:last-child ol {
 }
 
 .controls {
+  z-index: 99;
   font-size: 1rem !important;
   height: initial !important;
   display: flex !important;
