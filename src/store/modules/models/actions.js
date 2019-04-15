@@ -16,23 +16,23 @@ export default {
     context.dispatch('geometry/initGeometry', { story_id: story.id }, { root: true });
     // create space and select
     context.dispatch('initSpace', { story });
-    context.dispatch('models/createObjectWithType', { type: 'thermal_zones' }, { root: true });
-    const currentThermalZones = context.rootState.models.library.thermal_zones;
-    // only using below because getters apparently aren't ready the first time we perform this action...
-    const currentSpace = context.rootState.models.stories[context.rootState.models.stories.length - 1].spaces[context.rootState.models.stories[context.rootState.models.stories.length - 1].spaces.length - 1];
-    context.dispatch('updateSpaceWithData', { space: currentSpace, thermal_zone_id: currentThermalZones[currentThermalZones.length - 1] });
     context.dispatch('initShading', { story });
     context.dispatch('selectStory', { story });
   },
 
-    initSpace (context, payload) {
-      const story = context.state.stories.find(s => s.id === payload.story.id),
-          name = helpers.generateName(context.state, 'spaces', story),
-          space = new factory.Space(name);
+  initSpace(context, payload) {
+    const story = context.state.stories.find(s => s.id === payload.story.id),
+      name = helpers.generateName(context.state, 'spaces', story),
+      space = new factory.Space(name);
 
-      context.commit('initSpace', { story, space });
-      context.dispatch('application/setCurrentSubSelectionId', { id: space.id }, { root: true });
-    },
+    context.commit('initSpace', { story, space });
+    context.dispatch('application/setCurrentSubSelectionId', { id: space.id }, { root: true });
+    context.dispatch('models/createObjectWithType', { type: 'thermal_zones' }, { root: true });
+    const currentThermalZones = context.rootState.models.library.thermal_zones;
+        // only using below because getters apparently aren't ready the first time we perform this action...
+    const currentSpace = context.rootState.models.stories[context.rootState.models.stories.length - 1].spaces[context.rootState.models.stories[context.rootState.models.stories.length - 1].spaces.length - 1];
+    context.dispatch('updateSpaceWithData', { space: currentSpace, thermal_zone_id: currentThermalZones[currentThermalZones.length - 1] });
+  },
 
     initShading (context, payload) {
         const story = context.state.stories.find(s => s.id === payload.story.id),

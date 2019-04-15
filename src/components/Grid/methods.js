@@ -51,6 +51,9 @@ export default {
     if (this.currentTool === 'Apply Property') {
       this.assignProperty();
     }
+    if (this.currentTool === 'Select') {
+      this.assignProperty();
+    }
   },
   assignProperty() {
     if (!this.currentSpaceProperty) { return; }

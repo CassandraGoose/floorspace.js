@@ -91,27 +91,14 @@
             <create-speed class="button tree-button"/>Space Type
           </a>
           <div class="space-type-select-div" v-show="expandSpaceTypes">
-            <select class="space-type-select" @change="addSpaceTypeToProject" size="10">
-              <option value="" selected disabled>Space Type</option>
-              <option value="Office-Open">Office-Open</option>
-              <option value="Office-Private">Office-Private</option>
-              <option value="Retail-Retail">Retail-Retail</option>
-              <option value="Retail-1">Retail-1</option>
-              <option value="Retail-2">Retail-2</option>
-              <option value="Retail-3">Retail-3</option>
-              <option value="Retail-4">Retail-4</option>
-              <option value="Retail-5">Retail-5</option>
-              <option value="Retail-6">Retail-6</option>
-              <option value="Retail-7">Retail-7</option>
-              <option value="Retail-8">Retail-8</option>
-              <option value="Retail-9">Retail-0</option>
-              <option value="Retail-10">Retail-10</option>
-            </select>
+            <ol id="custom-select-type-list" v-for="(type, i) in this.availableTypes" :key="i">
+              <li @click="addSpaceTypeToProject">{{type}}</li>
+            </ol>
           </div>
           <div class="project-space-types-div" v-show="expandProjectSpaceTypes">
-            <select v-for="(type, i) in this.projectSpaceTypes" :key="i" class="project-space-types" size="10" @change="addSpaceType">
-                <option value="type">{{type.name}}</option>
-            </select>
+            <ol id="custom-select-ol" v-for="(type, i) in this.projectSpaceTypes" :key="i" class="project-space-types">
+              <li @click="selectSpaceType(type)"><span :style="{color: typeColor(type.id)}">&block;</span> {{type.name}}</li>
+            </ol>
           </div>
         </div>
         <div id="area-container">
@@ -152,6 +139,8 @@ export default {
       expandProjectSpaceTypes: false,
       shadingExpanded: [],
       adjustSizing: false,
+      selectedSpaceType: null,
+      availableTypes: ['Office-Private', 'Retail-Retail', 'PrimarySchool-Classroom', 'Office-Conference'],
     };
   },
   computed: {
@@ -170,6 +159,7 @@ export default {
       storiesArea: 'application/allStoriesArea',
       spacesArea: 'application/allSpacesArea',
       shadingArea: 'application/allShadingArea',
+      currentSpaceProperty: 'application/currentSpaceProperty',
     }),
     min_x: {
       get() { return this.$store.state.project.view.min_x; },
@@ -215,6 +205,11 @@ export default {
     selectStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
+    typeColor(id) {
+      const type = this.projectSpaceTypes.find(projectType => projectType.id === id);
+      if (!type) return '#FFFFFF';
+      return type.color;
+    },
     empty(story) {
       let thisSpaceLast;
       let notLastSpaceList;
@@ -237,9 +232,10 @@ export default {
     notTopOl(index) {
       return index !== 0;
     },
-    addSpaceType(e) {
-      this.$store.dispatch('models/updateSpaceWithData', { space: this.currentSubSelection, type: e.target.value });
-      this.expandSpaceTypes = false;
+    selectSpaceType(type) {
+      this.selectedSpaceType = type;
+      this.$store.dispatch('application/setCurrentSpacePropertyId', { id: type.id });
+      this.$store.dispatch('application/setCurrentTool', { tool: 'Select' });
     },
     addSpaceTypeToProject(e) {
       this.$store.dispatch('models/createObjectWithType', { type: 'space_types' });
@@ -669,9 +665,65 @@ svg.button.tree-button {
 }
 
 .project-space-types {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   background-color: white !important;
   width: 14rem !important;
+  height: 10rem;
   font-size: 1rem !important;
+  z-index: 9999999999;
+  color: black;
+  cursor: pointer;
+  overflow: scroll;
+}
+
+#space-type-select-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: grey !important;
+  width: 14rem !important;
+  height: 10rem;
+  font-size: 1rem !important;
+  z-index: 9999999999;
+  color: black;
+  cursor: pointer;
+  overflow: scroll;
+}
+
+#custom-select-ol {
+  border: none;
+  padding: 0;
+}
+
+#custom-select-ol li {
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 14rem !important;
+}
+
+#custom-select-ol li:hover {
+  width: 14rem !important;
+  background-color: grey;
+}
+
+#custom-select-type-list {
+  border: none;
+  padding: 0;
+}
+
+#custom-select-type-list li {
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 14rem !important;
+}
+
+#custom-select-type-list li:hover {
+  width: 14rem !important;
+  background-color: white;
 }
 
 #space-list-div {

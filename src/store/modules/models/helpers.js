@@ -168,7 +168,7 @@ const helpers = {
     let prefix = `${map[type].displayName} `;
     if (story) {
       const level = state.stories.findIndex(s => s.id === story.id) + 1;
-      prefix = prefix.concat(`${level} - `);
+      prefix = prefix.concat(`${level}-`);
     }
 
     let name = '';
