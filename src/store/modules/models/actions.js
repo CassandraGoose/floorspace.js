@@ -261,13 +261,12 @@ export default {
     });
   },
 
-    createObjectWithType (context, payload) {
-        const type = payload.type,
-            name = helpers.generateName(context.state, type),
-            object = new helpers.map[type].init({ name });
-
-        context.commit('initObject', { type, object });
-    },
+  createObjectWithType(context, payload) {
+    const type = payload.type,
+      name = helpers.generateName(context.state, type),
+      object = new helpers.map[type].init({ name });
+    context.commit('initObject', { type, object });
+  },
 
   selectStory(context, payload) {
     const story = payload.story;

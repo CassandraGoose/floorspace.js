@@ -7,7 +7,7 @@ export default {
     initShading (state, payload) { payload.story.shading.push(payload.shading); },
 
     initObject (state, payload) {
-        state.library[payload.type].push(payload.object);
+      state.library[payload.type].push(payload.object);
     },
 
     destroySpace (state, payload) {

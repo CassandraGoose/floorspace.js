@@ -70,6 +70,8 @@ export default {
         return geometryHelpers.pointInFace(rwuPoint, face.vertices);
       });
     if (!space) { return; }
+    console.log('key', this.spacePropertyKey);
+    console.log('id', this.currentSpaceProperty.id);
     this.$store.dispatch('models/updateSpaceWithData', {
       space,
       [this.spacePropertyKey]: this.currentSpaceProperty.id,

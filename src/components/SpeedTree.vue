@@ -87,17 +87,17 @@
           </a>
         </div>
         <div class="control-button" title="Assign type to current space.">
-          <a @click="expandSpaceTypes = true">
+          <a @click="toggleSelects">
             <create-speed class="button tree-button"/>Space Type
           </a>
-          <div class="space-type-select-div" v-show="expandSpaceTypes">
+          <div id="space-type-select-div" v-show="expandSpaceTypes">
             <ol id="custom-select-type-list" v-for="(type, i) in this.availableTypes" :key="i">
-              <li @click="addSpaceTypeToProject">{{type}}</li>
+              <li @click="addSpaceTypeToProject(type)">{{type}}</li>
             </ol>
           </div>
           <div class="project-space-types-div" v-show="expandProjectSpaceTypes">
             <ol id="custom-select-ol" v-for="(type, i) in this.projectSpaceTypes" :key="i" class="project-space-types">
-              <li @click="selectSpaceType(type)"><span :style="{color: typeColor(type.id)}">&block;</span> {{type.name}}</li>
+              <li @click="selectSpaceType(type)"><span :style="{color: typeColor(type.id)}">&block; </span> {{type.name}}</li>
             </ol>
           </div>
         </div>
@@ -210,6 +210,10 @@ export default {
       if (!type) return '#FFFFFF';
       return type.color;
     },
+    toggleSelects() {
+      this.expandSpaceTypes = !this.expandSpaceTypes;
+      this.expandProjectSpaceTypes = false;
+    },
     empty(story) {
       let thisSpaceLast;
       let notLastSpaceList;
@@ -237,12 +241,17 @@ export default {
       this.$store.dispatch('application/setCurrentSpacePropertyId', { id: type.id });
       this.$store.dispatch('application/setCurrentTool', { tool: 'Select' });
     },
-    addSpaceTypeToProject(e) {
+    addSpaceTypeToProject(name) {
+      const exists = this.projectSpaceTypes.some(type => type.name === name);
+      if (exists) {
+        this.expandSpaceTypes = false;
+        this.expandProjectSpaceTypes = true;
+        return;
+      }
       this.$store.dispatch('models/createObjectWithType', { type: 'space_types' });
       const recentlyAddedType = this.projectSpaceTypes[this.projectSpaceTypes.length - 1];
-      this.$store.dispatch('models/updateObjectWithData', { object: recentlyAddedType, name: e.target.value });
+      this.$store.dispatch('models/updateObjectWithData', { object: recentlyAddedType, name });
       this.expandSpaceTypes = false;
-      console.log('hey', this.projectSpaceTypes);
       this.expandProjectSpaceTypes = true;
     },
     selectSubItem(item) {
@@ -258,6 +267,8 @@ export default {
       this.expanded.push(index);
     },
     getSpaceType(space_type_id) {
+      const found = this.projectSpaceTypes.find(space => space.id === space_type_id);
+      if (found) return found.name;
       return 'undefined';
     },
     storyCollapsed(index) {
@@ -651,26 +662,21 @@ svg.button.tree-button {
   font-size: 90%;
 }
 
-.space-type-select-div, .project-space-types-div {
-  position: absolute;
-  z-index: 999;
-  margin: 1%;
-  min-height: 2rem;
-}
-
 .space-type-select {
   background-color: grey !important;
   width: 14rem !important;
   font-size: 1rem !important;
 }
 
-.project-space-types {
+#space-type-select-div {
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: white !important;
+  background-color: #585956 !important;
+  border: 1px solid black;
   width: 14rem !important;
-  height: 10rem;
+  height: 10rem !important;
   font-size: 1rem !important;
   z-index: 9999999999;
   color: black;
@@ -678,13 +684,15 @@ svg.button.tree-button {
   overflow: scroll;
 }
 
-#space-type-select-div {
+.project-space-types-div {
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: grey !important;
+  background-color: white !important;
+  border: 1px solid black;
   width: 14rem !important;
-  height: 10rem;
+  height: 10rem !important;
   font-size: 1rem !important;
   z-index: 9999999999;
   color: black;
@@ -702,6 +710,13 @@ svg.button.tree-button {
   padding: 0;
   margin: 0;
   width: 14rem !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  span {
+    padding-left: 3%;
+    padding-right: 3%;
+  }
 }
 
 #custom-select-ol li:hover {
@@ -719,6 +734,7 @@ svg.button.tree-button {
   padding: 0;
   margin: 0;
   width: 14rem !important;
+  padding-left: 3%;
 }
 
 #custom-select-type-list li:hover {
