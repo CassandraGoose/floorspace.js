@@ -2,42 +2,44 @@
   <div id="speedNavigation" ref="speedNavigation" :class="{'adjusted-tree': adjustSizing}">
     <div id="main-tree-container">
     <span><building-speed class="button"/>BUILDING</span>
-      <ol id="first-ol" v-for="(story, i) in this.stories" :key="i">
+      <ol id="first-ol" v-for="(story, i) in this.stories" :key="story.id">
         <li class="tree-container" id="second">
           <p class="story-p">            
-            <a v-if="expanded.includes(i)" @click="storyCollapsed(i)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
-            <a v-if="!expanded.includes(i)" @click="storyExpanded(i)" title="Expand story."><speed-expand class="button tree-button"/></a>
-            <a id="story-a" @click="selectStory(story)" :class="{ selected: story.id === currentStory.id }" title="Select Story.">
+            <a v-if="expanded.includes(story.id)" @click="storyCollapsed(story.id)" title="Collapse story."><speed-collapse class="button tree-button"/></a>
+            <a v-if="!expanded.includes(story.id)" @click="storyExpanded(story.id)" title="Expand story."><speed-expand class="button tree-button"/></a>
+            <a id="story-a" @click="selectStory(story)" :class="{ selected: story.id === currentStory.id && selectionType === 'story'}" title="Select Story.">
               <story-speed id="story-speed" class="button"/>{{story.name}}
             </a>
-            <a v-show="currentStory.id == story.id" @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
-            <a v-show="currentStory.id == story.id" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
+            <a v-show="currentStory.id == story.id && selectionType === 'story'" @click="cloneStory(story)" title="Clone story."><speed-copy class="button"/></a>
+            <a v-show="currentStory.id == story.id && selectionType === 'story'" v-if="story.name !== 'Story 1'" @click="destroyObject('stories', story)" title="Delete story."><delete-speed class="button tree-button"/></a>
           </p>
-            <ol :class="{'no-top-border': notTopOl(j)}" v-for="(space, j) in story.spaces" :key="j">
-              <li class="tree-container" v-if="expanded.includes(i)">
-                <p>
-                  <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
-                  <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
-                  <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id }" title="Select space.">
-                    <SpaceIconSpeed :id="space.id"/>{{space.name}}
-                  </a>
-                  <a v-show="currentSubSelection.id == space.id" @click="destroyObject('spaces', space)" title="Delete space.">
-                    <delete-speed class="button tree-button"/>
-                  </a>
-                </p>
-                <div  title="Space info.">
-                  <ol>
-                    <li v-if="spaceExpanded.includes(space.id)" :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{Math.round(treeSpaceArea(space.id))}} ft²</p></li>
-                    <li v-if="spaceExpanded.includes(space.id)" :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{getSpaceType(space.space_type_id)}}</p></li>
-                  </ol>
-                </div>
-              </li>
-              <div v-for="(shading, k) in story.shading" :key="k">
+            <ol>
+              <div v-for="space in story.spaces" :key="space.name">
+                <li class="tree-container" v-if="expanded.includes(story.id)">
+                  <p>
+                    <a v-if="spaceExpanded.includes(space.id)" @click="spaceCollapse(space.id)" title="Collapse space."><speed-collapse class="button tree-button"/></a>
+                    <a v-if="!spaceExpanded.includes(space.id)" @click="spaceExpand(space.id)" title="Expand space."><speed-expand class="button tree-button"/></a>
+                    <a @click="selectSubItem(space)" :class="{ selected: space.id == currentSubSelection.id && selectionType === 'subselection'}" title="Select space.">
+                      <SpaceIconSpeed :id="space.id"/>{{space.name}}
+                    </a>
+                    <a v-show="currentSubSelection.id == space.id && selectionType === 'subselection'" @click="destroyObject('spaces', space)" title="Delete space.">
+                      <delete-speed class="button tree-button"/>
+                    </a>
+                  </p>
+                  <div  title="Space info.">
+                    <ol>
+                      <li v-if="spaceExpanded.includes(space.id)" :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{Math.round(treeSpaceArea(space.id))}} ft²</p></li>
+                      <li v-if="spaceExpanded.includes(space.id)" :class="{ 'space-detail': currentSubSelection.id === space.id}"><p>{{getSpaceType(space.space_type_id)}}</p></li>
+                    </ol>
+                  </div>
+                </li>
+              </div>
+              <div v-for="shading in story.shading" :key="shading.name">
               <li class="tree-container">
                 <p>
                   <a v-if="shadingExpanded.includes(shading.id)" @click="shadingCollapse(shading.id)" title="Collapse shading."><speed-collapse class="button tree-button"/></a>
                   <a v-if="!shadingExpanded.includes(shading.id)" @click="shadingExpand(shading.id)" title="Expand shading."><speed-expand class="button tree-button"/></a>
-                  <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id }" title="Select shading.">
+                  <a @click="selectSubItem(shading)" :class="{ selected: shading.id === currentSubSelection.id && selectionType === 'subselection' }" title="Select shading.">
                     <SpaceIconSpeed :id="0" />{{shading.name}}
                   </a>
                   <a v-show="currentSubSelection.id == shading.id" @click="destroyObject('shading', shading)" title="Delete shading.">
@@ -45,7 +47,7 @@
                   </a>  
                 </p>
                 <ol>
-                    <li><p>{{Math.round(treeShadeArea(shading.id))}} ft²</p></li>
+                    <li v-if="shadingExpanded.includes(shading.id)"><p>{{Math.round(treeShadeArea(shading.id))}} ft²</p></li>
                 </ol>
               </li>
               </div>
@@ -53,13 +55,14 @@
         </li>
         <div id="i" v-show="i !== stories.length-1" :class="{'empty-expanded': empty(story), 'empty-collapsed': !empty(story)}"></div>              
       </ol>
+      <circle-speed id="speed-circle" />
     </div>
     <div class="controls">
         <div class="control-button create-with-input" title="Create new shading.">
           <a @click="createObject('Shading')">
             <create-speed class="button tree-button"/>Shading
           </a>
-          <div>
+          <div class="input-container">
             <input
             class="height"
             v-model="shadingHeight"
@@ -72,7 +75,7 @@
           <a @click="createObject('Story')">
             <create-speed class="button tree-button"/>Story
           </a>
-          <div>
+          <div class="input-container">
             <input
               title="Specify height of new story"
               class="height"
@@ -97,18 +100,18 @@
           </div>
           <div class="project-space-types-div" v-show="expandProjectSpaceTypes">
             <ol id="custom-select-ol" v-for="(type, i) in this.projectSpaceTypes" :key="i" class="project-space-types">
-              <li @click="selectSpaceType(type)"><span :style="{color: typeColor(type.id)}">&block; </span> {{type.name}}</li>
+              <li :class="{ selectedType: isCurrentSelectedType(type.id) }" @click="selectSpaceType(type)"><span :style="{color: typeColor(type.id)}">&block; </span>{{type.name}}</li>
             </ol>
           </div>
         </div>
         <div id="area-container">
           <div class="areas" title="Area of current story."> 
-            <div>Story Area: </div>
-            <div><input size="10" :value="storyArea" readonly/> ft²</div>
+            <div>Story Area</div>
+            <div class="input-container"><input size="10" :value="storyArea" readonly/> ft²</div>
           </div>
           <div class="areas" title="Area of building">
-            <div>Building Area: </div>
-            <div><input input size="10" :value="buildingArea" readonly/> ft²</div>
+            <div>Building Area</div>
+            <div class="input-container"><input input size="10" :value="buildingArea" readonly/> ft²</div>
           </div>
         </div>
       </div>
@@ -130,8 +133,8 @@ export default {
   props: ['styles', 'objectTypes'],
   data() {
     return {
-      expanded: [0],
-      spaceExpanded: [0],
+      expanded: [],
+      spaceExpanded: [],
       storyHeight: 10,
       shadingHeight: 10,
       spaceType: null,
@@ -141,6 +144,7 @@ export default {
       adjustSizing: false,
       selectedSpaceType: null,
       availableTypes: ['Office-Private', 'Retail-Retail', 'PrimarySchool-Classroom', 'Office-Conference'],
+      selectionType: 'story',
     };
   },
   computed: {
@@ -192,7 +196,12 @@ export default {
   },
   watch: {
     currentStory() {
-      this.expanded.push(this.stories.indexOf(this.currentStory));
+      this.expanded.push(this.currentStory.id);
+    },
+    expandProjectSpaceTypes() {
+      if (this.expandProjectSpaceTypes == true) {
+        this.$store.commit('application/setSpeedSelection', false);
+      }
     },
     currentSubSelection() {
       if (this.currentSubSelection.type === 'space') {
@@ -203,6 +212,7 @@ export default {
   },
   methods: {
     selectStory(story) {
+      this.selectionType = 'story';
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
     },
     typeColor(id) {
@@ -211,8 +221,16 @@ export default {
       return type.color;
     },
     toggleSelects() {
-      this.expandSpaceTypes = !this.expandSpaceTypes;
-      this.expandProjectSpaceTypes = false;
+      if (this.expandSpaceTypes && this.projectSpaceTypes.length > 0) {
+        this.expandSpaceTypes = false;
+        this.expandProjectSpaceTypes = true;
+      } else if (this.expandProjectSpaceTypes === true) {
+        this.expandSpaceTypes = false;
+        this.expandProjectSpaceTypes = false;
+      } else {
+        this.expandSpaceTypes = !this.expandSpaceTypes;
+        this.expandProjectSpaceTypes = false;
+      }
     },
     empty(story) {
       let thisSpaceLast;
@@ -260,6 +278,7 @@ export default {
         parentStory = this.stories.find(story => story.shading.find(shade => shade.id === item.id));
       }
       if (!parentStory) return;
+      this.selectionType = 'subselection';
       this.$store.dispatch('application/setCurrentStoryId', { id: parentStory.id });
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
     },
@@ -280,11 +299,11 @@ export default {
     spaceCollapse(index) {
       this.spaceExpanded = this.spaceExpanded.filter(item => item !== index);
     },
-    shadingExpand(index) {
-      this.shadingExpanded.push(index);
+    shadingExpand(id) {
+      this.shadingExpanded.push(id);
     },
-    shadingCollapse(index) {
-      this.shadingExpanded = this.shadingExpanded.filter(item => item !== index);
+    shadingCollapse(id) {
+      this.shadingExpanded = this.shadingExpanded.filter(item => item !== id);
     },
     treeSpaceArea(id) {
       if (!this.spacesArea) return '0';
@@ -301,20 +320,29 @@ export default {
     cloneStory(story) {
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
       const { clonedGeometry, idMap } = replaceIdsForCloning(this.currentStoryGeom);
-      this.createObject('Story');
+      this.createObject('Clone');
       const { clonedStory } = modelHelpers.replaceIdsUpdateInfoForCloning(story, idMap, this.state, this.currentStory);
       this.destroyObject('spaces', this.currentStory.spaces[0]);
       this.$store.dispatch('models/cloneStory', clonedStory);
       this.$store.dispatch('geometry/cloneStoryGeometry', clonedGeometry);
-      this.currentStory.shading.forEach((shade) => {
+      for (let i = this.currentStory.shading.length - 1; i >= 0; i--) {
         this.$store.dispatch('models/destroyShading', {
-          shading: shade, story: this.currentStory,
+          shading: this.currentStory.shading[i],
+          story: this.currentStory,
         });
-      });
+      }
     },
     subselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
       set(sst) { this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); },
+    },
+    isCurrentSelectedType(id) {
+      if (this.selectedSpaceType) {
+        if (this.selectedSpaceType.id === id) {
+          return true;
+        }
+      }
+      return false;
     },
     createObject(object) {
       switch (object) {
@@ -327,14 +355,25 @@ export default {
               story: this.currentStory,
             });
           }
+          this.selectionType = 'story';
+          this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
+          return;
+        case 'Clone':
+          this.$store.dispatch('models/initStory');
+          this.$store.dispatch('models/updateStoryWithData', { story: this.currentStory, floor_to_ceiling_height: this.storyHeight });
+          this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
           return;
         case 'Space':
           this.$store.dispatch('models/initSpace', { story: this.currentStory });
+          this.selectionType = 'subselection';
+          this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
           break;
         case 'Shading':
           this.$store.dispatch('models/initShading', { story: this.$store.state.models.stories.find(s => s.id === '1') });
           this.$store.dispatch('models/updateShadingWithData', { shading: this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
           this.selectSubItem(this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1]);
+          this.selectionType = 'subselection';
+          this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });
@@ -388,10 +427,7 @@ export default {
   mounted() {
     this.$store.dispatch('project/setMapEnabled', { enabled: true });
     this.$store.dispatch('application/setCurrentTool', { tool: 'Map' });
-    this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
-      this.adjustSizing = bool;
-      this.eventBus.$emit('drawingToolsSizeUpdate');
-    });
+    this.$store.dispatch('application/setCurrentMode', { mode: 'space_types' });
     this.$store.dispatch('models/destroyShading', {
       shading: this.currentStory.shading[0],
       story: this.$store.state.models.stories.find(story => story.shading.find(o => o.id === this.currentStory.shading[0].id)),
@@ -442,6 +478,14 @@ div#main-tree-container {
 
 #first-ol {
   border-top: 3px solid transparent;
+}
+
+ol#first-ol:last-of-type ol:last-child > div:last-child > li.tree-container:last-child {
+  height: 1.8rem;
+}
+
+ol#first-ol:last-of-type li > ol{
+  padding-bottom: 6rem;
 }
 
 .empty-collapsed {
@@ -506,10 +550,6 @@ li.tree-container > p {
   }
 }
 
-div#main-tree-container #first-ol:last-child li.tree-container:last-child { 
-  height: 1.8rem;
-}
-
 li p {
   margin: 0;
   background: white;
@@ -544,6 +584,7 @@ ol li:last-child ol {
   flex-direction: column !important;
   color: white !important;
   width: 100%;
+  margin-top: 5%;
   a {
     color: white !important;
   } 
@@ -588,8 +629,7 @@ ol li:last-child ol {
 }
 
 .control-button {
-  margin-top: 5%;
-  margin-left: 10%;
+  margin-left: 5%;
   height: initial !important;
   width: 45%;
   height: 1rem;
@@ -673,7 +713,8 @@ svg.button.tree-button {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #585956 !important;
+  padding-left: 3%;
+  background-color: white !important;
   border: 1px solid black;
   width: 14rem !important;
   height: 10rem !important;
@@ -707,9 +748,8 @@ svg.button.tree-button {
 
 #custom-select-ol li {
   border: none;
-  padding: 0;
   margin: 0;
-  width: 14rem !important;
+  width: 100% !important;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -720,8 +760,8 @@ svg.button.tree-button {
 }
 
 #custom-select-ol li:hover {
-  width: 14rem !important;
-  background-color: grey;
+  width: 100% !important;
+  background-color: #797a76;
 }
 
 #custom-select-type-list {
@@ -731,7 +771,7 @@ svg.button.tree-button {
 
 #custom-select-type-list li {
   border: none;
-  padding: 0;
+  // padding: 0;
   margin: 0;
   width: 14rem !important;
   padding-left: 3%;
@@ -755,4 +795,20 @@ svg.button.tree-button {
   font-weight: bold;
 }
 
+.selectedType {
+  background-color: #585956;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#speed-circle {
+  height: 1rem;
+  float: left;
+  padding-left: 1%;
+}
 </style>

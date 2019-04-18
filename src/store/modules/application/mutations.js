@@ -32,4 +32,5 @@ export default {
   setScaleY(state, payload) { state.scale.y = payload.scaleY; },
   setGridId(state, payload) { state.currentGridId = payload.currentGridId; },
   setSvgGridId(state, payload) { state.currentSvgGridId = payload.currentSvgGridId; },
+  setSpeedSelection(state, payload) { state.speedSelection = payload; },
 };

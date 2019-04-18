@@ -632,6 +632,12 @@ const map = {
         readonly: true,
         private: true,
       },
+      {
+        floor_to_ceiling_height: '10',
+        displayName: 'Floor To Ceiling Height',
+        input_type: 'text',
+        numeric: true,
+      },
     ],
   },
   images: {

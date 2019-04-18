@@ -10,9 +10,11 @@ Vue.component('pretty-select', PrettySelect);
 export default function renderTo(el) {
   const eventBus = new Vue();
   createStore(eventBus).then((store) => {
-    store.subscribeAction(() => {
-      const data = store.getters['exportData'];
-      eventBus.$emit('sendFloorspaceJSON', data);
+    store.subscribe((mutation) => {
+      if (mutation) {
+        const data = store.getters['exportData'];
+        eventBus.$emit('sendFloorspaceJSON', data);
+      }
     });
 
     window.application = new Vue({

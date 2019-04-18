@@ -112,6 +112,7 @@ export default {
   computed: {
     ...mapState({
       currentMode: state => state.application.currentSelections.mode,
+      speedSelection: state => state.application.speedSelection,
       modeTab: state => state.application.currentSelections.modeTab,
       currentTool: state => state.application.currentSelections.tool,
       snapMode: state => state.application.currentSelections.snapMode,
@@ -128,6 +129,7 @@ export default {
       allVertices: state => _.flatMap(state.geometry, 'vertices'),
       gridId: state => state.application.currentGridId,
       svgGridId: state => state.application.currentSvgGridId,
+      projectSpaceTypes: state => state.models.library.space_types,
     }),
     ...mapGetters({
       currentStory: 'application/currentStory',
@@ -298,7 +300,7 @@ export default {
     spacing() { this.updateGrid(); },
     units() { this.reloadGridAndScales(); },
     currentMode() { this.draw(); },
-    polygons() { 
+    polygons() {
       this.draw();
       this.styleSelectedFace();
     },
@@ -368,14 +370,12 @@ export default {
         this.removeLastDrawnPoint(gridCoord);
       });
     },
-    selectSubItem(item) {
-      this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
-    },
+    selectSubItem(item) { this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id }); },
     styleSelectedFace() {
         const that = this;
         d3.select(this.$refs.grid).selectAll('.polygon-text').each(
         function () {
-          if (this.id === `text-${that.currentSpace.face_id}`) {
+          if (this.id === `text-${that.currentSubSelection.face_id}`) {
             d3.select(this).style('text-decoration', 'underline').style('font-weight', 'bold');
           } else {
             d3.select(this).style('font-weight', '300').style('text-decoration', 'none');
@@ -482,6 +482,7 @@ export default {
             polygon.color = thermalZone ? thermalZone.color : applicationHelpers.config.palette.neutral;
           } else if (this.currentMode === 'space_types') {
             const spaceType = modelHelpers.libraryObjectWithId(this.$store.state.models, model.space_type_id);
+            if (!spaceType) return polygon;
             polygon.color = spaceType ? spaceType.color : applicationHelpers.config.palette.neutral;
           } else if (this.currentMode === 'building_units') {
             const buildingUnit = modelHelpers.libraryObjectWithId(this.$store.state.models, model.building_unit_id);

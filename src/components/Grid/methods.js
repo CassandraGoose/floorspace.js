@@ -51,7 +51,7 @@ export default {
     if (this.currentTool === 'Apply Property') {
       this.assignProperty();
     }
-    if (this.currentTool === 'Select') {
+    if (this.currentTool === 'Select' && this.speedSelection === false) {
       this.assignProperty();
     }
   },
@@ -70,8 +70,6 @@ export default {
         return geometryHelpers.pointInFace(rwuPoint, face.vertices);
       });
     if (!space) { return; }
-    console.log('key', this.spacePropertyKey);
-    console.log('id', this.currentSpaceProperty.id);
     this.$store.dispatch('models/updateSpaceWithData', {
       space,
       [this.spacePropertyKey]: this.currentSpaceProperty.id,
@@ -209,16 +207,10 @@ export default {
     };
     this.$store.dispatch('models/createDaylightingControl', payload);
   },
-  removeLastDrawnPoint(gridCoords) {
-    const gridPoint = { x: gridCoords[0], y: gridCoords[1] },
-      snapTarget = this.findSnapTarget(gridPoint);
-    const newPoint = snapTarget.type === 'edge' ? snapTarget.projection : snapTarget;
-    const previousPointClicked = this.checkPointExists(newPoint);
-    if (previousPointClicked) {
-      this.points.pop();
-      this.drawPoints();
-      this.$root.$options.eventBus.$emit('success', 'Deleted last drawn point.');
-    }
+  removeLastDrawnPoint() {
+    this.points.pop();
+    this.drawPoints();
+    this.$root.$options.eventBus.$emit('success', 'Deleted last drawn point.');
   },
   // see if where the mouse coords are matches where the last point was drawn
   checkPointExists(newPoint) {
@@ -831,11 +823,11 @@ export default {
     // remove expired polygons
     let poly = d3.select(this.$refs.gridParent).select('svg .polygons').selectAll('g.poly')
       .data(this.polygons, d => d.face_id);
-
     poly.exit().remove();
     const polyEnter = poly.enter().append('g').attr('class', 'poly');
     polyEnter.append('polygon');
     polyEnter.append('text').attr('class', 'polygon-text');
+    polyEnter.append('text').attr('class', 'space-type');
     polyEnter.append('g').attr('class', 'windows');
     polyEnter.append('g').attr('class', 'doors');
     polyEnter.append('g').attr('class', 'daylighting-controls');
@@ -868,6 +860,28 @@ export default {
       .attr('font-family', 'Open Sans')
       .attr('fill', 'black')
       .classed('polygon-text', true);
+
+    const spaceTypes = this.projectSpaceTypes;
+    const currentStorySpaces = this.currentStory.spaces;
+    poly.select('.space-type')
+      .attr('x', p => this.rwuToGrid(p.labelPosition.x, 'x'))
+      //HERE
+      .attr('y', p => (this.rwuToGrid(p.labelPosition.y, 'y')) + 20)
+      .text((p) => {
+        if (p.modelType === 'shading') return '';
+        let found;
+        const foundSpace = currentStorySpaces.find(space => space.face_id === p.face_id);
+        if (foundSpace) {
+          found = spaceTypes.find(type => type.id === foundSpace.space_type_id);
+        }
+        if (found) return `(${found.name})`;
+        return '(undefined)';
+      })
+      .attr('text-anchor', 'middle')
+      .style('font-size', '14px')
+      .attr('font-family', 'Open Sans')
+      .classed('polygon-text', true)
+      .attr('fill', 'black');
 
     poly.select('.windows')
       .selectAll('.window')

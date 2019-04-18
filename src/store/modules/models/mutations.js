@@ -47,14 +47,12 @@ export default {
         const story = state.stories.find(s => s.id === payload.story_id);
         story.images.push(payload.image);
     },
-
     updateSpaceWithData (state, payload) {
       var space = payload.space;
       Object.assign(space, payload);
       delete space.space;
     },
-
-    updateShadingWithData (state, payload) {
+     updateShadingWithData (state, payload) {
         const shading = payload.shading;
         Object.assign(shading, payload);
         delete shading.shading;

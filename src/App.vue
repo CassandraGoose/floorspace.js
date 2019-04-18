@@ -74,9 +74,6 @@ export default {
       this.$store.dispatch('project/setMapLatitude', { latitude: data.lat });
       this.$store.dispatch('project/setMapLongitude', { longitude: data.long });
     });
-    this.$root.$options.eventBus.$on('expandFloorspace', (bool) => {
-      this.adjustSizing = bool;
-    });
     this.$root.$options.eventBus.$on('error', (err) => {
       this.error = err;
       setTimeout(() => { this.error = null; }, 5000);

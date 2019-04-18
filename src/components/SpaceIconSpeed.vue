@@ -14,7 +14,7 @@
   </svg>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'StoryIconSpeed',
@@ -23,10 +23,17 @@ export default {
     ...mapGetters({
       allSpaces: 'models/allSpaces',
     }),
+    ...mapState({
+      projectSpaceTypes: state => state.models.library.space_types,
+    }),
     cubeColor() {
-      const spaceColor = this.allSpaces.find(space => space.id === this.id);
-      if (!spaceColor) return '#BEBEBE';
-      return spaceColor.color;
+      const space = this.allSpaces.find(aSpace => aSpace.id === this.id);
+      if (!space) return '#BEBEBE';
+      if (space.space_type_id) {
+        const type = this.projectSpaceTypes.find(aType => aType.id === space.space_type_id);
+        return type.color;
+      }
+      return space.color;
     },
   },
 };

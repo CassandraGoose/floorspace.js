@@ -164,6 +164,8 @@ export default {
             validProperties = Object.keys(shading),
             cleanedPayload = {};
 
+            validProperties.push('floor_to_ceiling_height');
+
         // remove extra properties from the payload
         for (var key in payload) {
             if (payload.hasOwnProperty(key) && ~validProperties.indexOf(key)) {
@@ -171,7 +173,6 @@ export default {
             }
         }
         cleanedPayload.shading = shading;
-
         // TODO: validation
         context.commit('updateShadingWithData', cleanedPayload);
     },

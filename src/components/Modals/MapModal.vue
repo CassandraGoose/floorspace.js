@@ -10,31 +10,31 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     <div class="floorspace-overlay"></div>
     <div id="speed-modal" class="floorspace-modal" :style="modal">
         <header>
-            <h2>Quickstart</h2>
+            <h2>Start</h2>
         </header>
         <NonChromeWarning />
         <div class="content">
             <p>
-              <a @click="mapEnabled = false; mapVisible = false; $emit('close')" class="quickstart-action new-floorplan">
-                <div class="title">New</div>
-                <QuickstartIconNewFloorplan />
-                <div class="explanation">Create a new floorplan</div>
-              </a>
-            </p>
-            <p>
               <a @click="mapEnabled = true; tool='Map'; $emit('close')" :disabled="!online" class="quickstart-action">
-                <div class="title">New With Map</div>
+                <div class="title">Create a new floorplan with a map</div>
                 <QuickstartIconNewMapFloorplan />
-                <div class="explanation">Create a new floorplan with a map</div>
+                <!-- <div class="explanation">Create a new floorplan with a map</div> -->
               </a>
             </p>
             <p>
+              <a @click="mapEnabled = false; mapVisible = false; $emit('close')" class="quickstart-action new-floorplan">
+                <div class="title">Create a new floorplan</div>
+                <QuickstartIconNewFloorplan />
+                <!-- <div class="explanation">Create a new floorplan</div> -->
+              </a>
+            </p>
+            <!-- <p>
               <a @click="$refs.importInput.click()" id="import" class="quickstart-action open-floorplan">
                 <div class="title">Open</div>
                 <QuickstartIconOpenFloorplan />
                 <div class="explanation">Open an existing floorplan</div>
               </a>
-            </p>
+            </p> -->
             <input id="importInput" ref="importInput" @change="importFloorplanAsFile" type="file"/>
         </div>
     </div>
@@ -129,7 +129,8 @@ export default {
           color: #5D5D5D;
           text-transform: uppercase;
           font-weight: bold;
-          margin-top: 2rem;
+          margin-top: 4rem;
+          width: 12rem;
         }
     }
 }
@@ -148,11 +149,11 @@ export default {
 }
 
 #speed-modal > div > p:nth-child(1) > a > div.title {
-  height: 100px !important;
+  height: 74px !important;
 }
 
 #speed-modal > div > p:nth-child(2) > a > div.title {
-  height: 100px !important;
+  height: 74px !important;
 }
 
 #import > div.title {

@@ -71,7 +71,9 @@ export default {
     // current selection getters and setters - these dispatch actions to update the data store when a new item is selected
     currentSubSelection: {
       get() { return this.$store.getters['application/currentSubSelection']; },
-      set(item) { this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id }); },
+      set(item) { 
+        this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
+      },
     },
     currentSpaceProperty: {
       get() { return this.$store.getters['application/currentSpaceProperty']; },

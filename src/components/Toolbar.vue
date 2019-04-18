@@ -63,11 +63,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       </ul>
 
       <div id="grid-settings" class="speed-grid-settings">
-        <div class="speed-north-axis" title="North axis">
-          <div>N</div> <div>{{Math.round(northAxis)}}</div>
+        <div class="speed-north-axis input-number" title="North axis">
+          <label class="speed-label">NORTH</label> 
+          <input class="speed-toolbar-input" readonly :value="`${Math.round(northAxis)}°`">
         </div>
+
         <div class="input-checkbox" title="Toggle previous story visability.">
-          <label class="speed-label">STORY BELOW</label>
+          <label class="speed-label" id="story-below-label">STORY BELOW</label>
           <input type="checkbox" v-model="previousStoryVisible">
         </div>
 
@@ -83,8 +85,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
         <div class="input-number" title="Specify spacing of the grid in ft.">
           <label class="speed-label">SPACING</label>
-          <input v-model.number.lazy="spacing">
-          <label class="floorspace-label" v-if="!allowSettingUnits">{{ rwUnits}}</label>
+          <input class="speed-toolbar-input" v-model.number.lazy="spacing">
+          <label class="floorspace-label" id="lower-case-speed" v-if="!allowSettingUnits">{{ rwUnits}}</label>
         </div>
         <PrettySelect
           v-if="allowSettingUnits"
@@ -94,11 +96,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           @change="updateUnits"
         />
         <div class="speed-coordinates-container" title="Coordinates of mouse on grid.">
-          <div>
-            <div class="speed-coordinates"><p>X: {{xCrossHair}}</p></div>
-            <div class="speed-coordinates"><p>Y: {{yCrossHair}}</p></div>
-            <div class="speed-coordinates"><p>Z: {{heightAtCurrentStoryFloor}} </p></div>
-          </div>
+          <input class="speed-coordinates-inputs" readonly :value="`X: ${xCrossHair}`">
+          <input class="speed-coordinates-inputs" readonly :value="`Y: ${yCrossHair}`">
+          <input class="speed-coordinates-inputs" readonly :value="`Z: ${heightAtCurrentStoryFloor}`">
         </div>
         <div class="speed-none" @click="showGroundPropsModal = true" title="settings">
           <SettingsGear class="button" />
@@ -256,6 +256,7 @@ export default {
     toggle3D() {
       this.tool = '3D';
       this.$root.$options.eventBus.$emit('toggle3D');
+      this.$root.$options.eventBus.$emit('drawingToolsSizeUpdate');
     },
     zoomToFit() {
       this.$root.$options.eventBus.$emit('zoomToFit');
