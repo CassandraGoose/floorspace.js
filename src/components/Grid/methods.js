@@ -1282,10 +1282,10 @@ export default {
       const d = (s - i) / 20;
       return [i - d, s + d];
     };
-    if (this.visibleVerts.length) {
-      currXExtent = plusMargin(d3.extent(this.allVertices, d => d.x));
-      currYExtent = plusMargin(d3.extent(this.allVertices, d => d.y));
-    }
+    // if (this.visibleVerts.length) {
+    //   currXExtent = plusMargin(d3.extent(this.allVertices, d => d.x));
+    //   currYExtent = plusMargin(d3.extent(this.allVertices, d => d.y));
+    // }
     const
       width = this.$refs.gridParent.clientWidth,
       height = this.$refs.gridParent.clientHeight,
@@ -1445,7 +1445,6 @@ export default {
       .call(this.zoomBehavior.transform, d3.zoomIdentity.scale(newScale));
   },
   zoomToFit() {
-    debugger;
     const
       width = this.$refs.grid.clientWidth,
       height = this.$refs.grid.clientHeight;
