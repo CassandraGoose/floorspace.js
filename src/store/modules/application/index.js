@@ -7,6 +7,7 @@ import d3P from '../../../d3';
 export default d3P.then(d3 => ({
   namespaced: true,
   state: {
+    speedSelection: true,
     currentSelections: {
       // models currently being edited
       story: null,
@@ -16,7 +17,6 @@ export default d3P.then(d3 => ({
       component_id: null,
       component_definition_id: null,
       component_instance_id: null,
-      speedSelection: true,
       space_property_id: null,
       currentGridId: null,
       currentSvgGridId: null,

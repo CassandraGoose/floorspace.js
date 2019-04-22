@@ -27,11 +27,13 @@ export default {
       projectSpaceTypes: state => state.models.library.space_types,
     }),
     cubeColor() {
+      if (!this.id) return '#BEBEBE';
       const space = this.allSpaces.find(aSpace => aSpace.id === this.id);
       if (!space) return '#BEBEBE';
       if (space.space_type_id) {
         const type = this.projectSpaceTypes.find(aType => aType.id === space.space_type_id);
-        return type.color;
+        if (type) return type.color;
+        return space.color;
       }
       return space.color;
     },

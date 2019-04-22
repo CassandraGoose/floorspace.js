@@ -30,6 +30,7 @@ import speedExpand from './../assets/svg-icons/speed_expand.svg';
 import speedCollapse from './../assets/svg-icons/speed_collapse.svg';
 import speedCopy from './../assets/svg-icons/speed_copy.svg';
 import circleSpeed from './../assets/svg-icons/circle_speed.svg';
+import speedNorth from './../assets/svg-icons/speed_north.svg';
 
 import ZoomToFitSvg from './../assets/svg-icons/zoom_to_fit.svg';
 import zoomInSvg from './../assets/svg-icons/zoom_in.svg';
@@ -112,6 +113,7 @@ export default {
   'speed-collapse': speedCollapse,
   'speed-copy': speedCopy,
   'circle-speed': circleSpeed,
+  'north-speed': speedNorth,
 
   'tool-3d-svg': tool3dSvg,
   'tool-select-svg': toolSelect,

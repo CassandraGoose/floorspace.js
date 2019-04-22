@@ -1445,6 +1445,7 @@ export default {
       .call(this.zoomBehavior.transform, d3.zoomIdentity.scale(newScale));
   },
   zoomToFit() {
+    debugger;
     const
       width = this.$refs.grid.clientWidth,
       height = this.$refs.grid.clientHeight;

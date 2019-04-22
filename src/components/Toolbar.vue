@@ -6,7 +6,7 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER, THE UNITED STATES GOVERNMENT, OR ANY CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. -->
 
 <template>
-  <nav id="toolbar" class="speed-toolbar">
+  <nav id="toolbar" :class="{'speed-toolbar': true, 'expanded-toolbar': floorspaceExpanded }" @onfocus="setSelectionTool()">
 
     <section id="top">
       <div id="navigation-head" :style="{'width': `${drawingToolsSize}`, 'left': `-${drawingToolsSize}`, 'height': `${drawingToolsSize}`}">
@@ -62,7 +62,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
         </li>
       </ul>
 
-      <div id="grid-settings" class="speed-grid-settings">
+      <div id="grid-settings" :class="{ 'speed-grid-settings': true, 'expanded-grid-settings': floorspaceExpanded }">
         <div class="speed-north-axis input-number" title="North axis">
           <label class="speed-label">NORTH</label> 
           <input class="speed-toolbar-input" readonly :value="`${Math.round(northAxis)}°`">
@@ -112,6 +112,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
           <div id="drawing-tools" :style="{'width': `${drawingToolsSize}`, 'left': `-${drawingToolsSize}`}" class="tools-list tools speed-drawing-tools">
             <div
               @click="tool = 'Rectangle'" 
+              @mousedown="setSelectionTool()"
               data-tool="Rectangle" 
               title="Place a rectangle on the grid using the cursor."
               :class="['speed-drawing-tools-button',{ active: tool === 'Rectangle' }]">
@@ -119,7 +120,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             </div>
             <div
               @click="tool = 'Polygon'" 
-              data-tool="Polygon" 
+              data-tool="Polygon"
+              @mousedown="setSelectionTool()" 
               title="Place a polygon on the grid using the cursor." 
               :class="['speed-drawing-tools-button', { active: tool === 'Polygon' }]">
               <tool-draw-polygon-svg class="button"></tool-draw-polygon-svg>
@@ -133,6 +135,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             </div>
             <div 
               @click="toggle3D()" 
+              @mousedown="setSelectionTool()"
               data-tool="3D" 
               title="Toggle 3D view." 
               :class="['speed-drawing-tools-button', { active: tool === '3D' }]">
@@ -141,6 +144,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             <div 
               @click="tool = 'Eraser'" 
               data-tool="Eraser" 
+              @mousedown="setSelectionTool()"
               title="Erase a part of your space using the cursor. " 
               :class="['speed-drawing-tools-button', { active: tool === 'Eraser' }]">
               <tool-erase-svg class="button"></tool-erase-svg>
@@ -151,6 +155,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
             </div> -->
             <div 
               @click="tool = 'Select'" 
+              @mousedown="setSelectionTool()"
               data-tool="Select" 
               title="Click to select." 
               :class="['speed-drawing-tools-button', { active: tool === 'Select' }]">
@@ -243,7 +248,8 @@ export default {
       showGroundPropsModal: false,
       xCrossHair: 0,
       yCrossHair: 0,
-      drawingToolsSize: '40px',
+      drawingToolsSize: '44px',
+      floorspaceExpanded: false,
     };
   },
   methods: {
@@ -253,10 +259,14 @@ export default {
         this.$root.$options.eventBus.$emit('uploadImage');
       }
     },
+    setSelectionTool() {
+      this.$store.commit('application/setSpeedSelection', true);
+    },
     toggle3D() {
+      this.setSelectionTool();
       this.tool = '3D';
       this.$root.$options.eventBus.$emit('toggle3D');
-      this.$root.$options.eventBus.$emit('drawingToolsSizeUpdate');
+      this.$root.$options.eventBus.$emit('toolbarSizeUpdate');
     },
     zoomToFit() {
       this.$root.$options.eventBus.$emit('zoomToFit');
@@ -303,10 +313,6 @@ export default {
       // this.$store.dispatch('changeUnits', { newUnits: val });
     },
     displayNameForMode(mode) { return applicationHelpers.displayNameForMode(mode); },
-    determineDrawingToolsSize() {
-      const newSize = document.getElementById('speedNavigation').getBoundingClientRect().width * 0.15;
-      this.drawingToolsSize = `${newSize}px`;
-    },
   },
   computed: {
     latestCreatedCompId() {
@@ -461,13 +467,9 @@ export default {
       this.xCrossHair = payload.x.toFixed(0);
       this.yCrossHair = payload.y.toFixed(0);
     });
-    this.$root.$options.eventBus.$on('drawingToolsSizeUpdate', () => {
-      this.determineDrawingToolsSize();
+    this.$root.$options.eventBus.$on('toolbarSizeUpdate', () => {
+      this.floorspaceExpanded = !this.floorspaceExpanded;
     });
-    window.addEventListener('resize', this.determineDrawingToolsSize);
-  },
-  beforeDestory() {
-    window.removeEventListener('resize', this.determineDrawingToolsSize);
   },
   components: {
     PrettySelect,
@@ -494,6 +496,10 @@ svg.icon, svg.button {
   vertical-align: middle;
   height: 2rem;
   width: 2rem;
+}
+
+.expanded-grid-settings {
+  max-width: 720px;
 }
 
 #toolbar {
@@ -653,6 +659,13 @@ svg.icon, svg.button {
       border-left-color: $gray-medium-light !important;
     }
   }
+}
+
+.expanded-toolbar {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  width: 82% !important;
 }
 </style>
 

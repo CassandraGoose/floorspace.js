@@ -1,6 +1,6 @@
 <template>
   <div id="speedNavigation" ref="speedNavigation" :class="{'adjusted-tree': adjustSizing}">
-    <div id="main-tree-container">
+    <div id="main-tree-container" @click="setSelectionTool">
     <span><building-speed class="button"/>BUILDING</span>
       <ol id="first-ol" v-for="(story, i) in this.stories" :key="story.id">
         <li class="tree-container" id="second">
@@ -58,7 +58,7 @@
       <circle-speed id="speed-circle" />
     </div>
     <div class="controls">
-        <div class="control-button create-with-input" title="Create new shading.">
+        <div class="control-button create-with-input" title="Create new shading." @click="setSelectionTool">
           <a @click="createObject('Shading')">
             <create-speed class="button tree-button"/>Shading
           </a>
@@ -71,7 +71,7 @@
             > ft
           </div>
         </div>
-        <div class="control-button create-with-input" title="Create new story">
+        <div class="control-button create-with-input" title="Create new story" @click="setSelectionTool">
           <a @click="createObject('Story')">
             <create-speed class="button tree-button"/>Story
           </a>
@@ -84,27 +84,37 @@
               > ft
           </div>
         </div>
-        <div class="control-button" title="Create new space">
+        <div class="control-button" title="Create new space" @click="setSelectionTool">
           <a @click="createObject('Space')">
             <create-speed class="button tree-button"/>Space
           </a>
         </div>
-        <div class="control-button" title="Assign type to current space.">
+        <div class="control-button" @click="setSelectionTool">
           <a @click="toggleSelects">
             <create-speed class="button tree-button"/>Space Type
           </a>
           <div id="space-type-select-div" v-show="expandSpaceTypes">
+            <a id="custom-select-close" @click="closeSpaceTypes">
+              <delete-speed class="button tree-button"/>
+            </a>
             <ol id="custom-select-type-list" v-for="(type, i) in this.availableTypes" :key="i">
-              <li @click="addSpaceTypeToProject(type)">{{type}}</li>
-            </ol>
-          </div>
-          <div class="project-space-types-div" v-show="expandProjectSpaceTypes">
-            <ol id="custom-select-ol" v-for="(type, i) in this.projectSpaceTypes" :key="i" class="project-space-types">
-              <li :class="{ selectedType: isCurrentSelectedType(type.id) }" @click="selectSpaceType(type)"><span :style="{color: typeColor(type.id)}">&block; </span>{{type.name}}</li>
+              <li :style="{ color: alreadyInProject(type) }" @click="addSpaceTypeToProject(type)">{{type}}</li>
             </ol>
           </div>
         </div>
-        <div id="area-container">
+        <div id="select-container">
+          <div class="project-space-types-div" title="Assign type to current space." >
+            <ol v-for="(type, i) in this.projectSpaceTypes" :key="i">
+              <li :class="{ selectedType: isCurrentSelectedType(type.id) }" @click="selectSpaceType(type)" @blur="setSelectionTool">
+                <span :style="{color: typeColor(type.id)}">&block; </span>
+                {{type.name}} 
+                <a @click="destroyObject('space_type', type)"><delete-speed class="button tree-button"/></a>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div id="area-container" @click="setSelectionTool">
           <div class="areas" title="Area of current story."> 
             <div>Story Area</div>
             <div class="input-container"><input size="10" :value="storyArea" readonly/> ft²</div>
@@ -139,7 +149,6 @@ export default {
       shadingHeight: 10,
       spaceType: null,
       expandSpaceTypes: false,
-      expandProjectSpaceTypes: false,
       shadingExpanded: [],
       adjustSizing: false,
       selectedSpaceType: null,
@@ -153,6 +162,7 @@ export default {
       geometry: state => state.geometry,
       state: state => state,
       projectSpaceTypes: state => state.models.library.space_types,
+      speedSelection: state => state.application.speedSelection,
     }),
     ...mapGetters({
       currentSpace: 'application/currentSpace',
@@ -198,22 +208,20 @@ export default {
     currentStory() {
       this.expanded.push(this.currentStory.id);
     },
-    expandProjectSpaceTypes() {
-      if (this.expandProjectSpaceTypes == true) {
-        this.$store.commit('application/setSpeedSelection', false);
-      }
-    },
     currentSubSelection() {
       if (this.currentSubSelection.type === 'space') {
         this.spaceExpanded = [];
         this.spaceExpanded.push(this.currentSubSelection.id);
-      } else this.shadingExpanded.push(this.currentSubSelection.id);
+      } else {
+        this.shadingExpanded.push(this.currentSubSelection.id);
+      }
     },
   },
   methods: {
     selectStory(story) {
       this.selectionType = 'story';
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
+      this.setSelectionTool();
     },
     typeColor(id) {
       const type = this.projectSpaceTypes.find(projectType => projectType.id === id);
@@ -221,16 +229,18 @@ export default {
       return type.color;
     },
     toggleSelects() {
-      if (this.expandSpaceTypes && this.projectSpaceTypes.length > 0) {
-        this.expandSpaceTypes = false;
-        this.expandProjectSpaceTypes = true;
-      } else if (this.expandProjectSpaceTypes === true) {
-        this.expandSpaceTypes = false;
-        this.expandProjectSpaceTypes = false;
-      } else {
-        this.expandSpaceTypes = !this.expandSpaceTypes;
-        this.expandProjectSpaceTypes = false;
-      }
+      this.expandSpaceTypes = true;
+    },
+    closeSpaceTypes() {
+      this.setSelectionTool();
+      this.expandSpaceTypes = false;
+    },
+    alreadyInProject(name) {
+      const isIncluded = this.projectSpaceTypes.some((type) => {
+        return type.name === name;
+      });
+      if (isIncluded) return 'red';
+      return 'black';
     },
     empty(story) {
       let thisSpaceLast;
@@ -258,12 +268,16 @@ export default {
       this.selectedSpaceType = type;
       this.$store.dispatch('application/setCurrentSpacePropertyId', { id: type.id });
       this.$store.dispatch('application/setCurrentTool', { tool: 'Select' });
+      this.$store.commit('application/setSpeedSelection', false);
+    },
+    setSelectionTool() {
+      this.$store.commit('application/setSpeedSelection', true);
+      // this.expandProjectTypes = false;
     },
     addSpaceTypeToProject(name) {
       const exists = this.projectSpaceTypes.some(type => type.name === name);
       if (exists) {
         this.expandSpaceTypes = false;
-        this.expandProjectSpaceTypes = true;
         return;
       }
       this.$store.dispatch('models/createObjectWithType', { type: 'space_types' });
@@ -281,9 +295,11 @@ export default {
       this.selectionType = 'subselection';
       this.$store.dispatch('application/setCurrentStoryId', { id: parentStory.id });
       this.$store.dispatch('application/setCurrentSubSelectionId', { id: item.id });
+      this.setSelectionTool();
     },
     storyExpanded(index) {
       this.expanded.push(index);
+      this.setSelectionTool();
     },
     getSpaceType(space_type_id) {
       const found = this.projectSpaceTypes.find(space => space.id === space_type_id);
@@ -292,18 +308,23 @@ export default {
     },
     storyCollapsed(index) {
       this.expanded = this.expanded.filter(item => item !== index);
+      this.setSelectionTool();
     },
     spaceExpand(index) {
       this.spaceExpanded.push(index);
+      this.setSelectionTool();
     },
     spaceCollapse(index) {
       this.spaceExpanded = this.spaceExpanded.filter(item => item !== index);
+      this.setSelectionTool();
     },
     shadingExpand(id) {
       this.shadingExpanded.push(id);
+      this.setSelectionTool();
     },
     shadingCollapse(id) {
       this.shadingExpanded = this.shadingExpanded.filter(item => item !== id);
+      this.setSelectionTool();
     },
     treeSpaceArea(id) {
       if (!this.spacesArea) return '0';
@@ -318,6 +339,7 @@ export default {
       return Math.abs(this.shadingArea[id]);
     },
     cloneStory(story) {
+      this.setSelectionTool();
       this.$store.dispatch('application/setCurrentStoryId', { id: story.id });
       const { clonedGeometry, idMap } = replaceIdsForCloning(this.currentStoryGeom);
       this.createObject('Clone');
@@ -338,13 +360,14 @@ export default {
     },
     isCurrentSelectedType(id) {
       if (this.selectedSpaceType) {
-        if (this.selectedSpaceType.id === id) {
+        if (this.selectedSpaceType.id === id && this.speedSelection === false) {
           return true;
         }
       }
       return false;
     },
     createObject(object) {
+      this.setSelectionTool();
       switch (object) {
         case 'Story':
           this.$store.dispatch('models/initStory');
@@ -371,9 +394,9 @@ export default {
         case 'Shading':
           this.$store.dispatch('models/initShading', { story: this.$store.state.models.stories.find(s => s.id === '1') });
           this.$store.dispatch('models/updateShadingWithData', { shading: this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
-          this.selectSubItem(this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1]);
           this.selectionType = 'subselection';
           this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
+          this.selectSubItem(this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1]);
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });
@@ -381,6 +404,7 @@ export default {
       }
     },
     destroyObject(type, object) {
+      this.setSelectionTool();
       switch (type) {
         case 'stories':
           this.$store.dispatch('models/destroyStory', { story: object });
@@ -432,7 +456,6 @@ export default {
       shading: this.currentStory.shading[0],
       story: this.$store.state.models.stories.find(story => story.shading.find(o => o.id === this.currentStory.shading[0].id)),
     });
-    this.$root.$options.eventBus.$emit('drawingToolsSizeUpdate');
   },
   components: {
     Library,
@@ -632,8 +655,9 @@ ol li:last-child ol {
   margin-left: 5%;
   height: initial !important;
   width: 45%;
-  height: 1rem;
-  padding-top: 3%;
+  height: 100% !important;
+  // padding-top: 3%;
+  margin-top: 3%;
   input {
     background-color: white;
     margin-bottom: 0 !important;
@@ -702,89 +726,77 @@ svg.button.tree-button {
   font-size: 90%;
 }
 
-.space-type-select {
-  background-color: grey !important;
-  width: 14rem !important;
-  font-size: 1rem !important;
-}
 
 #space-type-select-div {
   position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding-left: 3%;
   background-color: white !important;
   border: 1px solid black;
-  width: 14rem !important;
-  height: 10rem !important;
+  width: 90%!important;
+  height: 8rem !important;
   font-size: 1rem !important;
   z-index: 9999999999;
   color: black;
   cursor: pointer;
   overflow: scroll;
-}
-
-.project-space-types-div {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: white !important;
-  border: 1px solid black;
-  width: 14rem !important;
-  height: 10rem !important;
-  font-size: 1rem !important;
-  z-index: 9999999999;
-  color: black;
-  cursor: pointer;
-  overflow: scroll;
-}
-
-#custom-select-ol {
-  border: none;
-  padding: 0;
-}
-
-#custom-select-ol li {
-  border: none;
-  margin: 0;
-  width: 100% !important;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  span {
-    padding-left: 3%;
-    padding-right: 3%;
+  > ol {
+    border: none;
+    width: 100%;
+    padding: 0;
+    li {
+      border: none;
+    }
+    li:hover {
+      background-color: #C0C2BE;
+    }
   }
 }
 
-#custom-select-ol li:hover {
-  width: 100% !important;
-  background-color: #797a76;
+#custom-select-close {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 1%;
+  padding-right: 1%;
 }
 
-#custom-select-type-list {
-  border: none;
-  padding: 0;
+.project-space-types-div {
+  margin-top: 2%;
+  background-color: white !important;
+  border: 1px solid black;
+  width: 90% !important;
+  height: 7rem !important;
+  font-size: 1rem !important;
+  color: black;
+  cursor: pointer;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  > ol {
+    padding: 0;
+    border: none;
+    li {
+      border: none;
+    }
+    li:hover {
+      background-color: #C0C2BE;
+    }
+  }
+  a {
+    float: right;
+  }
 }
 
-#custom-select-type-list li {
-  border: none;
-  // padding: 0;
-  margin: 0;
-  width: 14rem !important;
-  padding-left: 3%;
+#select-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 1%;
 }
 
-#custom-select-type-list li:hover {
-  width: 14rem !important;
-  background-color: white;
-}
-
-#space-list-div {
-  height: initial !important;
-}
 
 .adjusted-tree {
   height: 65vh !important;
@@ -796,7 +808,7 @@ svg.button.tree-button {
 }
 
 .selectedType {
-  background-color: #585956;
+  background-color: #C0C2BE;
 }
 
 .input-container {
@@ -804,6 +816,9 @@ svg.button.tree-button {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  > input {
+    margin: 0;
+  }
 }
 
 #speed-circle {

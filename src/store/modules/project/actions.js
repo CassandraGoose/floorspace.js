@@ -118,10 +118,6 @@ export default {
       context.commit('setShowImportExport', payload);
     },
 
-  zoomToFit(context, { geometry_id, widthOverHeight }) {
-    context.commit('setView', { xExtent, yExtent });
-  },
-
   modifyGround({ state, commit, context }, { key, val }) {
     let value = +val;
     if (isNaN(value)) {

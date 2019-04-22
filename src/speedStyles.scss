@@ -8,12 +8,12 @@ body {
 }
 
 .speed-navigation {
-  width: 30%;
+  width: 300px;
   background-color:#0073aa;
 }
 
 .layout-main {
-  left: 30%;
+  left: 300px;
   top: 1.6rem;
   height: calc(100% - 1.6rem) !important;
 }
@@ -38,10 +38,9 @@ body {
 
 .speed-toolbar {
   display: flex;
-  flex-direction: column;
-  left: auto !important;
+  left: 300px !important;
   top: 0;
-  width: 70%;
+  width: 68.7%;
   color: white;
   font-size: 12pt;
   height: initial;
@@ -58,6 +57,7 @@ body {
   align-items: center;
   margin: 0;
   margin-left: 2%;
+  padding-left: 3%;
   width: 100%;
   justify-content: space-around;
   .input-checkbox {
@@ -70,7 +70,7 @@ body {
   .input-number > input {
     line-height: initial !important;
     width: 10px;
-    font-size: .8rem;
+    font-size: .6rem;
     align-self: center;
   }
   input:not([Type]) {
@@ -79,7 +79,7 @@ body {
   }
   > div > .speed-label {
     line-height: initial !important;
-    font-size: .8rem;
+    font-size: .6rem;
     color: white !important;
   }
   > div > input[type="checkbox"] {
@@ -100,7 +100,7 @@ body {
   .speed-toolbar-input {
       background-color: white !important;
       color: black !important;
-      width: 2rem !important;
+      width: 1rem !important;
       text-align: center !important;
       border: none;
   }
@@ -154,7 +154,7 @@ body {
   align-self: flex-start;
   height: 42px !important;
   position: absolute;
-  left: -40px;
+  left: -280px;
   svg {
     text-align: center;
     vertical-align: top;
@@ -182,7 +182,7 @@ body {
 
 #navigation-head {
   position: absolute;
-  left: -40px;
+  left: -280px;
 }
 
 .speed-coordinates-container {
@@ -192,9 +192,12 @@ body {
   justify-content: center;
   align-items: center;
   .speed-coordinates-inputs {
-    width: 2.6rem;
+    width: 3.2rem;
     border: 1px solid grey;
+    background-color: white !important;
+    color: black !important;
     text-align: center !important;
+    font-size: .7rem !important;
   }
 }
 
@@ -243,7 +246,9 @@ div#help-text {
 }
 
 .input-text > input {
-    width: 40vw;
+    width: 400px !important;
+    height: 1rem !important;
+    padding: 1% !important;
 }
 
 #lower-case-speed {

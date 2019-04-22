@@ -66,10 +66,10 @@ export default {
           display: 'flex',
           flexDirection: 'column',
           backgroundColor: '#24292c',
-          height: '40px',
+          height: '44px',
           textAlign: 'center',
           // verticalAlign: 'top',
-          width: '40px',
+          width: '44px',
           // marginTop: 0,
         },
         undoButton: {
