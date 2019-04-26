@@ -73,7 +73,9 @@ export default {
     },
     currentSubSelection: {
       get() { return this.$store.getters['application/currentSubSelection']; },
-      set(item) { this.$store.dispatch('application/setCurrentSubSelectionId', { id: (item ? item.id : null) }); },
+      set(item) { 
+        this.$store.dispatch('application/setCurrentSubSelectionId', { id: (item ? item.id : null) });
+        },
     },
 
     // currentStory's child spaces, shading, and images
@@ -98,7 +100,9 @@ export default {
     },
     subselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
-      set(sst) { this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); },
+      set(sst) { 
+        this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); 
+        },
     },
   },
   methods: {

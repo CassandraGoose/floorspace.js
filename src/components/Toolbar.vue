@@ -138,7 +138,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
               @mousedown="setSelectionTool()"
               data-tool="3D" 
               title="Toggle 3D view." 
-              :class="['speed-drawing-tools-button', { active: tool === '3D' }]">
+              :class="['speed-drawing-tools-button', { active: floorspaceExpanded === false }]">
               <tool-3d-svg class="button"></tool-3d-svg>
             </div>
             <div 
@@ -356,7 +356,9 @@ export default {
     }),
     currentSubselectionType: {
       get() { return this.$store.state.application.currentSelections.subselectionType; },
-      set(sst) { this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); },
+      set(sst) { 
+        this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst });
+      },
     },
     availableTools() {
       let tools = [];
@@ -665,7 +667,6 @@ svg.icon, svg.button {
   display: flex !important;
   flex-direction: row !important;
   justify-content: flex-start !important;
-  width: 82% !important;
 }
 </style>
 

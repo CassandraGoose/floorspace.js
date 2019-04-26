@@ -178,8 +178,7 @@ export function repeatingWindowCenters({ start, end, spacing, width }) {
   if (centers.length === 0) return [];
   const
     margin = (
-      (distanceBetweenPoints(centers[centers.length - 1], end) - width / 2)
-      / 2),
+      (distanceBetweenPoints(centers[centers.length - 1], end) - width / 2) / 2),
     totalDist = distanceBetweenPoints(start, end),
     offX = direction.dx * margin,
     offY = direction.dy * margin;

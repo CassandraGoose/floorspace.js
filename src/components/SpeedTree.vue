@@ -137,6 +137,7 @@ import svgs from './svgs';
 import SpaceIconSpeed from './SpaceIconSpeed.vue';
 import geometryHelpers, { replaceIdsForCloning } from './../store/modules/geometry/helpers';
 import modelHelpers from '../store/modules/models/helpers';
+import spaceTypes from './../assets/speed_space_types.json';
 
 export default {
   name: 'SpeedTree',
@@ -152,7 +153,7 @@ export default {
       shadingExpanded: [],
       adjustSizing: false,
       selectedSpaceType: null,
-      availableTypes: ['Office-Private', 'Retail-Retail', 'PrimarySchool-Classroom', 'Office-Conference'],
+      availableTypes: spaceTypes.Space_Types,
       selectionType: 'story',
     };
   },
@@ -249,16 +250,12 @@ export default {
       const someSpacesExpanded = story.spaces.some((space) => {
         const thisSpaceExpanded = this.spaceExpanded.includes(space.id);
         thisSpaceLast = story.spaces[story.spaces.length - 1].id === space.id;
-        notLastSpaceList = story.spaces.filter((filterSpace) => {
-          return filterSpace.id !== story.spaces[story.spaces.length - 1];
-        });
-        aboveSpacesExpanded = notLastSpaceList.some((someSpace) => {
-          return this.spaceExpanded.includes(someSpace.id);
-        });
+        notLastSpaceList = story.spaces.filter(filterSpace => filterSpace.id !== story.spaces[story.spaces.length - 1]);
+        aboveSpacesExpanded = notLastSpaceList.some(someSpace => this.spaceExpanded.includes(someSpace.id));
         return thisSpaceExpanded;
       });
       if (someSpacesExpanded && thisSpaceLast) return 'last-empty';
-      else if (someSpacesExpanded && thisSpaceLast && aboveSpacesExpanded) return 'aboved-expanded-last-empty'
+      else if (someSpacesExpanded && thisSpaceLast && aboveSpacesExpanded) return 'aboved-expanded-last-empty';
       return '';
     },
     notTopOl(index) {
@@ -272,7 +269,6 @@ export default {
     },
     setSelectionTool() {
       this.$store.commit('application/setSpeedSelection', true);
-      // this.expandProjectTypes = false;
     },
     addSpaceTypeToProject(name) {
       const exists = this.projectSpaceTypes.some(type => type.name === name);
@@ -354,10 +350,6 @@ export default {
         });
       }
     },
-    subselectionType: {
-      get() { return this.$store.state.application.currentSelections.subselectionType; },
-      set(sst) { this.$store.dispatch('application/setCurrentSubselectionType', { subselectionType: sst }); },
-    },
     isCurrentSelectedType(id) {
       if (this.selectedSpaceType) {
         if (this.selectedSpaceType.id === id && this.speedSelection === false) {
@@ -367,6 +359,7 @@ export default {
       return false;
     },
     createObject(object) {
+      const firstFloor = this.$store.state.models.stories.find(s => s.id === '1');
       this.setSelectionTool();
       switch (object) {
         case 'Story':
@@ -380,6 +373,7 @@ export default {
           }
           this.selectionType = 'story';
           this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
+          this.selectSubItem(this.currentStory.spaces[0]);
           return;
         case 'Clone':
           this.$store.dispatch('models/initStory');
@@ -392,11 +386,12 @@ export default {
           this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
           break;
         case 'Shading':
-          this.$store.dispatch('models/initShading', { story: this.$store.state.models.stories.find(s => s.id === '1') });
-          this.$store.dispatch('models/updateShadingWithData', { shading: this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
+          this.$store.dispatch('models/initShading', { story: firstFloor });
+          this.$store.dispatch('models/updateShadingWithData', { shading: firstFloor.shading[firstFloor.shading.length - 1], floor_to_ceiling_height: this.shadingHeight });
           this.selectionType = 'subselection';
           this.$store.dispatch('application/setCurrentTool', { tool: 'Rectangle' });
-          this.selectSubItem(this.$store.state.models.stories[0].shading[this.$store.state.models.stories[0].shading.length - 1]);
+          this.subSelectionType = 'shading';
+          this.selectSubItem(firstFloor.shading[firstFloor.shading.length - 1]);
           break;
         default:
           this.$store.dispatch('models/createObjectWithType', { type: this.mode });
@@ -456,6 +451,7 @@ export default {
       shading: this.currentStory.shading[0],
       story: this.$store.state.models.stories.find(story => story.shading.find(o => o.id === this.currentStory.shading[0].id)),
     });
+    this.selectSubItem(this.$store.state.models.stories[0].spaces[0]);
   },
   components: {
     Library,

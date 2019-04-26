@@ -43,7 +43,6 @@ function keyForMode(mode) {
     'currentSubSelection');
 }
 
-
 export default {
   name: 'Library',
   props: ['objectTypes', 'mode', 'searchAvailable', 'compact', 'addNewOnHotkey'],
@@ -96,7 +95,8 @@ export default {
         return this[this.keyForCurrentMode];
       },
       set(item) {
-        this[this.keyForCurrentMode] = item;
+        // SPEED EDIT BELOW
+        // this[this.keyForCurrentMode] = item;
       },
     },
     keyForCurrentMode() {
@@ -142,7 +142,7 @@ export default {
       } else if (keyForMode(oldMode) === 'currentSpaceProperty') {
         this.renderByMode = 'spaces';
       }
-    }
+    },
   },
   methods: {
     hotkeyAddNew(evt) {

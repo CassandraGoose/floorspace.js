@@ -210,7 +210,6 @@ export default {
   removeLastDrawnPoint() {
     this.points.pop();
     this.drawPoints();
-    this.$root.$options.eventBus.$emit('success', 'Deleted last drawn point.');
   },
   // see if where the mouse coords are matches where the last point was drawn
   checkPointExists(newPoint) {
@@ -743,7 +742,6 @@ export default {
   },
   
   speedSelectEvent(polygons) {
-//HERE
     const drag = d3.drag()
       .on('start', (d) => {
         if (d.previous_story) { return; }
@@ -865,7 +863,6 @@ export default {
     const currentStorySpaces = this.currentStory.spaces;
     poly.select('.space-type')
       .attr('x', p => this.rwuToGrid(p.labelPosition.x, 'x'))
-      //HERE
       .attr('y', p => (this.rwuToGrid(p.labelPosition.y, 'y')) + 20)
       .text((p) => {
         if (p.modelType === 'shading') return '';
