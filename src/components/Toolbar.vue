@@ -65,7 +65,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
       <div id="grid-settings" :class="{ 'speed-grid-settings': true, 'expanded-grid-settings': floorspaceExpanded }">
         <div class="speed-north-axis input-number" title="North axis">
           <label class="speed-label">NORTH</label> 
-          <input class="speed-toolbar-input" readonly :value="`${Math.round(northAxis)}°`">
+          <input id="north-input" readonly :value="`${Math.round(speedNorthAxis)}°`">
         </div>
 
         <div class="input-checkbox" title="Toggle previous story visability.">
@@ -266,7 +266,7 @@ export default {
       this.setSelectionTool();
       this.tool = '3D';
       this.$root.$options.eventBus.$emit('toggle3D');
-      this.$root.$options.eventBus.$emit('toolbarSizeUpdate');
+      this.$root.$options.eventBus.$emit('toolbarSizeUpdate', this);
     },
     zoomToFit() {
       this.$root.$options.eventBus.$emit('zoomToFit');
@@ -301,7 +301,10 @@ export default {
 
       if (file) { reader.readAsText(file); }
     },
-    undo() { this.$store.timetravel.undo(this.$root.$options.eventBus); },
+    undo() {
+      this.$store.timetravel.undo(this.$root.$options.eventBus);
+      this.$root.$options.eventBus.$emit('requestFloorspaceJSON');
+    },
     redo() { this.$store.timetravel.redo(); },
     updateUnits(val) {
       if (this.allowSettingUnits) {
@@ -315,6 +318,10 @@ export default {
     displayNameForMode(mode) { return applicationHelpers.displayNameForMode(mode); },
   },
   computed: {
+    speedNorthAxis() {
+      const north = this.northAxis < 0 ? 180 + (180 + this.northAxis) : this.northAxis;
+      return Math.round(north) === 360 ? 0 : north;
+    },
     latestCreatedCompId() {
       return _.chain(this.allComponents)
         .map('defs')

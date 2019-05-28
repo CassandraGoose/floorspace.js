@@ -112,6 +112,8 @@
     }
     .polygons .windows, .polygons .doors {
       .window {
+        //SPEED CHANGE BELOW
+        display: none;
         stroke-width: 3;
         stroke: black;
         .hatch {
@@ -134,6 +136,8 @@
       }
     }
     .daylighting-control {
+      // SPEED CHANGE BELOW
+      display: none;
       circle {
         stroke: #222;
       }

@@ -41,7 +41,7 @@ body {
   left: 300px !important;
   top: 0;
   color: white;
-  font-size: 12pt;
+  font-size: 8pt;
   height: initial;
   color: white !important;
   width: calc(100% - 300px);
@@ -56,7 +56,7 @@ body {
   flex-direction: row;
   align-items: center;
   margin: 0;
-  margin-left: 2%;
+  margin-left: 2% !important;
   padding-left: 3%;
   width: 100%;
   justify-content: space-around;
@@ -70,17 +70,19 @@ body {
   .input-number > input {
     line-height: initial !important;
     width: 10px;
-    font-size: .6rem;
+    font-size: .6rem !important;
     align-self: center;
   }
   input:not([Type]) {
     height: 1rem;
     margin: 0;
+    width: 2rem;
   }
   > div > .speed-label {
-    line-height: initial !important;
-    font-size: .6rem;
+    line-height: 2rem !important;
+    font-size: .6rem !important;
     color: white !important;
+    min-height: auto;
   }
   > div > input[type="checkbox"] {
     height: 16px;
@@ -100,9 +102,16 @@ body {
   .speed-toolbar-input {
       background-color: white !important;
       color: black !important;
-      width: 1rem !important;
+      width: 1.2rem !important;
       text-align: center !important;
       border: none;
+  }
+  #north-input {
+    // width: 30% !important;
+    background-color: white !important;
+    color: black !important;
+    text-align: center !important;
+    padding: 0;
   }
     #story-below-label {
         text-align: right !important;
@@ -146,6 +155,7 @@ body {
 
 #top {
   height: 1.6rem !important;
+  width: 100%;
 }
 
 #drawing-tools {
@@ -160,8 +170,9 @@ body {
     vertical-align: top;
   }
   .speed-drawing-tools-button {
+    line-height: 1rem !important;
     background-color: #24292c;
-    text-align: center;
+    text-align: center !important;
     width: auto;
   }
 }
@@ -192,7 +203,7 @@ body {
   justify-content: center;
   align-items: center;
   .speed-coordinates-inputs {
-    width: 3.2rem;
+    width: 3.2rem !important;
     border: 1px solid grey;
     background-color: white !important;
     color: black !important;
@@ -253,4 +264,5 @@ div#help-text {
 
 #lower-case-speed {
   text-transform: lowercase;
+  font-size: .7rem !important;
 }

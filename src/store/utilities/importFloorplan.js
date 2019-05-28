@@ -43,7 +43,6 @@ function withStoryDefaults(stories) {
   return stories.map((story) => {
     const multiplier = story.multiplier >= 1 ?
       story.multiplier : getDefaults('Story').multiplier;
-
     return {
       ...getDefaults('Story'),
       ...story,
@@ -62,7 +61,6 @@ export default function importFloorplan(context, payload) {
   // intialize a versionNumber if the app is running in embedded mode
   if (window.api) { window.versionNumber = 0; }
   const options = payload.options || {};
-
   // GEOMETRY
   const geometry = payload.data.stories.map((story) => {
     const faces = story.geometry.faces.map((face) => {
@@ -92,9 +90,9 @@ export default function importFloorplan(context, payload) {
   // MODELS
   const stories = payload.data.stories.map((s) => {
     const story = {
-      geometry_id: s.geometry.id,
       ...s,
     };
+    story.geometry_id = s.geometry.id;
     delete story.geometry;
     return story;
   });
@@ -123,7 +121,7 @@ export default function importFloorplan(context, payload) {
 
   context.commit('importState', {
     project: maybeUpdateProject(payload.data.project),
-    application: context.state.application,
+    application: payload.data.application || context.state.application,
     models: {
       stories: withStoryDefaults(stories),
       library: {
@@ -157,4 +155,5 @@ export default function importFloorplan(context, payload) {
   if (!options.noReloadGrid) {
     document.getElementById(context.state.application.currentSvgGridId).dispatchEvent(new Event('reloadGrid'));
   }
+
 }

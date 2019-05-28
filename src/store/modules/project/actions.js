@@ -22,6 +22,7 @@ export default {
       if (north_axis > 360 || north_axis < 0) { return; }
       context.commit('setConfigNorthAxis', { north_axis });
       context.commit('setMapRotation', { rotation: (north_axis * Math.PI) / 180 });
+      
     },
     setMapVisible (context, payload) {
         if (typeof payload.visible === 'boolean') {
@@ -102,6 +103,9 @@ export default {
         context.commit('setMapZoom',  { zoom: payload.zoom });
     },
 
+    setFootprintID(context, payload) {
+      context.commit('setFootprintID', payload);
+    },
 
     setMapRotation (context, payload) {
         context.commit('setConfigNorthAxis', { north_axis: (payload.rotation/(2*Math.PI)) * 360 });

@@ -317,7 +317,7 @@ export default {
            ) {
               this.currentImage = this.currentStory.images[0];
         }
-      } else if (!_.includes(_.map(this.currentStory.spaces, 'id'), this.currentSubSelection.id)) {
+      } else if (!_.includes(_.map(this.currentStory.spaces, 'id'), this.currentSubSelection.id) && !_.includes(_.map(this.currentStory.shading, 'id'), this.currentSubSelection.id)) {
         this.currentSubSelection = this.currentStory.spaces[0];
       }
     },

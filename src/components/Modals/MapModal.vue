@@ -21,13 +21,37 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
                 <!-- <div class="explanation">Create a new floorplan with a map</div> -->
               </a>
             </p>
-            <p>
+            <div v-if="currentFootprint !== 1" id="copyExisting">
+              <a :disabled="!online" class="quickstart-action">
+                <div class="title">Create a copy of existing floorplan</div>
+                <QuickstartIconNewFloorplan />
+                <div id="arrow-holder"> <speed-arrow id="arrow" /></div>
+                <QuickstartIconNewFloorplan />
+              </a>
+              <div v-if="currentFootprint !== 1" class="select-footprint" id="select-container">
+                <div @click="selectToggle = true" v-if="!selectToggle" id="list-container" class="start-select">
+                  <div>
+                    <p>{{availableFootprints[0]}}</p> <p>▼</p>
+                  </div>
+                </div>
+                  <div v-if="selectToggle" id="list-container" title="Select footprint to copy">
+                    <ol v-for="(footprint, i) in this.availableFootprints" :key="i">
+                      <li @click="copyFootprint(i)">{{footprint}}</li>
+                    </ol>
+                  </div>
+              </div>
+
+            </div>
+
+            <!-- FLOORSPACE CHANGE BELOW -->
+
+            <!-- <p>
               <a @click="mapEnabled = false; mapVisible = false; $emit('close')" class="quickstart-action new-floorplan">
                 <div class="title">Create a new floorplan</div>
-                <QuickstartIconNewFloorplan />
+                <QuickstartIconNewFloorplan /> -->
                 <!-- <div class="explanation">Create a new floorplan</div> -->
-              </a>
-            </p>
+              <!-- </a>
+            </p> -->
             <!-- <p>
               <a @click="$refs.importInput.click()" id="import" class="quickstart-action open-floorplan">
                 <div class="title">Open</div>
@@ -52,7 +76,24 @@ export default {
   data() {
     return {
       address: '',
+      selectToggle: false,
+      currentFootprint: 1,
+      availableFootprints: [],
+      underscoreFootprints: [],
     };
+  },
+  created() {
+    if (this.$root.$options.eventBus.currentFootPrintShape) {
+      this.currentFootprint = this.$root.$options.eventBus.currentFootPrintShape;
+      this.setAvailableFootprints(this.$root.$options.eventBus.allFloorspacesData);
+    } else {
+      this.$root.$options.eventBus.$on('currentFootPrintShape', (data) => {
+        this.currentFootprint = data;
+      });
+    }
+    this.$root.$options.eventBus.$on('loadOldData', (data) => {
+      this.importFloorplan(data);
+    });
   },
   computed: {
     ...mapState({
@@ -71,6 +112,35 @@ export default {
     },
   },
   methods: {
+    setAvailableFootprints(alldata) {
+      this.underscoreFootprints = alldata.map(object => Object.keys(object)[0]);
+      this.availableFootprints = this.underscoreFootprints.map(footprint => footprint.replace(/_/g, ' '));
+    },
+    copyFootprint(i) {
+      const selectedFootprint = this.underscoreFootprints[i];
+      this.mapEnabled = true;
+      this.tool = 'Map';
+      console.log('alldata', this.$root.$options.eventBus.allFloorspacesData);
+      console.log('selectedfootprint', this.underscoreFootprints[i]);
+      const data = this.$root.$options.eventBus.allFloorspacesData.find((object) => {
+        console.log('single object in loop', object);
+        console.log('in loop all', object[selectedFootprint]);
+        return object[selectedFootprint];
+      });
+      console.log('eventbusdata.find object[selectedfootprint]', data);
+      this.fixThermalZones(data[selectedFootprint]);
+      this.$nextTick(() => {
+        this.importFloorplan(data[selectedFootprint]);
+      });
+      this.$emit('close');
+    },
+    fixThermalZones(data) {
+      data.stories.forEach((story) => {
+        story.spaces.forEach((space) => {
+          space.thermal_zone_id = space.thermal_zone_id.id;
+        });
+      });
+    },
     importFloorplanAsFile(event) {
       const file = event.target.files[0];
       const reader = new FileReader();
@@ -84,9 +154,8 @@ export default {
       this.$store.dispatch('importFloorplan', {
         clientWidth: document.getElementById(this.svgGridId).clientWidth,
         clientHeight: document.getElementById(this.svgGridId).clientHeight,
-        data: JSON.parse(data),
+        data,
       });
-      this.$emit('close');
     },
   },
   components: {
@@ -112,7 +181,7 @@ export default {
         margin: 0 2rem 2rem 2rem;
         text-align: center;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
 
         button {
             margin: 1rem .5rem;
@@ -121,7 +190,6 @@ export default {
         input[type=file] {
             display: none;
         }
-
         .explanation {
           color: #5D5D5D;
         }
@@ -168,4 +236,79 @@ export default {
   text-align: center !important;
 }
 
+#arrow-holder {
+  display: inline-block;
+  width: 20px !important;
+  height: 20px !important;
+}
+#arrow {
+  height: 100%;
+  width: 100%;
+  padding-bottom: 75% !important;
+}
+
+.select-footprint {
+  min-width: 10rem;
+  height: 1rem !important;
+  position: absolute;
+  bottom: 25%;
+  right: 17%;
+}
+
+#copyExisting {
+  margin-top: 15px !important;
+}
+
+.start-select {
+  p {
+    padding: 0;
+    margin: 0;
+  }
+  > div {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1rem;
+  }
+}
+
+#select-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 1%;
+}
+ol, li { 
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start !important;
+  background-color: white !important;
+  border: 1px solid black;
+  padding: 2px;
+  width: 170px !important;
+  // height: 8rem !important;
+  font-size: .9rem !important;
+  z-index: 9999999999;
+  color: black;
+  cursor: pointer;
+  // overflow: scroll;
+  > ol {
+    padding: 0;
+    border: none;
+    li {
+      padding: 2px;
+      border: none;
+    }
+    li:hover {
+      background-color: #C0C2BE;
+    }
+  }
+}
+  
 </style>

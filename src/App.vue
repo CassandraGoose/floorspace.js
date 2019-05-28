@@ -67,6 +67,7 @@ export default {
     this.$store.dispatch('models/initStory');
   },
   mounted() {
+    this.$store.dispatch('project/setFootprintID', { id: this.guid });
     this.$root.$options.eventBus.$on('requestFloorspaceJSON', () => {
       this.$root.$options.eventBus.$emit('sendFloorspaceJSON', this.$store.getters['exportData']);
     });
@@ -114,6 +115,12 @@ export default {
       return 'yxxx'.replace(/[xy]/g, (c) => {
         const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return `${v.toString(4)}`;
+      });
+    },
+    guid() {
+      return 'yxxx-yxxx-yxxx-yxxx'.replace(/[xy]/g, (c) => {
+        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
       });
     },
   },

@@ -106,8 +106,7 @@
           <div class="project-space-types-div" title="Assign type to current space." >
             <ol v-for="(type, i) in this.projectSpaceTypes" :key="i">
               <li :class="{ selectedType: isCurrentSelectedType(type.id) }" @click="selectSpaceType(type)" @blur="setSelectionTool">
-                <span :style="{color: typeColor(type.id)}">&block; </span>
-                {{type.name}} 
+                <div><span :style="{color: typeColor(type.id)}">&block; </span>{{type.name}}</div>
                 <a @click="destroyObject('space_type', type)"><delete-speed class="button tree-button"/></a>
               </li>
             </ol>
@@ -503,7 +502,7 @@ ol#first-ol:last-of-type ol:last-child > div:last-child > li.tree-container:last
   height: 1.8rem;
 }
 
-ol#first-ol:last-of-type li > ol{
+ol#first-ol:last-of-type > li > ol:last-child {
   padding-bottom: 6rem;
 }
 
@@ -722,7 +721,6 @@ svg.button.tree-button {
   font-size: 90%;
 }
 
-
 #space-type-select-div {
   position: absolute;
   display: flex;
@@ -775,6 +773,9 @@ svg.button.tree-button {
     border: none;
     li {
       border: none;
+      padding-left: 0 !important;
+      display: flex;
+      justify-content: space-between;
     }
     li:hover {
       background-color: #C0C2BE;
@@ -820,6 +821,6 @@ svg.button.tree-button {
 #speed-circle {
   height: 1rem;
   float: left;
-  padding-left: 1%;
+  padding-left: 3.5%;
 }
 </style>

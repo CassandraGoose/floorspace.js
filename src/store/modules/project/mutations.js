@@ -1,5 +1,8 @@
 export default {
     // CONFIG
+  setFootprintID(state, payload) {
+    state.footprintID = payload.id;
+  },
   setUnits(state, payload) {
     if ('units' in payload) {
       state.config.units = payload.units;

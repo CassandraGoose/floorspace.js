@@ -10,6 +10,16 @@ Vue.component('pretty-select', PrettySelect);
 export default function renderTo(el) {
   const eventBus = new Vue();
   createStore(eventBus).then((store) => {
+    let actionCount = 0;
+    store.subscribe((action) => {
+      if (action) {
+        actionCount += 1;
+        if (actionCount >= 50) {
+          actionCount = 0;
+          eventBus.$emit('saveJSON');
+        }
+      }
+    });
     store.subscribe((mutation) => {
       if (mutation) {
         const data = store.getters['exportData'];
@@ -27,5 +37,6 @@ export default function renderTo(el) {
     timetravel.init(store);
   });
 
+  // possibly include store here as well so we can use getters and stuff
   return eventBus;
 }

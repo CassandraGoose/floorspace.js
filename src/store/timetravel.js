@@ -86,7 +86,6 @@ export default {
       // ignore changes to view bounds
       if (!_.includes(filteredActions, action)) {
         that.maybeSaveCheckpoint(action);
-        console.log('dispatching action:', args[0]);
       }
 
       originalDispatch.apply(this, args);
